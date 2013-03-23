@@ -28,10 +28,21 @@ $('#TextBox2').MonthPicker().css('backgroundColor', 'lightyellow');
 <h3>Options</h3>
 
 <p>
+
 <strong>Disabled</strong><br />
-<blockquote>
 Type: Boolean<br />
 Default: false<br />
+
 Disables/enables the MonthPicker on initialization.
-</blockquote>
+<pre>$('.selector').MonthPicker({ Disabled: true });</pre>
+
+Get or set the disabled option, after init. 
+<pre>
+//getter
+var disabled = $('.selector').MonthPicker('option', 'Disabled');
+
+//setter
+$('.selector').MonthPicker('option', 'Disabled', true );
+</pre>
+
 </p>

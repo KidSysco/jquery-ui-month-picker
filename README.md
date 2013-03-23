@@ -23,15 +23,15 @@ for date validation, setting the start year, using an icon button, input masking
 
 <h2>Installation</h2>
 <p>Attach all required css and js files to the web page as follows...</p> 
-```
-<link href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" media="all" rel="stylesheet" type="text/css" />
-<link href="css/MonthPicker.2.0.css" media="all" rel="stylesheet" type="text/css" />
+<pre>
+link href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" media="all" rel="stylesheet" type="text/css" />
+link href="css/MonthPicker.2.0.css" media="all" rel="stylesheet" type="text/css" />
 
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js" type="text/javascript"></script>
-<script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js" type="text/javascript"></script>
-<script src="https://raw.github.com/digitalBush/jquery.maskedinput/1.3.1/dist/jquery.maskedinput.min.js" type="text/javascript"></script>
-<script src="MonthPicker.2.0.min.js" type="text/javascript"></script>
-```
+script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js" type="text/javascript"></script>
+script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js" type="text/javascript"></script>
+script src="https://raw.github.com/digitalBush/jquery.maskedinput/1.3.1/dist/jquery.maskedinput.min.js" type="text/javascript"></script>
+script src="MonthPicker.2.0.min.js" type="text/javascript"></script>
+</pre>
 
 <h2>Source Code Example</h2>
 <p>This plugin can only be called on text boxes as follows.</p> 

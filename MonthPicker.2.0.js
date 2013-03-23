@@ -1,3 +1,16 @@
+/*
+Copyright (c) 2013 Ryan Segura - https://github.com/KidSysco/jquery-ui-month-picker/
+This library is free software; you can redistribute it and/or
+modify it under the terms of the GNU Lesser General Public
+License as published by the Free Software Foundation;
+version 3.0. This library is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+Lesser General Public License for more details.
+You should have received a copy of the GNU Lesser General Public
+License along with this library; if not, visit
+http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
+*/
 ;
 (function ($, window, document, undefined) {
     var _speed = 500;

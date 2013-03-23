@@ -37,6 +37,19 @@ $('#TextBox1').MonthPicker({ StartYear: 2020, ShowIcon: false });
 $('#TextBox2').MonthPicker().css('backgroundColor', 'lightyellow');
 </pre>
 
+<h2>Theme Support</h2>
+<p>The MonthPicker plugin uses the jQuery UI CSS Framework to style its look and feel, including the colors of buttons and background textures. We recommend using the ThemeRoller tool to create and download custom themes that are easy to build and maintain.</p>
+<p>If a deeper level of customization is needed, there are widget-specific classes referenced within the MonthPicker.css stylesheet that can be modified. These classes are highlighed below.</p>
+<p> <b>.month-picker-disabled</b>
+
+<br />Customize the disabled look of the MonthPicker text box.</p>
+<p> <b>.month-picker-invalid-message</b>
+
+<br />Customize the look of validation message.</p>
+<p> <b>.month-year-input</b>
+
+<br />Customize the look of the MonthPicker text input box in an enabled state.</p>
+
 <h2>Options</h2>
 
 <p>
@@ -364,15 +377,4 @@ $('.selector').MonthPicker('option', 'OnAfterChooseYears', function(){ ... } );
 </pre>
 </p>
 
-<h2>Theme Support</h2>
-<p>The MonthPicker plugin uses the jQuery UI CSS Framework to style its look and feel, including the colors of buttons and background textures. We recommend using the ThemeRoller tool to create and download custom themes that are easy to build and maintain.</p>
-<p>If a deeper level of customization is needed, there are widget-specific classes referenced within the MonthPicker.css stylesheet that can be modified. These classes are highlighed below.</p>
-<p> <b>.month-picker-disabled</b>
 
-<br />Customize the disabled look of the MonthPicker text box.</p>
-<p> <b>.month-picker-invalid-message</b>
-
-<br />Customize the look of validation message.</p>
-<p> <b>.month-year-input</b>
-
-<br />Customize the look of the MonthPicker text input box in an enabled state.</p>

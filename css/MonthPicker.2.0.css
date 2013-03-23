@@ -1,0 +1,65 @@
+.month-picker {
+    width: 200px;
+    display: none;
+    position: absolute;
+    z-index: 9999;
+}
+.month-year-input {
+    width: 60px;
+}
+.month-picker .year-container-all {
+    cursor: pointer;
+}
+.month-picker-year-table .year-container-all {
+    text-align: center;
+}
+.month-picker-year-table .year-title, .month-picker-year-table .year-container {
+    float: left;
+    display: inline-block;
+}
+.month-picker-year-table .year-title {
+    margin-left: 20px;
+    font-size: 12px;
+    font-family: Verdana, Arial, sans-serif;
+}
+.month-picker-year-table .year {
+    margin-right: 15px;
+    font-size: 12px;
+    font-family: Verdana, Arial, sans-serif;
+}
+.month-picker-year-table .year-container {
+    width: 50px;
+}
+.month-picker-year-table .previous-year {
+    width: 35px;
+}
+.month-picker-year-table .next-year {
+    width: 35px;
+    text-align: right;
+}
+.month-picker-year-table button {
+    width: 1.8em;
+    height: 1.8em;
+    text-align: center;
+    cursor: pointer;
+}
+.month-picker-year-table .year-container {
+    text-align: center;
+}
+.month-picker-month-table td {
+    height: 35px;
+    text-align: center;
+    font-size: 12px;
+}
+.month-picker-open-button {
+    height: 20px;
+    width: 20px;
+    vertical-align: bottom;
+}
+.month-picker-invalid-message {
+    display: none;
+    background-color: Yellow;
+}
+.month-picker-disabled {
+    background-color: #e1e1e1;
+}

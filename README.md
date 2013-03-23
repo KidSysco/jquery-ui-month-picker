@@ -4,13 +4,6 @@
 -See a demo with unit tests running on jsFiddle at...
 -http://jsfiddle.net/kidsysco/JeZap/ 
 
- <h2>Source Code Example</h2>
-<p>This plugin can only be called on text boxes as follows.</p> 
-<pre>
-$('#TextBox1').MonthPicker({ StartYear: 2020, ShowIcon: false });
-$('#TextBox2').MonthPicker().css('backgroundColor', 'lightyellow');
-</pre>
-
 <h2>Prerequisites</h2>
 <p>This plugin has been tested using the following configuration.</p>
 <ul>
@@ -24,6 +17,25 @@ $('#TextBox2').MonthPicker().css('backgroundColor', 'lightyellow');
     </li>
     <li>(optional) Digital Bush Input Mask jQuery Plugin</li>
 </ul>
+
+<h2>Installation</h2>
+<p>Attach all required css and js files to the web page as follows...</p> 
+```
+<link href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" media="all" rel="stylesheet" type="text/css" />
+<link href="css/MonthPicker.2.0.css" media="all" rel="stylesheet" type="text/css" />
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js" type="text/javascript"></script>
+<script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js" type="text/javascript"></script>
+<script src="https://raw.github.com/digitalBush/jquery.maskedinput/1.3.1/dist/jquery.maskedinput.min.js" type="text/javascript"></script>
+<script src="MonthPicker.2.0.min.js" type="text/javascript"></script>
+```
+
+<h2>Source Code Example</h2>
+<p>This plugin can only be called on text boxes as follows.</p> 
+<pre>
+$('#TextBox1').MonthPicker({ StartYear: 2020, ShowIcon: false });
+$('#TextBox2').MonthPicker().css('backgroundColor', 'lightyellow');
+</pre>
 
 <h2>Options</h2>
 
@@ -111,7 +123,7 @@ $('.selector').MonthPicker('option', 'ValidationErrorMessage', null );
     <h3>UseInputMask</h3>
     Type: Bool<br />
     Default: false<br />
-    Directs the MonthPicker to use the <a href="http://digitalbush.com/projects/masked-input-plugin/">Digital Bush InputMask jQuery Plugin</a> which must be loaded to the page if this option is to be used.
+    Directs the MonthPicker to use the <a href="http://digitalbush.com/projects/masked-input-plugin/">Digital Bush Masked Input jQuery Plugin</a> which must be loaded to the page if this option is to be used.
 </p>
 <p>
     Set the option upon init.

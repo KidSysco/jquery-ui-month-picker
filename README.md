@@ -40,6 +40,31 @@ $('#TextBox1').MonthPicker({ StartYear: 2020, ShowIcon: false });
 $('#TextBox2').MonthPicker().css('backgroundColor', 'lightyellow');
 </pre>
 
+<h2>API Methods</h2>
+<p> <b>$('.selector').MonthPicker('Clear')</b>
+<br />Clears the state of all input and validation warnings.</p>
+
+<p> <b>$('.selector').MonthPicker('ClearAllCallbacks')</b>
+<br />Disables all previously assigned event callbacks listed in the Events tab.</p>
+
+<p> <b>$('.selector').MonthPicker('Disable')</b>
+<br />Disables the MonthPicker and its associated elements.</p>
+
+<p> <b>$('.selector').MonthPicker('Enable')</b>
+<br />Enables the MonthPicker and its associated elements.</p>
+
+<p> <b>$('.selector').MonthPicker('GetSelectedMonthYear')</b>
+<br />Validates the selected month/year and returns the selected value if it is a valid date. Returns null if there is no valid date, displays an error message if the message is specified, focuses and selects the violating text.</p>
+
+<p> <b>$('.selector').MonthPicker('GetSelectedMonth')</b>
+<br />Returns only the month portion of the selected date as an integer. Returns NaN if there is no valid date.</p>
+
+<p> <b>$('.selector').MonthPicker('GetSelectedYear')</b>
+<br />Returns only the year portion of the selected date as an integer. Returns NaN if there is no valid date.</p>
+
+<p> <b>$('.selector').val()</b>
+<br />Use jQuery .val() to get the input without any date validation.</p>
+
 <h2>Theme Support</h2>
 <p>The MonthPicker plugin uses the jQuery UI CSS Framework to style its look and feel, including the colors of buttons and background textures. We recommend using the ThemeRoller tool to create and download custom themes that are easy to build and maintain.</p>
 <p>If a deeper level of customization is needed, there are widget-specific classes referenced within the MonthPicker.css stylesheet that can be modified. These classes are highlighed below.</p>
@@ -154,29 +179,6 @@ var disabled = $('.selector').MonthPicker('option', 'UseInputMask');
 $('.selector').MonthPicker('option', 'UseInputMask', false );
 </pre>
 </p>
-
-<h2>API Methods</h2>
-<p> <b>$('.selector').MonthPicker('Clear')</b>
-
-<br />If the Digital Bush Watermark plugin is activated. This will set the field to a blank value and show the watermark again.</p>
-<p> <b>$('.selector').MonthPicker('ClearAllCallbacks')</b>
-
-<br />Disables all previously assigned event callbacks listed in the Events tab.</p>
-<p> <b>$('.selector').MonthPicker('Disable')</b>
-
-<br />Disables the MonthPicker and its associated elements.</p>
-<p> <b>$('.selector').MonthPicker('Enable')</b>
-
-<br />Enables the MonthPicker and its associated elements.</p>
-<p> <b>$('.selector').MonthPicker('GetSelectedMonthYear')</b>
-
-<br />Validates the selected month/year and returns the selected value if it is a valid date. Returns null if there is no valid date, displays an error message if the message is specified, focuses and selects the violating text.</p>
-<p> <b>$('.selector').MonthPicker('GetSelectedMonth')</b>
-
-<br />Returns only the month portion of the selected date as an integer. Returns NaN if there is no valid date.</p>
-<p> <b>$('.selector').MonthPicker('GetSelectedYear')</b>
-
-<br />Returns only the year portion of the selected date as an integer. Returns NaN if there is no valid date.</p>
 
 <h2>Events</h2>
 

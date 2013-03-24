@@ -18,7 +18,7 @@ for date validation, setting the start year, using an icon button, input masking
             <li>.datepicker() plugin required</li>
         </ul>
     </li>
-    <li>(optional) Digital Bush Input Mask jQuery Plugin</li>
+    <li>(optional) <a target="_new" href="http://digitalbush.com/projects/masked-input-plugin/">Digital Bush Masked Input jQuery Plugin</a></li>
 </ul>
 
 <h2>Installation</h2>

@@ -34,7 +34,7 @@ script src="MonthPicker.2.0.min.js" type="text/javascript"></script>
 </pre>
 
 <h2>Source Code Example</h2>
-<p>This plugin can only be called on text boxes as follows.</p> 
+<p>This plugin can only be called on the text or month input types as follows.</p> 
 <pre>
 $('#TextBox1').MonthPicker({ StartYear: 2020, ShowIcon: false });
 $('#TextBox2').MonthPicker().css('backgroundColor', 'lightyellow');

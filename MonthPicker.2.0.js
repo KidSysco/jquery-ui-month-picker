@@ -156,7 +156,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             }
 
             if (!(this.element.is('input[type="text"]') || this.element.is('input[type="month"]'))) {
-                alert('MonthPicker Setup Error: MonthPicker can only be called on text inputs. ' + this.element.attr('id') + ' is not a text input.');
+                alert('MonthPicker Setup Error: MonthPicker can only be called on text or month inputs. ' + this.element.attr('id') + ' is not a text or month input.');
                 return false;
             }
 

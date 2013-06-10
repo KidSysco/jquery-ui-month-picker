@@ -7,6 +7,10 @@ for date validation, setting the start year, using an icon button, input masking
 -See a demo with unit tests running on jsFiddle at...
 -http://jsfiddle.net/kidsysco/JeZap/ 
 
+<table border="0" stye="border: 0;" cellspacing="0" cellpadding="0">
+
+<tr><td>
+
 <h2>Prerequisites</h2>
 <p>This plugin has been tested using the following configuration.</p>
 <ul>
@@ -20,6 +24,13 @@ for date validation, setting the start year, using an icon button, input masking
     </li>
     <li>(optional) <a target="_new" href="http://digitalbush.com/projects/masked-input-plugin/">Digital Bush Masked Input jQuery Plugin</a></li>
 </ul>
+
+</td><td>
+<img src="http://ubuntuone.com/4N6DpoxnMHLYVG3LqMhtiZ" />
+</td>
+</tr>
+
+</table>
 
 <h2>Installation</h2>
 <p>Attach all required css and js files to the web page as follows...</p> 

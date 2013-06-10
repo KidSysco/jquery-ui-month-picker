@@ -164,6 +164,10 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
                 alert('MonthPicker Setup Error: The UseInputMask option is set but the Digital Bush Input Mask jQuery Plugin is not loaded. Get the plugin from http://digitalbush.com/');
                 return false;
             }
+            
+            if (this.element.is('input[type="month"]')) {
+                this.element.css('width', 'auto');
+            }
 
             this.element.addClass('month-year-input');
 
@@ -358,10 +362,12 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
         },
 
         _setUseInputMask: function () {
-            if (this.options.UseInputMask) {
-                this.element.mask(_inputMask);
-            } else {
-                this.element.unmask();
+            if (!this.element.is('input[type="month"]')) {
+                if (this.options.UseInputMask) {
+                    this.element.mask(_inputMask);
+                } else {
+                    this.element.unmask();
+                }
             }
         },
 
@@ -415,6 +421,15 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
                     }
                 }
             }
+            
+            if (text.indexOf('-') != -1) {
+                var _month = parseInt(text.split('-')[1], 10);
+                if (!isNaN(_month)) {
+                    if (_month >= 1 && _month <= 12) {
+                        return _month;
+                    }
+                }
+            }
 
             return NaN;
         },
@@ -433,6 +448,16 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
                     }
                 }
             }
+            
+            if (text.indexOf('-') != -1) {
+                var _year = parseInt(text.split('-')[0], 10);
+
+                if (!isNaN(_year)) {
+                    if (_year >= 1800 && _year <= 3000) {
+                        return _year;
+                    }
+                }
+            }
 
             return NaN;
         },
@@ -442,7 +467,11 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
                 month = '0' + month;
             }
 
-            this.element.val(month + '/' + this._getPickerYear()).change();
+            if (this.element.is('input[type="month"]')) {
+                this.element.val(this._getPickerYear() + '-' + month).change();
+            }else{
+                this.element.val(month + '/' + this._getPickerYear()).change();
+            }
             this.element.blur();
             if (this._isFunction(this.options.OnAfterChooseMonth)) {
                 this.options.OnAfterChooseMonth();

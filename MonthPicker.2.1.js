@@ -48,6 +48,8 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
         _validationMessage: null,
 
         _yearContainer: null,
+        
+        _isMonthInputType: null,
 
         _enum: {
             _overrideStartYear: 'MonthPicker_OverrideStartYear'
@@ -167,6 +169,9 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             
             if (this.element.is('input[type="month"]')) {
                 this.element.css('width', 'auto');
+                this._isMonthInputType = true;
+            }else{
+                 this._isMonthInputType = false;   
             }
 
             this.element.addClass('month-year-input');
@@ -230,15 +235,21 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
         },
 
         GetSelectedMonthYear: function () {
-            var _month = this._validateMonth(this.element.val());
-            var _year = this._validateYear(this.element.val());
+            var _month = this._validateMonth(this.element.val()),
+                _year = this._validateYear(this.element.val()), 
+                _date;
 
             if (!isNaN(_year) && !isNaN(_month)) {
                 if (this.options.ValidationErrorMessage !== null && !this.options.Disabled) {
                     $('#MonthPicker_Validation_' + this.element.attr('id')).hide();
                 }
-
-                var _date = _month + '/' + _year;
+                
+                if(this._isMonthInputType){
+                    _date = _year + '-' + _month;
+                }else{
+                    _date = _month + '/' + _year;
+                }
+                
                 $(this).val(_date);
                 return _date;
             } else {
@@ -362,7 +373,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
         },
 
         _setUseInputMask: function () {
-            if (!this.element.is('input[type="month"]')) {
+            if (!this._isMonthInputType) {
                 if (this.options.UseInputMask) {
                     this.element.mask(_inputMask);
                 } else {
@@ -472,6 +483,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             }else{
                 this.element.val(month + '/' + this._getPickerYear()).change();
             }
+            
             this.element.blur();
             if (this._isFunction(this.options.OnAfterChooseMonth)) {
                 this.options.OnAfterChooseMonth();

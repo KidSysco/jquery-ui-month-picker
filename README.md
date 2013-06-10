@@ -148,7 +148,7 @@ $('.selector').MonthPicker('option', 'StartYear', false );
     <h3>ValidationErrorMessage</h3>
     Type: Nullable String<br />
     Default: null<br />
-    Sets the starting year in the month picker. Set to null to omit this behavior. This option will override all other start year behaviors.
+    Sets the validation error message for use with text input types. Set to null to omit this behavior. This option will be ignored if the HTML 5 Input Type is used.
 </p>
 <p>
     Set the option upon init.
@@ -168,7 +168,7 @@ $('.selector').MonthPicker('option', 'ValidationErrorMessage', null );
     <h3>UseInputMask</h3>
     Type: Bool<br />
     Default: false<br />
-    Directs the MonthPicker to use the <a href="http://digitalbush.com/projects/masked-input-plugin/">Digital Bush Masked Input jQuery Plugin</a> which must be loaded to the page if this option is to be used.
+    Directs the MonthPicker to use the <a href="http://digitalbush.com/projects/masked-input-plugin/">Digital Bush Masked Input jQuery Plugin</a> on text inputs, the plugin must be loaded to the page if this option is to be used. This option will be ignored if the HTML 5 Input Type is used.
 </p>
 <p>
     Set the option upon init.

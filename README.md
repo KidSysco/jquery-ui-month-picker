@@ -39,6 +39,8 @@ script src="MonthPicker.2.0.min.js" type="text/javascript"></script>
 $('#TextBox1').MonthPicker({ StartYear: 2020, ShowIcon: false });
 $('#TextBox2').MonthPicker().css('backgroundColor', 'lightyellow');
 </pre>
+
+<h2>HTML 5 Month Input Support</h2>
 <p>Calling the MonthPicker on HTML 5 Month Input types is currently addressed but still under development. The version of Chrome that I currently run shows some nice examples of how this plugin works with the HTML 5 Month Input Type.</p>
 <p>W3C Month Input Type Documentation: http://www.w3.org/TR/html-markup/input.month.html</p>
 

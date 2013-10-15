@@ -17,7 +17,10 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
     var _disabledClass = 'month-picker-disabled';
     var _inputMask = '99/9999';
     var _markup = '<div class="ui-widget-header ui-helper-clearfix ui-corner-all"><table class="month-picker-year-table" width="100%" border="0" cellspacing="1" cellpadding="2"><tr><td class="previous-year"><button>&nbsp;</button></td><td class="year-container-all" title="Jump Years"><div class="year-title">Year: </div><div id="year-container"><span class="year"></span></div></td><td class="next-year"><button>&nbsp;</button></td></tr></table></div><div class="ui-widget ui-widget-content ui-helper-clearfix ui-corner-all"><table class="month-picker-month-table" width="100%" border="0" cellspacing="1" cellpadding="2"><tr><td><button type="button" class="button-1"></button></td><td><button class="button-2" type="button"></button></td><td><button class="button-3" type="button"></button></td></tr><tr><td><button class="button-4" type="button"></button></td><td><button class="button-5" type="button"></button></td><td><button class="button-6" type="button"></button></td></tr><tr><td><button class="button-7" type="button"></button></td><td><button class="button-8" type="button"></button></td><td><button class="button-9" type="button"></button></td></tr><tr><td><button class="button-10" type="button"></button></td><td><button class="button-11" type="button"></button></td><td><button class="button-12" type="button"></button></td></tr></table></div>';
-    var _months = ['Jan.', 'Feb.', 'Mar.', 'Apr.', 'May', 'June', 'July', 'Aug.', 'Sep.', 'Oct.', 'Nov.', 'Dec.'];
+    
+    $.MonthPicker = {
+        months: ['Jan.', 'Feb.', 'Mar.', 'Apr.', 'May', 'June', 'July', 'Aug.', 'Sep.', 'Oct.', 'Nov.', 'Dec.']
+    };
 
     $.widget("KidSysco.MonthPicker", {
 
@@ -513,7 +516,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             $('.year-container-all', this._monthPickerMenu).css('cursor', 'pointer');
             $('.month-picker-month-table button', this._monthPickerMenu).unbind('.MonthPicker');
 
-            for (var _month in _months) {
+            for (var _month in $.MonthPicker.months) {
                 var _counter = parseInt(_month, 10) + 1;
                 $('.button-' + _counter, this._monthPickerMenu)
                     .bind('click.MonthPicker', {
@@ -523,7 +526,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
                     this._hide();
                 }, this));
 
-                $('.button-' + _counter, this._monthPickerMenu).button('option', 'label', _months[_month]);
+                $('.button-' + _counter, this._monthPickerMenu).button('option', 'label', $.MonthPicker.months[_month]);
             }
         },
 

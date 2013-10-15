@@ -13,14 +13,20 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
 */
 ;
 (function ($, window, document, undefined) {
+    var _markup;
     var _speed = 500;
     var _disabledClass = 'month-picker-disabled';
     var _inputMask = '99/9999';
-    var _markup = '<div class="ui-widget-header ui-helper-clearfix ui-corner-all"><table class="month-picker-year-table" width="100%" border="0" cellspacing="1" cellpadding="2"><tr><td class="previous-year"><button>&nbsp;</button></td><td class="year-container-all" title="Jump Years"><div class="year-title">Year: </div><div id="year-container"><span class="year"></span></div></td><td class="next-year"><button>&nbsp;</button></td></tr></table></div><div class="ui-widget ui-widget-content ui-helper-clearfix ui-corner-all"><table class="month-picker-month-table" width="100%" border="0" cellspacing="1" cellpadding="2"><tr><td><button type="button" class="button-1"></button></td><td><button class="button-2" type="button"></button></td><td><button class="button-3" type="button"></button></td></tr><tr><td><button class="button-4" type="button"></button></td><td><button class="button-5" type="button"></button></td><td><button class="button-6" type="button"></button></td></tr><tr><td><button class="button-7" type="button"></button></td><td><button class="button-8" type="button"></button></td><td><button class="button-9" type="button"></button></td></tr><tr><td><button class="button-10" type="button"></button></td><td><button class="button-11" type="button"></button></td><td><button class="button-12" type="button"></button></td></tr></table></div>';
     
     $.MonthPicker = {
+        year: "Year",
+        prevYear: "Previous Year",
+        nextYear: "Next Year",
+        jumpYears: "Jump Years",
         months: ['Jan.', 'Feb.', 'Mar.', 'Apr.', 'May', 'June', 'July', 'Aug.', 'Sep.', 'Oct.', 'Nov.', 'Dec.']
     };
+    
+    _markup = '<div class="ui-widget-header ui-helper-clearfix ui-corner-all"><table class="month-picker-year-table" width="100%" border="0" cellspacing="1" cellpadding="2"><tr><td class="previous-year"><button>&nbsp;</button></td><td class="year-container-all" title="' + $.MonthPicker.jumpYears + '"><div class="year-title">' + $.MonthPicker.year + '</div><div id="year-container"><span class="year"></span></div></td><td class="next-year"><button>&nbsp;</button></td></tr></table></div><div class="ui-widget ui-widget-content ui-helper-clearfix ui-corner-all"><table class="month-picker-month-table" width="100%" border="0" cellspacing="1" cellpadding="2"><tr><td><button type="button" class="button-1"></button></td><td><button class="button-2" type="button"></button></td><td><button class="button-3" type="button"></button></td></tr><tr><td><button class="button-4" type="button"></button></td><td><button class="button-5" type="button"></button></td><td><button class="button-6" type="button"></button></td></tr><tr><td><button class="button-7" type="button"></button></td><td><button class="button-8" type="button"></button></td><td><button class="button-9" type="button"></button></td></tr><tr><td><button class="button-10" type="button"></button></td><td><button class="button-11" type="button"></button></td><td><button class="button-12" type="button"></button></td></tr></table></div>';
 
     $.widget("KidSysco.MonthPicker", {
 
@@ -504,12 +510,12 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
 
         _showMonths: function () {
             $('.previous-year button', this._monthPickerMenu)
-                .attr('title', 'Previous Year')
+                .attr('title', $.MonthPicker.prevYear)
                 .unbind('click')
                 .bind('click.MonthPicker', $.proxy(this._previousYear, this));
 
             $('.next-year button', this._monthPickerMenu)
-                .attr('title', 'Next Year')
+                .attr('title', $.MonthPicker.nextYear)
                 .unbind('click')
                 .bind('click.MonthPicker', $.proxy(this._nextYear, this));
 

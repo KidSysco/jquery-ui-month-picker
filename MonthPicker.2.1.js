@@ -19,20 +19,59 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
     var _inputMask = '99/9999';
     
     $.MonthPicker = {
-        year: "Year",
-        prevYear: "Previous Year",
-        nextYear: "Next Year",
-        jumpYears: "Jump Years",
-        months: ['Jan.', 'Feb.', 'Mar.', 'Apr.', 'May', 'June', 'July', 'Aug.', 'Sep.', 'Oct.', 'Nov.', 'Dec.']
+        i18n: {
+            year: "Year",
+            prevYear: "Previous Year",
+            nextYear: "Next Year",
+            jumpYears: "Jump Years",
+            months: ['Jan.', 'Feb.', 'Mar.', 'Apr.', 'May', 'June', 'July', 'Aug.', 'Sep.', 'Oct.', 'Nov.', 'Dec.']
+        }
     };
     
-    _markup = '<div class="ui-widget-header ui-helper-clearfix ui-corner-all"><table class="month-picker-year-table" width="100%" border="0" cellspacing="1" cellpadding="2"><tr><td class="previous-year"><button>&nbsp;</button></td><td class="year-container-all" title="' + $.MonthPicker.jumpYears + '"><div class="year-title">' + $.MonthPicker.year + '</div><div id="year-container"><span class="year"></span></div></td><td class="next-year"><button>&nbsp;</button></td></tr></table></div><div class="ui-widget ui-widget-content ui-helper-clearfix ui-corner-all"><table class="month-picker-month-table" width="100%" border="0" cellspacing="1" cellpadding="2"><tr><td><button type="button" class="button-1"></button></td><td><button class="button-2" type="button"></button></td><td><button class="button-3" type="button"></button></td></tr><tr><td><button class="button-4" type="button"></button></td><td><button class="button-5" type="button"></button></td><td><button class="button-6" type="button"></button></td></tr><tr><td><button class="button-7" type="button"></button></td><td><button class="button-8" type="button"></button></td><td><button class="button-9" type="button"></button></td></tr><tr><td><button class="button-10" type="button"></button></td><td><button class="button-11" type="button"></button></td><td><button class="button-12" type="button"></button></td></tr></table></div>';
+    _markup =
+        '<div class="ui-widget-header ui-helper-clearfix ui-corner-all">' +
+            '<table class="month-picker-year-table" width="100%" border="0" cellspacing="1" cellpadding="2">' +
+                '<tr>' +
+                    '<td class="previous-year"><button>&nbsp;</button></td>' +
+                    '<td class="year-container-all">' +
+                        '<div class="year-title"></div>' +
+                        '<div id="year-container"><span class="year"></span></div>' +
+                    '</td>' +
+                    '<td class="next-year"><button>&nbsp;</button></td>' +
+                '</tr>' +
+            '</table>' +
+        '</div>' +
+        '<div class="ui-widget ui-widget-content ui-helper-clearfix ui-corner-all">' +
+            '<table class="month-picker-month-table" width="100%" border="0" cellspacing="1" cellpadding="2">' +
+                '<tr>' +
+                    '<td><button type="button" class="button-1"></button></td>' +
+                    '<td><button class="button-2" type="button"></button></td>' +
+                    '<td><button class="button-3" type="button"></button></td>' +
+                '</tr>' +
+                '<tr>' +
+                    '<td><button class="button-4" type="button"></button></td>' +
+                    '<td><button class="button-5" type="button"></button></td>' +
+                    '<td><button class="button-6" type="button"></button></td>' +
+                '</tr>' +
+                '<tr>' +
+                    '<td><button class="button-7" type="button"></button></td>' +
+                    '<td><button class="button-8" type="button"></button></td>' +
+                    '<td><button class="button-9" type="button"></button></td>' +
+                '</tr>' +
+                '<tr>' +
+                    '<td><button class="button-10" type="button"></button></td>' +
+                    '<td><button class="button-11" type="button"></button></td>' +
+                    '<td><button class="button-12" type="button"></button></td>' +
+                '</tr>' +
+            '</table>' +
+        '</div>';
 
     $.widget("KidSysco.MonthPicker", {
 
         /******* Properties *******/
 
         options: {
+            i18n: null,
             StartYear: null,
             ShowIcon: true,
             UseInputMask: false,
@@ -99,6 +138,9 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             // In jQuery UI 1.9 and above, you use the _super method instead.
             this._super("_setOption", key, value);
             switch (key) {
+                case 'i18n':
+                    this.options.i18n = $.extend({}, value);
+                    break;
                 case 'Disabled':
                     this.options.Disabled = value;
                     this._setDisabledState();
@@ -192,6 +234,9 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             $(_markup).appendTo(this._monthPickerMenu);
             $('body').append(this._monthPickerMenu);
 
+            this._monthPickerMenu.find('.year-title').text(this._i18n('year'));
+            this._monthPickerMenu.find('.year-container-all').attr('title', this._i18n('jumpYears'));
+
             this._showIcon();
 
             this._createValidationMessage();
@@ -228,6 +273,10 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
         },
 
         /****** Misc. Utility functions ******/
+
+        _i18n: function(str) {
+            return $.extend({}, $.MonthPicker.i18n, this.options.i18n)[str];
+        },
 
         _isFunction: function (func) {
             return typeof (func) === 'function';
@@ -383,11 +432,13 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
 
         _setUseInputMask: function () {
             if (!this._isMonthInputType) {
-                if (this.options.UseInputMask) {
-                    this.element.mask(_inputMask);
-                } else {
-                    this.element.unmask();
-                }
+                try {
+                    if (this.options.UseInputMask) {
+                        this.element.mask(_inputMask);
+                    } else {
+                        this.element.unmask();
+                    }
+                } catch (e) {}
             }
         },
 
@@ -509,20 +560,22 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
         },
 
         _showMonths: function () {
+            var _months = this._i18n('months');
+
             $('.previous-year button', this._monthPickerMenu)
-                .attr('title', $.MonthPicker.prevYear)
+                .attr('title', this._i18n('prevYear'))
                 .unbind('click')
                 .bind('click.MonthPicker', $.proxy(this._previousYear, this));
 
             $('.next-year button', this._monthPickerMenu)
-                .attr('title', $.MonthPicker.nextYear)
+                .attr('title', this._i18n('nextYear'))
                 .unbind('click')
                 .bind('click.MonthPicker', $.proxy(this._nextYear, this));
 
             $('.year-container-all', this._monthPickerMenu).css('cursor', 'pointer');
             $('.month-picker-month-table button', this._monthPickerMenu).unbind('.MonthPicker');
 
-            for (var _month in $.MonthPicker.months) {
+            for (var _month in _months) {
                 var _counter = parseInt(_month, 10) + 1;
                 $('.button-' + _counter, this._monthPickerMenu)
                     .bind('click.MonthPicker', {
@@ -532,7 +585,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
                     this._hide();
                 }, this));
 
-                $('.button-' + _counter, this._monthPickerMenu).button('option', 'label', $.MonthPicker.months[_month]);
+                $('.button-' + _counter, this._monthPickerMenu).button('option', 'label', _months[_month]);
             }
         },
 

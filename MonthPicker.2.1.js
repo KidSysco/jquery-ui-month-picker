@@ -24,7 +24,8 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             prevYear: "Previous Year",
             nextYear: "Next Year",
             nextText: "Next",
-			prevText: "Prev",
+	    prevText: "Prev",
+	    buttonText: "Open Month Chooser",
             jumpYears: "Jump Years",
             months: ['Jan.', 'Feb.', 'Mar.', 'Apr.', 'May', 'June', 'July', 'Aug.', 'Sep.', 'Oct.', 'Nov.', 'Dec.']
         }
@@ -355,7 +356,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
         _showIcon: function () {
             if (this._monthPickerButton === null) {
                 if (this.options.ShowIcon) {
-                    this._monthPickerButton = $('<span id="MonthPicker_Button_' + this.element.attr('id') + '" class="month-picker-open-button">Open Month Chooser</span>').insertAfter(this.element);
+                    this._monthPickerButton = $('<span id="MonthPicker_Button_' + this.element.attr('id') + '" class="month-picker-open-button">' + this._i18n('buttonText') + '</span>').insertAfter(this.element);
                     this._monthPickerButton.button({
                         text: false,
                         icons: {

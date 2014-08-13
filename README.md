@@ -7,10 +7,6 @@ for date validation, setting the start year, using an icon button, input masking
 -See a demo with unit tests running on jsFiddle at...
 -http://jsfiddle.net/kidsysco/JeZap/ 
 
-<table border="0" stye="border: 0;" cellspacing="0" cellpadding="0">
-
-<tr><td>
-
 <h2>Prerequisites</h2>
 <p>This plugin has been tested using the following configuration.</p>
 <ul>
@@ -24,13 +20,6 @@ for date validation, setting the start year, using an icon button, input masking
     </li>
     <li>(optional) <a target="_new" href="http://digitalbush.com/projects/masked-input-plugin/">Digital Bush Masked Input jQuery Plugin</a></li>
 </ul>
-
-</td><td>
-<img src="https://cloud.githubusercontent.com/assets/2731230/3907006/f117cf7c-22f7-11e4-9958-4cd246c0acb6.gif" />
-</td>
-</tr>
-
-</table>
 
 <h2>Installation</h2>
 <p>Attach all required css and js files to the web page as follows...</p> 
@@ -53,6 +42,7 @@ $('#TextBox2').MonthPicker().css('backgroundColor', 'lightyellow');
 
 <h2>HTML 5 Month Input Support</h2>
 <p>Calling the MonthPicker on HTML 5 Month Input types is currently addressed but still under development. The version of Chrome that I currently run shows some nice examples of how this plugin works with the HTML 5 Month Input Type. The HTML 5 support in Chrome appears to make input masking and validation obsolete. This is quickly becoming the reccomended way to use this plugin.</p>
+<p><img src="https://cloud.githubusercontent.com/assets/2731230/3907006/f117cf7c-22f7-11e4-9958-4cd246c0acb6.gif" /></p>
 <p>W3C Month Input Type Documentation: http://www.w3.org/TR/html-markup/input.month.html</p>
 
 <h2>API Methods</h2>

@@ -26,7 +26,7 @@ for date validation, setting the start year, using an icon button, input masking
 </ul>
 
 </td><td>
-<img src="https://www.dropbox.com/s/ehrldlx0v3dbltt/html5-example-1.gif" />
+<img src="https://cloud.githubusercontent.com/assets/2731230/3907006/f117cf7c-22f7-11e4-9958-4cd246c0acb6.gif" />
 </td>
 </tr>
 

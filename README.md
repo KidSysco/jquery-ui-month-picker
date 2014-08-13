@@ -41,7 +41,7 @@ $('#TextBox2').MonthPicker().css('backgroundColor', 'lightyellow');
 </pre>
 
 <h2>HTML 5 Month Input Support</h2>
-<p>Calling the MonthPicker on HTML 5 Month Input types is currently addressed but still under development. The version of Chrome that I currently run shows some nice examples of how this plugin works with the HTML 5 Month Input Type. The HTML 5 support in Chrome appears to make input masking and validation obsolete. This is quickly becoming the reccomended way to use this plugin.</p>
+<p>Calling the MonthPicker on HTML 5 Month Input types is currently addressed. The latest version of Chrome shows some nice examples of how this plugin works with the HTML 5 Month Input Type. The HTML 5 support in Chrome appears to make input masking and validation obsolete, so those can be turned off. This is the reccomended way to use this plugin but it is not required.</p>
 <p><img src="https://cloud.githubusercontent.com/assets/2731230/3907006/f117cf7c-22f7-11e4-9958-4cd246c0acb6.gif" /></p>
 <p>W3C Month Input Type Documentation: http://www.w3.org/TR/html-markup/input.month.html</p>
 

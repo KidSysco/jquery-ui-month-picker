@@ -10,8 +10,8 @@ for date validation, setting the start year, using an icon button, input masking
 <h2>Prerequisites</h2>
 <p>This plugin has been tested using the following configuration.</p>
 <ul>
-    <li>jQuery 1.9</li>
-    <li>jQuery UI 1.9, 1.10
+    <li>jQuery 1.9+</li>
+    <li>jQuery UI 1.9+
         <ul>
             <li>jQuery UI Widget Factory required</li>
             <li>.button() plugin required</li>
@@ -34,14 +34,14 @@ script src="MonthPicker.2.0.min.js" type="text/javascript"></script>
 </pre>
 
 <h2>Source Code Example</h2>
-<p>This plugin can only be called on the text or month input types as follows.</p> 
+<p>This plugin can only be called on the text or the HTML 5 Month Input Types as follows.</p> 
 <pre>
 $('#TextBox1').MonthPicker({ StartYear: 2020, ShowIcon: false });
-$('#TextBox2').MonthPicker().css('backgroundColor', 'lightyellow');
+$('input[type=month]').MonthPicker().css('backgroundColor', 'lightyellow');
 </pre>
 
 <h2>HTML 5 Month Input Support</h2>
-<p>Calling the MonthPicker on HTML 5 Month Input types is currently addressed. The latest version of Chrome shows some nice examples of how this plugin works with the HTML 5 Month Input Type. The HTML 5 support in Chrome appears to make input masking and validation obsolete, so those can be turned off. This is the reccomended way to use this plugin but it is not required.</p>
+<p>Calling the MonthPicker on HTML 5 Month Input types is currently working. The latest version of Chrome shows some nice examples of how this plugin works with the HTML 5 Month Input Type but we still feel that our UI is better than what Chrome offers... Wow, did I just say that? The jQuery UI month picker UI allows the user to choose any month of the year in a single click, while the Chrome version requires more tinkering. The HTML 5 support in Chrome appears to make input masking and validation obsolete, so those should be turned off when using this plugin on an HTML 5 Month Input Type. The HTML 5 Month Input Type is the reccomended element to call this plugin on but it is not required.</p>
 <p><img src="https://cloud.githubusercontent.com/assets/2731230/3907006/f117cf7c-22f7-11e4-9958-4cd246c0acb6.gif" /></p>
 <p>W3C Month Input Type Documentation: http://www.w3.org/TR/html-markup/input.month.html</p>
 

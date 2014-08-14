@@ -27,6 +27,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             prev5Years: 'Jump Back 5 Years',
             nextLabel: "Next",
             prevLabel: "Prev",
+            buttonText: "Open Month Chooser",
             jumpYears: "Jump Years",
             months: ['Jan.', 'Feb.', 'Mar.', 'Apr.', 'May', 'June', 'July', 'Aug.', 'Sep.', 'Oct.', 'Nov.', 'Dec.']
         }

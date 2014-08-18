@@ -1,8 +1,8 @@
-<h1>The jQuery UI Month Picker Plugin</h1>
+<h1>The jQuery UI Month Picker Version 2.2</h1>
 <p>The jQuery UI Month Picker Plugin is designed to allow user input for only a month and year when only that input is 
 required. Clicking on the year, allows the user to jump ahead or back 5 years at a time. Clicking anywhere on the 
 page, except on the month picker menu itself, will cause the month picker to hide. The Month Picker has lots of options 
-for date validation, setting the start year, using an icon button, input masking and more.</p>
+for date validation, setting the start year, using an icon button, input masking, internationalization and localization and more.</p>
  
 -See a demo with unit tests running on jsFiddle at...
 -http://jsfiddle.net/kidsysco/JeZap/ 
@@ -39,6 +39,9 @@ script src="MonthPicker.2.0.min.js" type="text/javascript"></script>
 $('#TextBox1').MonthPicker({ StartYear: 2020, ShowIcon: false });
 $('input[type=month]').MonthPicker().css('backgroundColor', 'lightyellow');
 </pre>
+
+<h2>Internationalization and Localization i18n</h2>
+<p>All buttons, labels and other text can be changed out using the i18n support. Examples needed here.</p>
 
 <h2>HTML 5 Month Input Support</h2>
 <p>Calling the MonthPicker on HTML 5 Month Input types is currently working. The latest version of Chrome shows some nice examples of how this plugin works with the HTML 5 Month Input Type but we still feel that our UI is better than what Chrome offers... Wow, did I just say that? The jQuery UI month picker UI allows the user to choose any month of the year in a single click, while the Chrome version requires more tinkering. The HTML 5 support in Chrome appears to make input masking and validation obsolete, so those should be turned off when using this plugin on an HTML 5 Month Input Type. The HTML 5 Month Input Type is the reccomended element to call this plugin on but it is not required.</p>

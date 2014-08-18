@@ -23,6 +23,11 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             year: "Year",
             prevYear: "Previous Year",
             nextYear: "Next Year",
+            next5Years: 'Jump Forward 5 Years',
+            prev5Years: 'Jump Back 5 Years',
+            nextLabel: "Next",
+            prevLabel: "Prev",
+            buttonText: "Open Month Chooser",
             jumpYears: "Jump Years",
             months: ['Jan.', 'Feb.', 'Mar.', 'Apr.', 'May', 'June', 'July', 'Aug.', 'Sep.', 'Oct.', 'Nov.', 'Dec.']
         }
@@ -250,7 +255,8 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
                 },
                 text: false
             });
-
+            $('.previous-year button span.ui-button-icon-primary').text(this._i18n('prevLabel'));
+             
             $('.next-year button', this._monthPickerMenu)
                 .button({
                 icons: {
@@ -258,6 +264,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
                 },
                 text: false
             });
+            $('.next-year button span.ui-button-icon-primary').text(this._i18n('nextLabel'));
 
             $('.month-picker-month-table td button', this._monthPickerMenu).button();
 
@@ -353,7 +360,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
         _showIcon: function () {
             if (this._monthPickerButton === null) {
                 if (this.options.ShowIcon) {
-                    this._monthPickerButton = $('<span id="MonthPicker_Button_' + this.element.attr('id') + '" class="month-picker-open-button">Open Month Chooser</span>').insertAfter(this.element);
+                    this._monthPickerButton = $('<span id="MonthPicker_Button_' + this.element.attr('id') + '" class="month-picker-open-button">' + this._i18n('buttonText') + '</span>').insertAfter(this.element);
                     this._monthPickerButton.button({
                         text: false,
                         icons: {
@@ -601,7 +608,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             var _year = this._getPickerYear();
 
             $('.previous-year button', this._monthPickerMenu)
-                .attr('title', 'Jump Back 5 Years')
+                .attr('title', this._i18n('prev5Years'))
                 .unbind('click')
                 .bind('click', $.proxy(function () {
                 this._previousYears();
@@ -609,7 +616,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             }, this));
 
             $('.next-year button', this._monthPickerMenu)
-                .attr('title', 'Jump Forward 5 Years')
+                .attr('title', this._i18n('next5Years'))
                 .unbind('click')
                 .bind('click', $.proxy(function () {
                 this._nextYears();

@@ -126,8 +126,10 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
 
             $(document).unbind('click.MonthPicker' + this.element.attr('id'), $.proxy(this._hide, this));
 
-            this._monthPickerMenu.remove();
-            this._monthPickerMenu = null;
+            if(this._monthPickerMenu){
+                this._monthPickerMenu.remove();
+                this._monthPickerMenu = null;
+            }
 
             if (this.monthPickerButton) {
                 this._monthPickerButton.remove();
@@ -197,6 +199,9 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
                 case 'ShowIcon':
                     this.options.ShowIcon = value;
                     this._showIcon();
+                    break;
+                case 'Destroy':
+                    this._destroy();
                     break;
                 case 'ValidationErrorMessage':
                     this.options.ValidationErrorMessage = value;
@@ -335,6 +340,10 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
 
         Enable: function () {
             this._setOption("Disabled", false);
+        },
+
+        Destroy: function() {
+            this._setOption("Destroy");
         },
 
         ClearAllCallbacks: function () {

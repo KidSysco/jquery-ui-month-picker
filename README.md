@@ -73,6 +73,9 @@ $('input[type=month]').MonthPicker().css('backgroundColor', 'lightyellow');
 <p> <b>$('.selector').val()</b>
 <br />Use jQuery .val() to get the input without any date validation.</p>
 
+<p> <b>$('.selector').Destroy()</b>
+<br />Destroys the month picker widget.</p>
+
 <h2>Theme Support</h2>
 <p>The MonthPicker plugin uses the jQuery UI CSS Framework to style its look and feel, including the colors of buttons and background textures. We recommend using the ThemeRoller tool to create and download custom themes that are easy to build and maintain.</p>
 <p>If a deeper level of customization is needed, there are widget-specific classes referenced within the MonthPicker.css stylesheet that can be modified. These classes are highlighed below.</p>

@@ -41,7 +41,12 @@ $('input[type=month]').MonthPicker().css('backgroundColor', 'lightyellow');
 </pre>
 
 <h2>Internationalization and Localization i18n</h2>
-<p>All buttons, labels and other text can be changed out using the i18n support. Examples needed here.</p>
+<p>
+All buttons, labels and other text can be changed out using the i18n support.<br/>
+$('#TextBox1').MonthPicker({ year: "année",
+                             prevYear: "l'année dernière",
+                             nextYear: "l'année prochaine" });
+</p>
 
 <h2>HTML 5 Month Input Support</h2>
 <p>Calling the MonthPicker on HTML 5 Month Input types is currently working. The latest version of Chrome shows some nice examples of how this plugin works with the HTML 5 Month Input Type but we still feel that our UI is better than what Chrome offers... Wow, did I just say that? The jQuery UI month picker UI allows the user to choose any month of the year in a single click, while the Chrome version requires more tinkering. The HTML 5 support in Chrome appears to make input masking and validation obsolete, so those should be turned off when using this plugin on an HTML 5 Month Input Type. The HTML 5 Month Input Type is the reccomended element to call this plugin on but it is not required.</p>

@@ -143,18 +143,26 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
         },
 
         _setOption: function (key, value) {
-            // In jQuery UI 1.8, manually invoke the _setOption method from the base widget.
+            switch (key) {
+	            case 'i18n':
+                    this.options.i18n = $.extend({}, value);
+			        return;
+			    case 'Destroy':
+                    this._destroy();
+					return;
+	        }
+	        
+	        // In jQuery UI 1.8, manually invoke the _setOption method from the base widget.
             //$.Widget.prototype._setOption.apply(this, arguments);
             // In jQuery UI 1.9 and above, you use the _super method instead.
-            this._super("_setOption", key, value);
+            this._super(key, value);
+            
             switch (key) {
-                case 'i18n':
-                    this.options.i18n = $.extend({}, value);
-                    break;
                 case 'Disabled':
-                    this.options.Disabled = value;
+                    //this.options.Disabled = value;
                     this._setDisabledState();
                     break;
+                /*
                 case 'OnAfterChooseMonth':
                     this.options.OnAfterChooseMonth = value;
                     break;
@@ -184,27 +192,21 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
                     break;
                 case 'OnAfterPreviousYears':
                     this.options.OnAfterPreviousYears = value;
-                    break;
+                    break; 
+                */
                 case 'UseInputMask':
-                    this.options.UseInputMask = value;
                     this._setUseInputMask();
                     break;
                 case 'StartYear':
-                    this.options.StartYear = value;
                     this._setStartYear();
                     if (value !== null) {
                         this._setPickerYear(value);
                     }
                     break;
                 case 'ShowIcon':
-                    this.options.ShowIcon = value;
                     this._showIcon();
                     break;
-                case 'Destroy':
-                    this._destroy();
-                    break;
                 case 'ValidationErrorMessage':
-                    this.options.ValidationErrorMessage = value;
                     if (this.options.ValidationErrorMessage !== null) {
                         this._createValidationMessage();
                     } else {
@@ -343,7 +345,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
         },
 
         Destroy: function() {
-            this._setOption("Destroy");
+            this._destroy();
         },
 
         ClearAllCallbacks: function () {

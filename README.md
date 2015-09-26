@@ -16,6 +16,7 @@ for date validation, setting the start year, using an icon button, input masking
             <li>jQuery UI Widget Factory required</li>
             <li>.button() plugin required</li>
             <li>.datepicker() plugin required</li>
+            <li>.position() plugin optional (highly recommended see Position option)</li>
         </ul>
     </li>
     <li>(optional) <a target="_new" href="http://digitalbush.com/projects/masked-input-plugin/">Digital Bush Masked Input jQuery Plugin</a></li>
@@ -43,9 +44,15 @@ $('input[type=month]').MonthPicker().css('backgroundColor', 'lightyellow');
 <h2>Internationalization and Localization i18n</h2>
 <p>
 All buttons, labels and other text can be changed out using the i18n support.<br/>
-$('#TextBox1').MonthPicker({ year: "année",
-                             prevYear: "l'année dernière",
-                             nextYear: "l'année prochaine" });
+<pre>
+$('#TextBox1').MonthPicker({
+      i18n: {
+         year: "année",
+         prevYear: "l'année dernière",
+         nextYear: "l'année prochaine"
+      }
+});
+</pre>
 </p>
 
 <h2>HTML 5 Month Input Support</h2>
@@ -165,7 +172,7 @@ $('.selector').MonthPicker('option', 'StartYear', false );
 <p>
     Set the option upon init.
     <pre>$('.selector').MonthPicker({ ValidationErrorMessage: 'Invalid Date!' });</pre>
-    
+    o
     Get or set the option, after init. 
 <pre>
 //getter
@@ -193,6 +200,36 @@ var disabled = $('.selector').MonthPicker('option', 'UseInputMask');
 
 //setter
 $('.selector').MonthPicker('option', 'UseInputMask', false );
+</pre>
+</p>
+
+<p>
+    <b>Position</b>
+    Type: Object<br>
+    Default: <pre>{ my: "right top", at: "right bottom", collision: "flip", of: $('.selector') }</pre><br />
+    If the <a href='http://api.jqueryui.com/position/'>jQuery UI .position() plugin</a> is loaded
+    the menu will be moved to an alternative position when it overflows the window in some direction. <br>
+    For more information see the <a href='http://api.jqueryui.com/position/#position-options'>collision option</a>.
+    <p>
+    In addition you can specify where you would like the menu to positiond.
+</p>
+<p>
+    Set the option upon init.
+    <pre>
+$('.selector').MonthPicker({
+ Position: {
+    collision: 'fit flip'
+ }
+});
+</pre>
+    
+    Get or set the option, after init. 
+<pre>
+//getter
+var position = $('.selector').MonthPicker('option', 'Position');
+
+//setter
+$('.selector').MonthPicker('option', 'Position', {collision: 'fit', at: 'left bottom'});
 </pre>
 </p>
 

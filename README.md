@@ -210,8 +210,8 @@ $('.selector').MonthPicker('option', 'UseInputMask', false );
     If the <a href='http://api.jqueryui.com/position/'>jQuery UI .position() plugin</a> is loaded
     the menu will be moved to an alternative position when it overflows the window in some direction. <br />
     For more information see the <a href='http://api.jqueryui.com/position/#position-options'>collision option</a>.
-    
-    
+</p>    
+<p>
     In addition you can specify where you would like the menu to positiond.
 </p>
 <p>

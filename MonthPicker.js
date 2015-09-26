@@ -15,12 +15,12 @@ License along with this library; if not, visit
 http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
 */
 ;
-(function ($, window, document, undefined) {
+(function ($, window, document) {
     var _markup;
     var _speed = 500;
     var _disabledClass = 'month-picker-disabled';
     var _inputMask = '99/9999';
-    var _defaultPos = { my: "right top", at: "right bottom" };
+    var _defaultPos = { my: 'left top+1', at: 'left bottom' };
     var _setupErr = 'MonthPicker Setup Error: ';
     var _posErrr = _setupErr + 'The jQuery UI position plug-in must be loaded in order to specify a position.';
     
@@ -90,15 +90,15 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             ValidationErrorMessage: null,
             Disabled: false,
             OnAfterMenuOpen: $.noop,
-            OnAfterMenuClose: null,
-            OnAfterNextYear: null,
-            OnAfterNextYears: null,
-            OnAfterPreviousYear: null,
-            OnAfterPreviousYears: null,
-            OnAfterChooseMonth: null,
-            OnAfterChooseYear: null,
-            OnAfterChooseYears: null,
-            OnAfterChooseMonths: null
+            OnAfterMenuClose: $.noop,
+            OnAfterNextYear: $.noop,
+            OnAfterNextYears: $.noop,
+            OnAfterPreviousYear: $.noop,
+            OnAfterPreviousYears: $.noop,
+            OnAfterChooseMonth: $.noop,
+            OnAfterChooseYear: $.noop,
+            OnAfterChooseYears: $.noop,
+            OnAfterChooseMonths: $.noop
         },
 
         _monthPickerMenu: null,
@@ -287,10 +287,6 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             return $.extend({}, $.MonthPicker.i18n, this.options.i18n)[str];
         },
 
-        _isFunction: function (func) {
-            return typeof (func) === 'function';
-        },
-
         /****** Publicly Accessible API functions ******/
 
         GetSelectedYear: function () {
@@ -341,16 +337,11 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
         },
 
         ClearAllCallbacks: function () {
-            this.options.OnAfterChooseMonth = null;
-            this.options.OnAfterChooseMonths = null;
-            this.options.OnAfterChooseYear = null;
-            this.options.OnAfterChooseYears = null;
-            this.options.OnAfterMenuClose = null;
-            this.options.OnAfterMenuOpen = $.noop;
-            this.options.OnAfterNextYear = null;
-            this.options.OnAfterNextYears = null;
-            this.options.OnAfterPreviousYear = null;
-            this.options.OnAfterPreviousYears = null;
+            for (var _opt in this.options) {
+                if (_opt.indexOf('On') === 0) {
+                    this.options[_opt] = $.noop;
+                }
+            }
         },
 
         Clear: function () {
@@ -405,7 +396,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
 
         _show: function () {
             var _selectedYear = this.GetSelectedYear();
-            if (this.element.data(this._enum._overrideStartYear) !== undefined) {
+            if (this.element.data(this._enum._overrideStartYear) !== void 0) {
                 this._setPickerYear(this.options.StartYear);
             } else if (!isNaN(_selectedYear)) {
                 this._setPickerYear(_selectedYear);
@@ -443,11 +434,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
 
         _hide: function () {
             if (this._monthPickerMenu.css('display') === 'block') {
-                this._monthPickerMenu.slideUp(_speed, $.proxy(function () {
-                    if (this._isFunction(this.options.OnAfterMenuClose)) {
-                        this.options.OnAfterMenuClose();
-                    }
-                }, this));
+                this._monthPickerMenu.slideUp(_speed, $.proxy(this.options.OnAfterMenuClose, this.options));
             }
         },
 		
@@ -561,23 +548,20 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
 
             if (this.element.is('input[type="month"]')) {
                 this.element.val(this._getPickerYear() + '-' + month).change();
-            }else{
+            } else {
                 this.element.val(month + '/' + this._getPickerYear()).change();
             }
             
             this.element.blur();
-            if (this._isFunction(this.options.OnAfterChooseMonth)) {
-                this.options.OnAfterChooseMonth();
-            }
+            
+            this.options.OnAfterChooseMonth();
         },
 
         _chooseYear: function (year) {
             this._setPickerYear(year);
             this._showMonths();
-            if (this._isFunction(this.options.OnAfterChooseYear)) {
-                this.options.OnAfterChooseYear();
-            }
 
+            this.options.OnAfterChooseYear();
         },
 
         _showMonths: function () {
@@ -612,9 +596,8 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
 
         _showYearsClickHandler: function () {
             this._showYears();
-            if (this._isFunction(this.options.OnAfterChooseYears)) {
-                this.options.OnAfterChooseYears();
-            }
+
+            this.options.OnAfterChooseYears();
         },
 
         _showYears: function () {
@@ -657,35 +640,31 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
         _nextYear: function () {
             var _year = $('.month-picker-year-table .year', this._monthPickerMenu);
             _year.text(parseInt(_year.text()) + 1, 10);
-            if (this._isFunction(this.options.OnAfterNextYear)) {
-                this.options.OnAfterNextYear();
-            }
+
+            this.options.OnAfterNextYear();
         },
 
         _nextYears: function () {
             var _year = $('.month-picker-year-table .year', this._monthPickerMenu);
             _year.text(parseInt(_year.text()) + 5, 10);
             this._showYears();
-            if (this._isFunction(this.options.OnAfterNextYears)) {
-                this.options.OnAfterNextYears();
-            }
+
+            this.options.OnAfterNextYears();
         },
 
         _previousYears: function () {
             var _year = $('.month-picker-year-table .year', this._monthPickerMenu);
             _year.text(parseInt(_year.text()) - 5, 10);
             this._showYears();
-            if (this._isFunction(this.options.OnAfterPreviousYears)) {
-                this.options.OnAfterPreviousYears();
-            }
+
+            this.options.OnAfterPreviousYears();
         },
 
         _previousYear: function () {
             var _year = $('.month-picker-year-table .year', this._monthPickerMenu);
             _year.text(parseInt(_year.text()) - 1, 10);
-            if (this._isFunction(this.options.OnAfterPreviousYear)) {
-                this.options.OnAfterPreviousYear();
-            }
+            
+            this.options.OnAfterPreviousYear();
         }
     });
 }(jQuery, window, document));

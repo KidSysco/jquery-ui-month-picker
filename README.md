@@ -206,7 +206,7 @@ $('.selector').MonthPicker('option', 'UseInputMask', false );
 <p>
     <h3>Position</h3>
     Type: Object<br />
-    Default: <pre>{ my: "right top", at: "right bottom", collision: "flip", of: $('.selector') }</pre><br />
+    Default: <pre>{ my: 'left top+1', at: 'left bottom', collision: 'flip', of: $('.selector') }</pre><br />
     If the <a href='http://api.jqueryui.com/position/'>jQuery UI .position() plugin</a> is loaded
     the menu will be moved to an alternative position when it overflows the window in some direction. <br />
     For more information see the <a href='http://api.jqueryui.com/position/#position-options'>collision option</a>.

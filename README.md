@@ -172,7 +172,7 @@ $('.selector').MonthPicker('option', 'StartYear', false );
 <p>
     Set the option upon init.
     <pre>$('.selector').MonthPicker({ ValidationErrorMessage: 'Invalid Date!' });</pre>
-    o
+    
     Get or set the option, after init. 
 <pre>
 //getter

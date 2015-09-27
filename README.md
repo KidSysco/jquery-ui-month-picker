@@ -212,7 +212,7 @@ $('.selector').MonthPicker('option', 'UseInputMask', false );
     For more information see the <a href='http://api.jqueryui.com/position/#position-options'>collision option</a>.
 </p>    
 <p>
-    In addition you can specify where you would like the menu to positiond using the standart  <a href='http://api.jqueryui.com/position/#position-options'>jQuery IU .position() plugin options</a>.
+    In addition you can specify where you would like the menu to positiond using the <a href='http://api.jqueryui.com/position/#position-options'>jQuery IU .position() plugin options</a>.
 </p>
 <p>
  The properties you specify in the position hash will be merged with the default properties (shown above). <br />

@@ -17,7 +17,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
 ;
 (function ($, window, document) {
     var _markup;
-    var _speed = 500;
+    var _speeds = $.fx.speeds;
     var _disabledClass = 'month-picker-disabled';
     var _inputMask = '99/9999';
     var _defaultPos = { my: 'left top+1', at: 'left bottom' };
@@ -89,6 +89,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             UseInputMask: false,
             ValidationErrorMessage: null,
             Disabled: false,
+            Duration: 500,
             OnAfterMenuOpen: $.noop,
             OnAfterMenuClose: $.noop,
             OnAfterNextYear: $.noop,
@@ -403,21 +404,31 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             } else {
                 this._setPickerYear(new Date().getFullYear());
             }
-
+            
             var _menu = this._monthPickerMenu;
             if (_menu.css('display') === 'none') {
                 _menu.slideDown({
-	               duration: _speed,
+	               duration: this._duration(),
 	               start: $.proxy(this._position, this, _menu),
 	               complete: $.proxy(this.options.OnAfterMenuOpen, this.options)
 	            });
             }
-
+            
             this._showMonths();
-
+            
             return false;
         },
+        
+        _duration: function() {
+            var _dur = this.options.Duration;
 
+            if ($.isNumeric(_dur)) {
+		        return _dur;
+            }
+
+            return _dur in _speeds ? _speeds[ _dur ] : _speeds._default;
+        },
+        
         _position: $.ui.position ?
             function($menu) {
                 var _posOpts = $.extend(_defaultPos, this.options.Position);
@@ -434,7 +445,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
 
         _hide: function () {
             if (this._monthPickerMenu.css('display') === 'block') {
-                this._monthPickerMenu.slideUp(_speed, $.proxy(this.options.OnAfterMenuClose, this.options));
+                this._monthPickerMenu.slideUp(this._duration(), $.proxy(this.options.OnAfterMenuClose, this.options));
             }
         },
 		

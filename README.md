@@ -1,4 +1,4 @@
-<h1>The jQuery UI Month Picker Version 2.2</h1>
+<h1>The jQuery UI Month Picker Version 2.3</h1>
 <p>The jQuery UI Month Picker Plugin is designed to allow user input for only a month and year when only that input is 
 required. Clicking on the year, allows the user to jump ahead or back 5 years at a time. Clicking anywhere on the 
 page, except on the month picker menu itself, will cause the month picker to hide. The Month Picker has lots of options 
@@ -26,12 +26,12 @@ for date validation, setting the start year, using an icon button, input masking
 <p>Attach all required css and js files to the web page as follows...</p> 
 <pre>
 &lt;link href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" media="all" rel="stylesheet" type="text/css" />
-&lt;link href="css/MonthPicker.2.0.css" media="all" rel="stylesheet" type="text/css" />
+&lt;link href="css/MonthPicker.css" media="all" rel="stylesheet" type="text/css" />
 
 &lt;script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js" type="text/javascript"></script>
 &lt;script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js" type="text/javascript"></script>
 &lt;script src="https://raw.github.com/digitalBush/jquery.maskedinput/1.3.1/dist/jquery.maskedinput.min.js" type="text/javascript"></script>
-&lt;script src="MonthPicker.2.0.min.js" type="text/javascript"></script>
+&lt;script src="MonthPicker.min.js" type="text/javascript"></script>
 </pre>
 
 <h2>Source Code Example</h2>

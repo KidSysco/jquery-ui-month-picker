@@ -16,6 +16,7 @@ for date validation, setting the start year, using an icon button, input masking
             <li>jQuery UI Widget Factory required</li>
             <li>.button() plugin required</li>
             <li>.datepicker() plugin required</li>
+            <li>.position() plugin optional (highly recommended see Position option)</li>
         </ul>
     </li>
     <li>(optional) <a target="_new" href="http://digitalbush.com/projects/masked-input-plugin/">Digital Bush Masked Input jQuery Plugin</a></li>
@@ -24,13 +25,13 @@ for date validation, setting the start year, using an icon button, input masking
 <h2>Installation</h2>
 <p>Attach all required css and js files to the web page as follows...</p> 
 <pre>
-link href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" media="all" rel="stylesheet" type="text/css" />
-link href="css/MonthPicker.2.0.css" media="all" rel="stylesheet" type="text/css" />
+&lt;link href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" media="all" rel="stylesheet" type="text/css" />
+&lt;link href="css/MonthPicker.2.0.css" media="all" rel="stylesheet" type="text/css" />
 
-script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js" type="text/javascript"></script>
-script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js" type="text/javascript"></script>
-script src="https://raw.github.com/digitalBush/jquery.maskedinput/1.3.1/dist/jquery.maskedinput.min.js" type="text/javascript"></script>
-script src="MonthPicker.2.0.min.js" type="text/javascript"></script>
+&lt;script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js" type="text/javascript"></script>
+&lt;script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js" type="text/javascript"></script>
+&lt;script src="https://raw.github.com/digitalBush/jquery.maskedinput/1.3.1/dist/jquery.maskedinput.min.js" type="text/javascript"></script>
+&lt;script src="MonthPicker.2.0.min.js" type="text/javascript"></script>
 </pre>
 
 <h2>Source Code Example</h2>
@@ -43,9 +44,15 @@ $('input[type=month]').MonthPicker().css('backgroundColor', 'lightyellow');
 <h2>Internationalization and Localization i18n</h2>
 <p>
 All buttons, labels and other text can be changed out using the i18n support.<br/>
-$('#TextBox1').MonthPicker({ year: "année",
-                             prevYear: "l'année dernière",
-                             nextYear: "l'année prochaine" });
+<pre>
+$('#TextBox1').MonthPicker({
+      i18n: {
+         year: "année",
+         prevYear: "l'année dernière",
+         nextYear: "l'année prochaine"
+      }
+});
+</pre>
 </p>
 
 <h2>HTML 5 Month Input Support</h2>
@@ -193,6 +200,43 @@ var disabled = $('.selector').MonthPicker('option', 'UseInputMask');
 
 //setter
 $('.selector').MonthPicker('option', 'UseInputMask', false );
+</pre>
+</p>
+
+<p>
+    <h3>Position</h3>
+    Type: Object<br />
+    Default: <pre>{ my: 'left top+1', at: 'left bottom', collision: 'flip', of: $('.selector') }</pre><br />
+    If the <a href='http://api.jqueryui.com/position/'>jQuery UI .position() plugin</a> is loaded
+    the menu will be moved to an alternative position when it overflows the window in some direction. <br />
+    For more information see the <a href='http://api.jqueryui.com/position/#position-options'>collision option</a>.
+</p>    
+<p>
+    In addition you can specify where you would like the menu to positiond using the <a href='http://api.jqueryui.com/position/#position-options'>jQuery IU .position() plugin options</a>.
+</p>
+<p>
+ The properties you specify in the position hash will be merged with the default properties (shown above). <br />
+ See example below:
+</p>
+<p>
+    Set the option upon init.
+    <pre>
+// The collision property will be morged with the defualt properties so the position plugin will receive:
+// { my: 'left top+1', at: 'left bottom', collision: 'fit flip', of: $('.selector') }
+$('.selector').MonthPicker({
+ Position: {
+    collision: 'fit flip'
+ }
+});
+</pre>
+    
+    Get or set the option, after init. 
+<pre>
+//getter
+var position = $('.selector').MonthPicker('option', 'Position');
+
+//setter
+$('.selector').MonthPicker('option', 'Position', {collision: 'fit', at: 'left bottom'});
 </pre>
 </p>
 

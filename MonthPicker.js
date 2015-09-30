@@ -23,6 +23,12 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
     var _defaultPos = { my: 'left top+1', at: 'left bottom' };
     var _setupErr = 'MonthPicker Setup Error: ';
     var _posErrr = _setupErr + 'The jQuery UI position plug-in must be loaded in order to specify a position.';
+    var _badOptValErr = _setupErr + 'Unsupported % option value, supported (case sensitive) values are: ';
+    var _animVals = {
+            Animation: ['slideToggle', 'fadeToggle'],
+            ShowAnim: ['fadeIn', 'slideDown'],
+            HideAnim: ['fadeOut', 'slideUp']
+	    };
     
     $.MonthPicker = {
         i18n: {
@@ -89,6 +95,9 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             UseInputMask: false,
             ValidationErrorMessage: null,
             Disabled: false,
+            Animation: 'slideToggle',
+            ShowAnim: null,
+            HideAnim: null,
             Duration: 500,
             OnAfterMenuOpen: $.noop,
             OnAfterMenuClose: $.noop,
@@ -158,7 +167,13 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
                     return;
 	        }
 	        
-	        // In jQuery UI 1.8, manually invoke the _setOption method from the base widget.
+	        // Make sure the user passed in a valid Animation, ShowAnim and HideAnim options values.
+	        if (key in _animVals && _animVals[key].indexOf(value) === -1) {
+                alert(_badOptValErr.replace(/%/, key) + _animVals[key]);
+                return;
+            }
+            
+            // In jQuery UI 1.8, manually invoke the _setOption method from the base widget.
             //$.Widget.prototype._setOption.apply(this, arguments);
             // In jQuery UI 1.9 and above, you use the _super method instead.
             this._super(key, value);
@@ -201,7 +216,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
                 return false;
             }
 
-            var _el = this.element;
+            var _el = this.element, _opts = this.options;
             // According to http://www.w3.org/TR/html-markup/input.html#input
             // An input element with no type attribute specified represents the same thing as an
             // input element with its type attribute set to "text".
@@ -218,14 +233,22 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
                 return false;
             }
 
-            if (!jQuery.mask && this.options.UseInputMask) {
+            if (!jQuery.mask && _opts.UseInputMask) {
                 alert(_setupErr + 'The UseInputMask option is set but the Digital Bush Input Mask jQuery Plugin is not loaded. Get the plugin from http://digitalbush.com/');
                 return false;
             }
             
-            if (this.options.Position !== null && !$.ui.position) {
+            if (_opts.Position !== null && !$.ui.position) {
                 alert(_posErrr);
                 return false;
+            }
+            
+            // Make sure the user passed in a valid Animation, ShowAnim and HideAnim options values.
+            for (var opt in _animVals) {
+                if (_opts[opt] !== null && _animVals[opt].indexOf(_opts[opt]) === -1) {
+                    alert(_badOptValErr.replace(/%/, opt) + _animVals[opt]);
+                    return false;
+                }
             }
             
             this._isMonthInputType = _el.attr('type') === 'month';
@@ -405,9 +428,9 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
                 this._setPickerYear(new Date().getFullYear());
             }
             
-            var _menu = this._monthPickerMenu;
+            var _menu = this._monthPickerMenu, _opts = this.options;
             if (_menu.css('display') === 'none') {
-                _menu.slideDown({
+                _menu[_opts.ShowAnim || _opts.Animation]({
 	               duration: this._duration(),
 	               start: $.proxy(this._position, this, _menu),
 	               complete: $.proxy(this.options.OnAfterMenuOpen, this.options)
@@ -444,8 +467,12 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             },
 
         _hide: function () {
-            if (this._monthPickerMenu.css('display') === 'block') {
-                this._monthPickerMenu.slideUp(this._duration(), $.proxy(this.options.OnAfterMenuClose, this.options));
+	        var _menu = this._monthPickerMenu, 
+	            _opts = this.options;
+	            
+            if (_menu.css('display') === 'block') {
+	            var _callback = $.proxy(this.options.OnAfterMenuClose, _opts);
+                _menu[_opts.HideAnim || _opts.Animation](this._duration(), _callback);
             }
         },
 		

@@ -25,13 +25,13 @@ for date validation, setting the start year, using an icon button, input masking
 <h2>Installation</h2>
 <p>Attach all required css and js files to the web page as follows...</p> 
 <pre>
-link href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" media="all" rel="stylesheet" type="text/css" />
-link href="css/MonthPicker.2.0.css" media="all" rel="stylesheet" type="text/css" />
+&lt;link href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" media="all" rel="stylesheet" type="text/css" />
+&lt;link href="css/MonthPicker.2.0.css" media="all" rel="stylesheet" type="text/css" />
 
-script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js" type="text/javascript"></script>
-script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js" type="text/javascript"></script>
-script src="https://raw.github.com/digitalBush/jquery.maskedinput/1.3.1/dist/jquery.maskedinput.min.js" type="text/javascript"></script>
-script src="MonthPicker.2.0.min.js" type="text/javascript"></script>
+&lt;script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js" type="text/javascript"></script>
+&lt;script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js" type="text/javascript"></script>
+&lt;script src="https://raw.github.com/digitalBush/jquery.maskedinput/1.3.1/dist/jquery.maskedinput.min.js" type="text/javascript"></script>
+&lt;script src="MonthPicker.2.0.min.js" type="text/javascript"></script>
 </pre>
 
 <h2>Source Code Example</h2>
@@ -172,7 +172,7 @@ $('.selector').MonthPicker('option', 'StartYear', false );
 <p>
     Set the option upon init.
     <pre>$('.selector').MonthPicker({ ValidationErrorMessage: 'Invalid Date!' });</pre>
-    o
+    
     Get or set the option, after init. 
 <pre>
 //getter
@@ -212,11 +212,17 @@ $('.selector').MonthPicker('option', 'UseInputMask', false );
     For more information see the <a href='http://api.jqueryui.com/position/#position-options'>collision option</a>.
 </p>    
 <p>
-    In addition you can specify where you would like the menu to positiond.
+    In addition you can specify where you would like the menu to positiond using the <a href='http://api.jqueryui.com/position/#position-options'>jQuery IU .position() plugin options</a>.
+</p>
+<p>
+ The properties you specify in the position hash will be merged with the default properties (shown above). <br />
+ See example below:
 </p>
 <p>
     Set the option upon init.
     <pre>
+// The collision property will be morged with the defualt properties so the position plugin will receive:
+// { my: 'left top+1', at: 'left bottom', collision: 'fit flip', of: $('.selector') }
 $('.selector').MonthPicker({
  Position: {
     collision: 'fit flip'

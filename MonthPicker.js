@@ -95,6 +95,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             UseInputMask: false,
             ValidationErrorMessage: null,
             Disabled: false,
+            MonthFormat: 'mm/yy', 
             Animation: 'slideToggle',
             ShowAnim: null,
             HideAnim: null,
@@ -253,6 +254,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             
             this._isMonthInputType = _el.attr('type') === 'month';
             if (this._isMonthInputType) {
+	            this.options.MonthFormat = 'yy-mm';
 	            _el.css('width', 'auto');
             }
 
@@ -313,35 +315,46 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
 
         /****** Publicly Accessible API functions ******/
 
+		_parseMonth: function(val) {
+        	val = val || this.element.val();
+        	try {
+        		return $.datepicker.parseDate('dd' + this.options.MonthFormat, '01' + val);
+        	} catch (e) {
+        		return null;
+        	}
+        },
+        
+        _formatMonth: function(date) {
+        	return $.datepicker.formatDate(this.options.MonthFormat, date);
+		},
+
         GetSelectedYear: function () {
-            return this._validateYear(this.element.val());
+            var date = this._parseMonth();
+            return date ? date.getFullYear() : NaN;
         },
 
         GetSelectedMonth: function () {
-            return this._validateMonth(this.element.val());
+            var date = this._parseMonth();
+            return date ? date.getMonth()+1 : NaN;
         },
 
         GetSelectedMonthYear: function () {
-            var _month = this._validateMonth(this.element.val()),
-                _year = this._validateYear(this.element.val()), 
-                _date;
-
-            if (!isNaN(_year) && !isNaN(_month)) {
-                if (this.options.ValidationErrorMessage !== null && !this.options.Disabled) {
-                    $('#MonthPicker_Validation_' + this.element.attr('id')).hide();
+            var _elem = this.element,
+                date = this._parseMonth(),
+        		hasMsg = this.options.ValidationErrorMessage !== null && !this.options.Disabled;
+        	
+            if (date) {
+                if (hasMsg) {
+                    $('#MonthPicker_Validation_' + _elem.attr('id')).hide();
                 }
                 
-                if(this._isMonthInputType){
-                    _date = _year + '-' + _month;
-                }else{
-                    _date = _month + '/' + _year;
-                }
+                var _date = this._formatMonth(date);
                 
                 $(this).val(_date);
                 return _date;
             } else {
-                if (this.options.ValidationErrorMessage !== null && !this.options.Disabled) {
-                    $('#MonthPicker_Validation_' + this.element.attr('id')).show();
+                if (hasMsg) {
+                    $('#MonthPicker_Validation_' + _elem.attr('id')).show();
                 }
 
                 return null;
@@ -525,72 +538,9 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             this._yearContainer.text(year);
         },
 
-        _validateMonth: function (text) {
-            if (text === '') {
-                return NaN;
-            }
-
-            if (text.indexOf('/') != -1) {
-                var _month = parseInt(text.split('/')[0], 10);
-                if (!isNaN(_month)) {
-                    if (_month >= 1 && _month <= 12) {
-                        return _month;
-                    }
-                }
-            }
-            
-            if (text.indexOf('-') != -1) {
-                var _month = parseInt(text.split('-')[1], 10);
-                if (!isNaN(_month)) {
-                    if (_month >= 1 && _month <= 12) {
-                        return _month;
-                    }
-                }
-            }
-
-            return NaN;
-        },
-
-        _validateYear: function (text) {
-            if (text === '') {
-                return NaN;
-            }
-
-            if (text.indexOf('/') != -1) {
-                var _year = parseInt(text.split('/')[1], 10);
-
-                if (!isNaN(_year)) {
-                    if (_year >= 1800 && _year <= 3000) {
-                        return _year;
-                    }
-                }
-            }
-            
-            if (text.indexOf('-') != -1) {
-                var _year = parseInt(text.split('-')[0], 10);
-
-                if (!isNaN(_year)) {
-                    if (_year >= 1800 && _year <= 3000) {
-                        return _year;
-                    }
-                }
-            }
-
-            return NaN;
-        },
-
         _chooseMonth: function (month) {
-            if (month > 0 && month < 10) {
-                month = '0' + month;
-            }
-
-            if (this.element.is('input[type="month"]')) {
-                this.element.val(this._getPickerYear() + '-' + month).change();
-            } else {
-                this.element.val(month + '/' + this._getPickerYear()).change();
-            }
-            
-            this.element.blur();
+            var date = new Date(this._getPickerYear(), month-1);
+            this.element.val(this._formatMonth( date )).blur();
             
             this.options.OnAfterChooseMonth();
         },

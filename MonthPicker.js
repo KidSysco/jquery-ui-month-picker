@@ -384,6 +384,10 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             }
         },
         
+        /**
+         * Methods the user can override to use a third party library
+         * such as http://momentjs.com for parsing and formatting months.
+         */
         ParseMonth: function (str, format) {
             try {
                 return $datepicker.parseDate('dd' + format, '01' + str);
@@ -701,4 +705,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             this.options.OnAfterPreviousYear.call(this.element);
         }
     });
+    
+    // Added in version 2.4.
+    $.KidSysco.MonthPicker.VERSION = '2.4';
 }(jQuery, window, document));

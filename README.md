@@ -208,8 +208,7 @@ var disabled = $('.selector').MonthPicker('option', 'MonthFormat');
 $('.selector').MonthPicker('option', MonthFormat: 'MM, yy' );
 </pre>
 
-This option uses jQuery UI's Datepicker's <a href='http://api.jqueryui.com/datepicker/#utility-formatDate'>$.datepicker.formatDate()</a> 
-function for parsing and formatting dates. The following example shows how to use the popular <a href='http://momentjs.com'>Moment.js</a> library
+The following example shows how to use the popular <a href='http://momentjs.com'>Moment.js</a> library
 for parsing and formatting dates, but you can use any third party library you would like:
 <pre>
 $.widget('MyOrg.MomentMonthPicker', $.KidSysco.MonthPicker, {

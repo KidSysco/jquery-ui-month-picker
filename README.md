@@ -212,9 +212,9 @@ This option uses jQuery UI's Datepicker's <a href='http://api.jqueryui.com/datep
 function for parsing and formatting dates. The following example shows how to use the popular <a href='http://momentjs.com'>Moment.js</a> library
 for parsing and formatting dates, but you can use any third party library you would like:
 <pre>
-$.widget("MyOrg.MomentMonthPicker", $.KidSysco.MonthPicker, {
+$.widget('MyOrg.MomentMonthPicker', $.KidSysco.MonthPicker, {
     /**
-     * @param str	{String} A string representing a date in the given format.
+     * @param str		{String} A string representing a date in the given format.
      * @param format	{String} The format used to parse the str argument.
      * 
      * @returns	{Date}	 A JavaScript date.
@@ -225,7 +225,7 @@ $.widget("MyOrg.MomentMonthPicker", $.KidSysco.MonthPicker, {
     },
     
     /**
-     * @param date	{Date} A string representing a date in the given format.
+     * @param date		{Date} A string representing a date in the given format.
      * @param format	{String} The format to use to convert the date to a string.
      * 
      * @returns	{String}  A string representing a date in the given format.

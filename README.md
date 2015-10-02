@@ -74,7 +74,7 @@ $('#TextBox1').MonthPicker({
 <br />Enables the MonthPicker and its associated elements.</p>
 
 <p> <b>$('.selector').MonthPicker('GetSelectedDate')</b>
-<br />Returns the selected date as a <a href='https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Date'>Date</a> object. (Added in version 2.4)</p>
+<br />Returns the selected month as a <a href='https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Date'>Date</a> object. (Added in version 2.4)</p>
 
 <p> <b>$('.selector').MonthPicker('GetSelectedMonthYear')</b>
 <br />Validates the selected month/year and returns the selected value if it is a valid date. Returns null if there is no valid date, displays an error message if the message is specified, focuses and selects the violating text.</p>

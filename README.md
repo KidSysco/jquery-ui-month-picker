@@ -190,6 +190,7 @@ $('.selector').MonthPicker('option', 'ValidationErrorMessage', null );
     <h3>MonthFormat</h3>
     Type: String<br />
     Default: 'mm/yy' which results in 12/2015.<br />
+    Since: 2.4</br>
     The format for parsed and displayed months. For a full list of the possible formats see the <a href='http://api.jqueryui.com/datepicker/#utility-formatDate'>$.datepicker.formatDate()</a> function.
 </p>
 <p>
@@ -253,7 +254,7 @@ $('.selector').MomentMonthPicker({
     Directs the MonthPicker to use the <a href="http://digitalbush.com/projects/masked-input-plugin/">Digital Bush Masked Input jQuery Plugin</a> on text inputs, the plugin must be loaded to the page if this option is to be used. This option will be ignored if the HTML 5 Input Type is used.
 </p>
 <p>
-The mask is constructed according to the <a href='#monthformat'>MonthFormat option</a>.
+In version 2.4 and later the mask is constructed according to the <a href='#monthformat'>MonthFormat option</a>.
 </p>
 <p>
 NOTE: numeric literals in the MonthFormat will be editable by the user, if this is not the desired behavior you will have to use the <a href='http://digitalbush.com/projects/masked-input-plugin/'>.mask()</a> method manually.
@@ -276,7 +277,8 @@ $('.selector').MonthPicker('option', 'UseInputMask', false );
     <h3>Animation</h3>
     Type: String<br />
     Default: 'fadeToggle'<br />
-     ['fadeToggle', 'slideToggle']<br />
+    Supported values: ['fadeToggle', 'slideToggle']<br />
+    Since: 2.4</br>
     Sets the animation to use when the menu both opens and closes.
     <p>
     If you want to have different animations for opening and closing the menu
@@ -303,6 +305,7 @@ $('.selector').MonthPicker('option', Animation: 'slideToggle' );
     Type: String<br />
     Default: 'fadeIn'<br />
     Supported values: ['fadeIn', 'slideDown']<br />
+    Since: 2.4</br>
     Sets the animation to use only when the  menu is opened.
     <p>
     If you want to have the same animation for both opening and closing the menu use
@@ -332,6 +335,7 @@ $('.selector').MonthPicker('option', ShowAnim: 'slideDown' );
     Type: String<br />
     Default: 'fadeOut'<br />
     Supported values: ['fadeOut', 'slideUp']<br />
+    Since: 2.4</br>
     Sets the animation to use only when the menu is opened.
     <p>
     If you want to have the same animation for both opening and closing the menu use

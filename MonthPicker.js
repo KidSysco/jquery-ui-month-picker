@@ -320,40 +320,32 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
         /****** Publicly Accessible API functions ******/
         
         GetSelectedDate: function () {
-	        return this._formatMonth();
+	        return this._parseMonth();
         },
         
         GetSelectedYear: function () {
-            var date = this._parseMonth();
+            var date = this.GetSelectedDate();
             return date ? date.getFullYear() : NaN;
         },
 
         GetSelectedMonth: function () {
-            var date = this._parseMonth();
+            var date = this.GetSelectedDate();
             return date ? date.getMonth()+1 : NaN;
         },
-
-        GetSelectedMonthYear: function () {
-            var _elem = this.element,
-                date = this._parseMonth(),
-        		hasMsg = this.options.ValidationErrorMessage !== null && !this.options.Disabled;
+        
+        Validate: function() {
+	        var _date = this.GetSelectedDate();
         	
-            if (date) {
-                if (hasMsg) {
-                    $('#MonthPicker_Validation_' + _elem.attr('id')).hide();
-                }
-                
-                var _date = this._formatMonth(date);
-                
-                $(this).val(_date);
-                return _date;
-            } else {
-                if (hasMsg) {
-                    $('#MonthPicker_Validation_' + _elem.attr('id')).show();
-                }
-
-                return null;
-            }
+        	if (this.options.ValidationErrorMessage !== null && !this.options.Disabled) {
+	        	this._validationMessage[ _date ? 'hide' : 'show' ]();
+        	}
+        	
+        	return _date;
+        },
+        
+        GetSelectedMonthYear: function () {
+	        var date = this.Validate();
+	        return date ? (date.getMonth() + 1) + '/' + date.getYear() : null;
         },
 
         Disable: function () {
@@ -449,7 +441,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
 
                 this._validationMessage.insertAfter(this.options.ShowIcon ? _elem.next() : _elem);
 
-                _elem.blur($.proxy(this.GetSelectedMonthYear, this));
+                _elem.blur($.proxy(this.Validate, this));
             }
         },
 

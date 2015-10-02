@@ -209,15 +209,15 @@ $('.selector').MonthPicker('option', MonthFormat: 'MM, yy' );
 </pre>
 
 This option uses jQuery UI's Datepicker's <a href='http://api.jqueryui.com/datepicker/#utility-formatDate'>$.datepicker.formatDate()</a> 
-function for parsing and formatting dates. The flowing example shows how use the popular <a href='http://momentjs.com'>Moment.js</a> library
+function for parsing and formatting dates. The following example shows how to use the popular <a href='http://momentjs.com'>Moment.js</a> library
 for parsing and formatting dates, but you can use any third party library you would like:
 <pre>
 $.widget("MyOrg.MomentMonthPicker", $.KidSysco.MonthPicker, {
     /**
-     * @param str		{String} A string representing a date in the given format.
+     * @param str	{String} A string representing a date in the given format.
      * @param format	{String} The format used to parse the str argument.
      * 
-     * @returns	{Date}	A JavaScript date.
+     * @returns	{Date}	 A JavaScript date.
      */
     ParseMonth: function(str, format) {
         var wrapper = moment(str, format);
@@ -225,10 +225,10 @@ $.widget("MyOrg.MomentMonthPicker", $.KidSysco.MonthPicker, {
     },
     
     /**
-     * @param date		{Date} A string representing a date in the given format.
+     * @param date	{Date} A string representing a date in the given format.
      * @param format	{String} The format to use to convert the date to a string.
      * 
-     * @returns	{String}	 A string representing a date in the given format.
+     * @returns	{String}  A string representing a date in the given format.
      */
     FormatMonth: function(date, format) {
         var wrapper = moment(date);

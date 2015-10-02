@@ -189,7 +189,7 @@ $('.selector').MonthPicker('option', 'ValidationErrorMessage', null );
 <p>
     <h3>MonthFormat</h3>
     Type: String<br />
-    Default: `'mm/yy'` which results in 12/2015.<br />
+    Default: 'mm/yy' which results in 12/2015.<br />
     The format for parsed and displayed months. For a full list of the possible formats see the <a href='http://api.jqueryui.com/datepicker/#utility-formatDate'>$.datepicker.formatDate()</a> function.
 </p>
 <p>

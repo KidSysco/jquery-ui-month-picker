@@ -139,7 +139,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
                 .css('color', '')
                 .removeClass('month-year-input')
                 .removeData(this._enum._overrideStartYear)
-                .unbind();
+                .unbind(_eventsNs);
 
             $(document).unbind('click' + _eventsNs + _elem.attr('id'), $.proxy(this._hide, this));
 
@@ -467,8 +467,12 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
                 this._setPickerYear(new Date().getFullYear());
             }
             
+            this._showMonths();
+            
             var _menu = this._monthPickerMenu, _opts = this.options;
             if (_menu.css('display') === 'none') {
+                this._addKeyEvents();
+                
                 _menu[_opts.ShowAnim || _opts.Animation]({
 	               duration: this._duration(),
 	               start: $.proxy(this._position, this, _menu),
@@ -476,9 +480,22 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
 	            });
             }
             
-            this._showMonths();
-            
             return false;
+        },
+        
+        _addKeyEvents: function () {
+        	$(document).on('keydown' + _eventsNs, $.proxy(function(event) {
+	            var keyCode = $.ui.keyCode;
+	            switch (event.keyCode) {
+		            case keyCode.ENTER:
+		            	this._chooseMonth(new Date().getMonth() + 1);
+		            	this._hide();
+		            	break;
+		            case keyCode.ESCAPE:
+		            	this._hide();
+		            	break;
+	            }
+            }, this));
         },
         
         _duration: function() {
@@ -507,10 +524,12 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
 
         _hide: function () {
 	        var _menu = this._monthPickerMenu, 
-	            _opts = this.options;
+	            _opts = this.options,
+	            _elem = this.element;
 	            
             if (_menu.css('display') === 'block') {
-	            var _callback = $.proxy(_opts.OnAfterMenuClose, this.element);
+	            $(document).off('keydown' + _eventsNs);
+	            var _callback = $.proxy(_opts.OnAfterMenuClose, _elem);
                 _menu[_opts.HideAnim || _opts.Animation](this._duration(), _callback);
             }
         },

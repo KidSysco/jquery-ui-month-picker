@@ -276,7 +276,7 @@ $('.selector').MonthPicker('option', 'UseInputMask', false );
     <h3>Animation</h3>
     Type: String<br />
     Default: 'fadeToggle'<br />
-    lues: <b>['fadeToggle', 'slideToggle']</b><br />
+     ['fadeToggle', 'slideToggle']<br />
     Sets the animation to use when the menu both opens and closes.
     <p>
     If you want to have different animations for opening and closing the menu
@@ -302,7 +302,7 @@ $('.selector').MonthPicker('option', Animation: 'slideToggle' );
     <h3>ShowAnim</h3>
     Type: String<br />
     Default: 'fadeIn'<br />
-    Supported values: <b>['fadeIn', 'slideDown']</b><br />
+    Supported values: ['fadeIn', 'slideDown']<br />
     Sets the animation to use only when the  menu is opened.
     <p>
     If you want to have the same animation for both opening and closing the menu use
@@ -331,7 +331,7 @@ $('.selector').MonthPicker('option', ShowAnim: 'slideDown' );
     <h3>HideAnim</h3>
     Type: String<br />
     Default: 'fadeOut'<br />
-    lues: <b>['fadeOut', 'slideUp']</b><br />
+    Supported values: ['fadeOut', 'slideUp']<br />
     Sets the animation to use only when the menu is opened.
     <p>
     If you want to have the same animation for both opening and closing the menu use
@@ -400,7 +400,7 @@ $('.selector').MonthPicker('option', 'Position', {collision: 'fit', at: 'left bo
     <h3>OnAfterMenuOpen</h3>
     Type: function<br />
     Default: null<br />
-    This event is triggered after the Month Picker menu opens. As of version 2.4 <b>this</b> refers to the associated input field.
+    This event is triggered after the Month Picker menu opens. As of version 2.4 this refers to the associated input field.
 </p>
 <p>
     Supply a callback function to handle the event as an init option.
@@ -420,7 +420,7 @@ $('.selector').MonthPicker('option', 'OnAfterMenuOpen', function(){ ... } );
     <h3>OnAfterMenuClose</h3>
     Type: function<br />
     Default: null<br />
-    This event is triggered after the Month Picker menu closes. As of version 2.4 <b>this</b> refers to the associated input field.
+    This event is triggered after the Month Picker menu closes. As of version 2.4 this refers to the associated input field.
 </p>
 <p>
     Supply a callback function to handle the event as an init option.
@@ -440,7 +440,7 @@ $('.selector').MonthPicker('option', 'OnAfterNextYear', function(){ ... } );
     <h3>OnAfterNextYear</h3>
     Type: function<br />
     Default: null<br />
-    This event is triggered after the Month Picker next year button has been clicked. As of version 2.4 <b>this</b> refers to the associated input field.
+    This event is triggered after the Month Picker next year button has been clicked. As of version 2.4 this refers to the associated input field.
 </p>
 <p>
     Supply a callback function to handle the event as an init option.
@@ -460,7 +460,7 @@ $('.selector').MonthPicker('option', 'OnAfterNextYear', function(){ ... } );
     <h3>OnAfterNextYears</h3>
     Type: function<br />
     Default: null<br />
-    This event is triggered after the Month Picker next 5 years button has been clicked. As of version 2.4 <b>this</b> refers to the associated input field.
+    This event is triggered after the Month Picker next 5 years button has been clicked. As of version 2.4 this refers to the associated input field.
 </p>
 <p>
     Supply a callback function to handle the event as an init option.
@@ -480,7 +480,7 @@ $('.selector').MonthPicker('option', 'OnAfterNextYears', function(){ ... } );
     <h3>OnAfterPreviousYear</h3>
     Type: function<br />
     Default: null<br />
-    This event is triggered after the Month Picker previous year button has been clicked. As of version 2.4 <b>this</b> refers to the associated input field.
+    This event is triggered after the Month Picker previous year button has been clicked. As of version 2.4 this refers to the associated input field.
 </p>
 <p>
     Supply a callback function to handle the event as an init option.
@@ -500,7 +500,7 @@ $('.selector').MonthPicker('option', 'OnAfterPreviousYear', function(){ ... } );
     <h3>OnAfterPreviousYears</h3>
     Type: function<br />
     Default: null<br />
-    This event is triggered after the Month Picker previous 5 years button has been clicked. As of version 2.4 <b>this</b> refers to the associated input field.
+    This event is triggered after the Month Picker previous 5 years button has been clicked. As of version 2.4 this refers to the associated input field.
 </p>
 <p>
     Supply a callback function to handle the event as an init option.
@@ -520,7 +520,7 @@ $('.selector').MonthPicker('option', 'OnAfterPreviousYears', function(){ ... } )
     <h3>OnAfterChooseMonth</h3>
     Type: function<br />
     Default: null<br />
-    This event is triggered after the Month Picker month button has been clicked. As of version 2.4 <b>this</b> refers to the associated input field.
+    This event is triggered after the Month Picker month button has been clicked. As of version 2.4 this refers to the associated input field.
 </p>
 <p>
     Supply a callback function to handle the event as an init option.
@@ -540,7 +540,7 @@ $('.selector').MonthPicker('option', 'OnAfterChooseMonth', function(){ ... } );
     <h3>OnAfterChooseMonths</h3>
     Type: function<br />
     Default: null<br />
-    This event is triggered after the Month Picker choose months button has been clicked. As of version 2.4 <b>this</b> refers to the associated input field.
+    This event is triggered after the Month Picker choose months button has been clicked. As of version 2.4 this refers to the associated input field.
 </p>
 <p>
     Supply a callback function to handle the event as an init option.
@@ -560,7 +560,7 @@ $('.selector').MonthPicker('option', 'OnAfterChooseMonths', function(){ ... } );
     <h3>OnAfterChooseYear</h3>
     Type: function<br />
     Default: null<br />
-    This event is triggered after the Month Picker choose year button has been clicked. As of version 2.4 <b>this</b> refers to the associated input field.
+    This event is triggered after the Month Picker choose year button has been clicked. As of version 2.4 this refers to the associated input field.
 </p>
 <p>
     Supply a callback function to handle the event as an init option.
@@ -580,7 +580,7 @@ $('.selector').MonthPicker('option', 'OnAfterChooseYear', function(){ ... } );
     <h3>OnAfterChooseYears</h3>
     Type: function<br />
     Default: null<br />
-    This event is triggered after the Month Picker choose years button has been clicked. As of version 2.4 <b>this</b> refers to the associated input field.
+    This event is triggered after the Month Picker choose years button has been clicked. As of version 2.4 this refers to the associated input field.
 </p>
 <p>
     Supply a callback function to handle the event as an init option.

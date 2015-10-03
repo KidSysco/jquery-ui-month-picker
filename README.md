@@ -295,13 +295,45 @@ $('.selector').MonthPicker('option', 'UseInputMask', false );
     Get or set the option, after init. 
 <pre>
 //getter
-var disabled = $('.selector').MonthPicker('option', 'Animation');
+var Animation = $('.selector').MonthPicker('option', 'Animation');
 
 //setter
-$('.selector').MonthPicker('option', Animation: 'slideToggle' );
+$('.selector').MonthPicker('option', 'Animation', 'slideToggle' );
 </pre>
 </p>
 
+<p>
+    <h3>Duration</h3>
+    Type: Number or String<br />
+    Default: 'fadeToggle'<br />
+    Supported values: ['normal', 'fast', 'slow'] or number of milliseconds<br />
+    Since: 2.4</br>
+    Sets the speed of the animation used to open and close the menu.
+</p>
+<p>
+	You choose from three predefined speeds:
+	<ul>
+	<li>normal (the default) 400ms</li>
+	<li>fast 200ms</li>
+	<li>slow 600ms</li>
+	<li>0 disables animation</li>
+	</ul>
+	
+	Or you can specify the speed in milliseconds by passing in a number.
+</p>
+<p>
+    Set the option upon init.
+    <pre>$('.selector').MonthPicker({ Duration: 'fast' });</pre>
+    
+    Get or set the option, after init. 
+<pre>
+//getter
+var Duration = $('.selector').MonthPicker('option', 'Duration');
+
+//setter
+$('.selector').MonthPicker('option', 'Duration', 'fast' );
+</pre>
+</p>
 
 <p>
     <h3>ShowAnim</h3>
@@ -326,10 +358,10 @@ $('.selector').MonthPicker('option', Animation: 'slideToggle' );
     Get or set the option, after init. 
 <pre>
 //getter
-var disabled = $('.selector').MonthPicker('option', 'ShowAnim');
+var ShowAnim = $('.selector').MonthPicker('option', 'ShowAnim');
 
 //setter
-$('.selector').MonthPicker('option', ShowAnim: 'slideDown' );
+$('.selector').MonthPicker('option', 'ShowAnim', 'slideDown' );
 </pre>
 </p>
 
@@ -356,10 +388,10 @@ $('.selector').MonthPicker('option', ShowAnim: 'slideDown' );
     Get or set the option, after init. 
 <pre>
 //getter
-var disabled = $('.selector').MonthPicker('option', 'HideAnim');
+var HideAnim = $('.selector').MonthPicker('option', 'HideAnim');
 
 //setter
-$('.selector').MonthPicker('option', HideAnim: 'slideUp' );
+$('.selector').MonthPicker('option', 'HideAnim', 'slideUp' );
 </pre>
 </p>
 

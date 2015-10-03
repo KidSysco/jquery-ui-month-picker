@@ -301,8 +301,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             $('.month-picker-month-table td button', _menu).button();
 
             $('.year-container-all', _menu).click($.proxy(this._showYearsClickHandler, this));
-
-            $(document).bind('click' + _eventsNs + this.element.attr('id'), $.proxy(this._hide, this));
+            
             _menu.bind('click' + _eventsNs, function (event) {
                 return false;
             });
@@ -454,6 +453,14 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             }
         },
 
+		Show: function() {
+			return this._show();
+		},
+		
+		Toggle: function() {
+			return this._visible ? this._hide() : this._show();
+		},
+		
         _show: function () {
             var _selectedYear = this.GetSelectedYear();
             var _elem = this.element;
@@ -468,19 +475,21 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             this._showMonths();
             
             var _menu = this._monthPickerMenu, _opts = this.options;
-            if (_menu.css('display') === 'none') {
+            if (!this._visible) {
                 this._addKeyEvents();
+                $(document).on('click' + _eventsNs + this.uuid, $.proxy(this._hide, this));
                 
                 var _anim = _opts.ShowAnim || _opts.Animation,
                 	_noAnim = _anim === 'none';
-                	
+                
 	            _menu[ _noAnim ? 'show' : _anim ]({
-	               duration: _noAnim ?  0 : this._duration(),
+	               duration: _noAnim ? 0 : this._duration(),
 	               start: $.proxy(this._position, this, _menu),
 	               complete: $.proxy(_opts.OnAfterMenuOpen, _elem)
 		        });
+		        
+		        this._visible = true;
             }
-            
             
             return false;
         },
@@ -529,7 +538,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
 	            _opts = this.options,
 	            _elem = this.element;
 	            
-            if (_menu.css('display') === 'block') {
+            if (this._visible) {
 	            $(document).off('keydown' + _eventsNs);
 	            var _callback = $.proxy(_opts.OnAfterMenuClose, _elem);
 	            
@@ -540,6 +549,10 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
                 	_menu[ _anim ](this._duration(), _callback);                
                 }
             }
+            
+            $(document).off('click' + _eventsNs + this.uuid);
+            
+            this._visible = false;
         },
 		
         _setUseInputMask: function () {

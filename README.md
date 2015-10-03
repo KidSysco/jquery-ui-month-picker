@@ -216,6 +216,15 @@ The following example shows how to use the popular <a href='http://momentjs.com'
 for parsing and formatting dates, but you can use any third party library you would like:
 <pre>
 $.widget('MyOrg.MomentMonthPicker', $.KidSysco.MonthPicker, {
+	
+	// Set the default format.
+	options: {
+		MonthFormat: 'MM {YYYY}',
+	},
+	
+	// Set the format to use with the HTML 5 month input.
+	MonthInputFormat: 'YYYY-MM',
+	
     /**
      * @param str		{String} A string representing a date in the given format.
      * @param format	{String} The format used to parse the str argument.
@@ -280,9 +289,10 @@ $('.selector').MonthPicker('option', 'UseInputMask', false );
     <h3>Animation</h3>
     Type: String<br />
     Default: 'fadeToggle'<br />
-    Supported values: ['fadeToggle', 'slideToggle']<br />
+    Supported values: ['fadeToggle', 'slideToggle', 'none']<br />
     Since: 2.4</br>
-    Sets the animation to use when the menu both opens and closes.
+    Sets the animation to use when the menu both opens and closes, you can disable animation
+    by passing in none.
     <p>
     If you want to have different animations for opening and closing the menu
     see the <a href='#showanim'>ShowAnim</a> and <a href='#hideanim'>HideAnim</a> options.
@@ -310,13 +320,12 @@ $('.selector').MonthPicker('option', 'Animation', 'slideToggle' );
     Since: 2.4</br>
     Sets the speed of the animation used to open and close the menu.
 </p>
-<p>
+<p>F
 	You choose from three predefined speeds:
 	<ul>
 	<li>normal (the default) 400ms</li>
 	<li>fast 200ms</li>
 	<li>slow 600ms</li>
-	<li>0 disables animation</li>
 	</ul>
 	
 	Or you can specify the speed in milliseconds by passing in a number.
@@ -339,9 +348,10 @@ $('.selector').MonthPicker('option', 'Duration', 'fast' );
     <h3>ShowAnim</h3>
     Type: String<br />
     Default: 'fadeIn'<br />
-    Supported values: ['fadeIn', 'slideDown']<br />
+    Supported values: ['fadeIn', 'slideDown', 'none']<br />
     Since: 2.4</br>
-    Sets the animation to use only when the  menu is opened.
+    Sets the animation to use only when the  menu is open, you can disable the show animation by
+    passing in none.
     <p>
     If you want to have the same animation for both opening and closing the menu use
     the <a href='#animation'>Animation option</a> instead.
@@ -369,9 +379,10 @@ $('.selector').MonthPicker('option', 'ShowAnim', 'slideDown' );
     <h3>HideAnim</h3>
     Type: String<br />
     Default: 'fadeOut'<br />
-    Supported values: ['fadeOut', 'slideUp']<br />
+    Supported values: ['fadeOut', 'slideUp', 'none']<br />
     Since: 2.4</br>
-    Sets the animation to use only when the menu is opened.
+    Sets the animation to use only when the menu is opened, you can disable the hide animation by
+    passing in none.
     <p>
     If you want to have the same animation for both opening and closing the menu use
     the <a href='#animation'>Animation option</a> instead.

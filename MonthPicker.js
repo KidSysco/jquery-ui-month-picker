@@ -24,9 +24,9 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
     var _posErr = _setupErr + 'The jQuery UI position plug-in must be loaded in order to specify a position.';
     var _badOptValErr = _setupErr + 'Unsupported % option value, supported (case sensitive) values are: ';
     var _animVals = {
-            Animation: ['slideToggle', 'fadeToggle'],
-            ShowAnim: ['fadeIn', 'slideDown'],
-            HideAnim: ['fadeOut', 'slideUp']
+            Animation: ['slideToggle', 'fadeToggle', 'none'],
+            ShowAnim: ['fadeIn', 'slideDown', 'none'],
+            HideAnim: ['fadeOut', 'slideUp', 'none']
 	    };
 	var $noop = $.noop;
 	var $datepicker = $.datepicker;
@@ -256,7 +256,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             
             this._isMonthInputType = _el.attr('type') === 'month';
             if (this._isMonthInputType) {
-	            this.options.MonthFormat = 'yy-mm';
+	            this.options.MonthFormat = this.MonthInputFormat;
 	            _el.css('width', 'auto');
             }
 
@@ -380,6 +380,8 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
          * Methods the user can override to use a third party library
          * such as http://momentjs.com for parsing and formatting months.
          */
+		MonthInputFormat: 'mm/yy',
+         
         ParseMonth: function (str, format) {
             try {
                 return $datepicker.parseDate('dd' + format, '01' + str);
@@ -469,12 +471,16 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             if (_menu.css('display') === 'none') {
                 this._addKeyEvents();
                 
-                _menu[_opts.ShowAnim || _opts.Animation]({
-	               duration: this._duration(),
+                var _anim = _opts.ShowAnim || _opts.Animation,
+                	_noAnim = _anim === 'none';
+                	
+	            _menu[ _noAnim ? 'show' : _anim ]({
+	               duration: _noAnim ?  0 : this._duration(),
 	               start: $.proxy(this._position, this, _menu),
-	               complete: $.proxy(this.options.OnAfterMenuOpen, _elem)
-	            });
+	               complete: $.proxy(_opts.OnAfterMenuOpen, _elem)
+		        });
             }
+            
             
             return false;
         },
@@ -526,7 +532,13 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             if (_menu.css('display') === 'block') {
 	            $(document).off('keydown' + _eventsNs);
 	            var _callback = $.proxy(_opts.OnAfterMenuClose, _elem);
-                _menu[_opts.HideAnim || _opts.Animation](this._duration(), _callback);
+	            
+	            var _anim = _opts.HideAnim || _opts.Animation;
+	            if (_anim === 'none') {
+		            _menu.hide(0, _callback);
+	            } else {
+                	_menu[ _anim ](this._duration(), _callback);                
+                }
             }
         },
 		

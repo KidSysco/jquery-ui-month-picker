@@ -31,6 +31,15 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
 	var $noop = $.noop;
 	var $datepicker = $.datepicker;
     
+    function _makeDefaultButton(options) {
+	   return $('<span id="MonthPicker_Button_' + this.id + '" class="month-picker-open-button">' + options.i18n.buttonText + '</span>').button({
+            text: false,
+            icons: {
+                primary: options.ButtonIcon
+            }
+        });
+    }
+    
     $.MonthPicker = {
         i18n: {
             year: "Year",
@@ -101,6 +110,8 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             ShowAnim: null,
             HideAnim: null,
             Duration: 'normal',
+            Button: _makeDefaultButton,
+            OnAfterSetDisabled: $noop,
             ButtonIcon: 'ui-icon-calculator',
             OnBeforeMenuOpen: $noop,
             OnAfterMenuOpen: $noop,
@@ -167,7 +178,13 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             switch (key) {
                 case 'i18n':
                     // Pass a clone i18n object to the this._super.
-                    value = $.extend({}, value);
+                    /*
+                    var proto = function() {};
+                    proto.prototype = $.MonthPicker.i18n;
+                    value = $.extend(new proto, value);
+                    */
+                    //value = Object.create($.MonthPicker.i18n, value);
+                    value = $.extend({}, $.MonthPicker.i18n, value);
                     break;
                 case 'Destroy':
                     this._destroy();
@@ -250,6 +267,8 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
                 return false;
             }
             
+            this._setOption('i18n', _opts.i18n);
+            
             // Make sure the user passed in a valid Animation, ShowAnim and HideAnim options values.
             for (var opt in _animVals) {
                 if (_opts[opt] !== null && _animVals[opt].indexOf(_opts[opt]) === -1) {
@@ -317,7 +336,8 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
         /****** Misc. Utility functions ******/
 
         _i18n: function(str) {
-            return $.extend({}, $.MonthPicker.i18n, this.options.i18n)[str];
+            //return $.extend({}, $.MonthPicker.i18n, this.options.i18n)[str];
+            return this.options.i18n[str];
         },
 
         /****** Publicly Accessible API functions ******/
@@ -412,33 +432,32 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
         },
 
         _showIcon: function () {
-	        var _button = this._monthPickerButton, 
-                _showIcon = this.options.ShowIcon, 
+	        var _button = this._monthPickerButton || $(), 
                 _elem = this.element;
 	        	
-            if (_button === null) {
-                if (_showIcon) {
-                    _button = $('<span id="MonthPicker_Button_' + _elem.attr('id') + '" class="month-picker-open-button">' + this._i18n('buttonText') + '</span>').insertAfter(_elem);
-                    
-                    _button.button({
-                        text: false,
-                        icons: {
-                            primary: this.options.ButtonIcon
-                        }
-                    }).click($.proxy(this.Show, this));
-                } else {
-                    _elem.bind('click' + _eventsNs, $.proxy(this.Show, this));
-                }
-            } else {
-                if (!_showIcon) {
-                    _button.remove();
-                    _button = null;
-                    _elem.bind('click' + _eventsNs, $.proxy(this.Show, this));
-                }
-            }
-            
-            this._monthPickerButton = _button;
+	        if (!_button.length) {
+		        if (this.options.ShowIcon) {
+			        this._createButton(_elem);
+		        }
+	      	} else {
+		      	_button[this.options.ShowIcon ? 'show' : 'hide']();
+	      	}
         },
+
+		_createButton: function(_elem) {
+			var _button = this.options.Button;
+	        if ($.isFunction(_button)) {
+		        _button = _button.call(_elem[0], this.options);
+	        }
+	        
+	        this._monthPickerButton = ( _button instanceof $ ? _button : $(_button) )
+	        	.each(function() {
+			        if (!$.contains(document.body, this)) {
+				        $(this).insertAfter(_elem);
+			        }
+				})
+				.on('click' + _eventsNs, $.proxy(this.Toggle, this));
+		},
 
         _createValidationMessage: function () {
 	        var _errorMsg = this.options.ValidationErrorMessage, _elem = this.element;
@@ -463,8 +482,11 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
 		},
 		
         Show: function (event) {
-            var _elem = this.element;
-            var _opts = this.options;
+	        if (this.options.Disabled) {
+		        return;
+	        }
+	        
+            var _elem = this.element, _opts = this.options;
             
             event = event || new $.Event('Show');
 			_opts.OnAfterMenuOpen.call(_elem, event);
@@ -581,26 +603,30 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
         },
 
         _setDisabledState: function () {
-	        var _button = this._monthPickerButton, _elem = this.element;
-            if (this.options.Disabled) {
-                _elem.addClass(_disabledClass).prop('disabled', true);
-                
-                if (_button !== null) {
-                    _button.button('option', 'disabled', true);
-                }
-
-                if (this._validationMessage !== null) {
-                    this._validationMessage.hide();
-                }
-
-            } else {
-                _elem.removeClass(_disabledClass).prop('disabled', false);
-                
-                if (_button !== null) {
-                    _button.button('option', 'disabled', false);
-                }
-            }
+	        var isDisabled = this.options.Disabled,
+		        _button = this._monthPickerButton || $();
+		        
+	        this.element[isDisabled ? 'addClass' : 'removeClass']('disabled');
+	        if (isDisabled) {
+		        (this._validationMessage || $()).hide();
+	        }
+	        if (this._visible) {
+		        this.Hide();
+	        }
+	        
+	        this.SetDisabled(isDisabled, _button);
+	        this.options.OnAfterSetDisabled.call(this.element[0], isDisabled, _button);
         },
+        
+        // The API user can override this method to 
+        // change the way buttons are disabled.
+		SetDisabled: function (state, button) {
+			try {
+			    button.button('option', 'disabled', state);
+		    } catch (e) {
+			    button.prop('disabled', state);
+		    }
+	    },
 
         _setStartYear: function () {
             if (this.options.StartYear !== null) {

@@ -141,7 +141,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
                 .removeData(this._enum._overrideStartYear)
                 .unbind(_eventsNs);
 
-            $(document).unbind('click' + _eventsNs + _elem.attr('id'), $.proxy(this._hide, this));
+            $(document).unbind('click' + _eventsNs + _elem.attr('id'), $.proxy(this.Hide, this));
 
             if(this._monthPickerMenu) {
                 this._monthPickerMenu.remove();
@@ -420,15 +420,15 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
                         icons: {
                             primary: 'ui-icon-calculator'
                         }
-                    }).click($.proxy(this._show, this));
+                    }).click($.proxy(this.Show, this));
                 } else {
-                    _elem.bind('click' + _eventsNs, $.proxy(this._show, this));
+                    _elem.bind('click' + _eventsNs, $.proxy(this.Show, this));
                 }
             } else {
                 if (!_showIcon) {
                     _button.remove();
                     _button = null;
-                    _elem.bind('click' + _eventsNs, $.proxy(this._show, this));
+                    _elem.bind('click' + _eventsNs, $.proxy(this.Show, this));
                 }
             }
             
@@ -454,14 +454,14 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
         },
 
 		Show: function() {
-			return this._show();
+			return this.Show();
 		},
 		
 		Toggle: function() {
-			return this._visible ? this._hide() : this._show();
+			return this._visible ? this.Hide() : this.Show();
 		},
 		
-        _show: function () {
+        Show: function () {
             var _selectedYear = this.GetSelectedYear();
             var _elem = this.element;
             if (_elem.data(this._enum._overrideStartYear) !== void 0) {
@@ -477,7 +477,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             var _menu = this._monthPickerMenu, _opts = this.options;
             if (!this._visible) {
                 this._addKeyEvents();
-                $(document).on('click' + _eventsNs + this.uuid, $.proxy(this._hide, this));
+                $(document).on('click' + _eventsNs + this.uuid, $.proxy(this.Hide, this));
                 
                 var _anim = _opts.ShowAnim || _opts.Animation,
                 	_noAnim = _anim === 'none';
@@ -500,10 +500,10 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
 	            switch (event.keyCode) {
 		            case keyCode.ENTER:
 		            	this._chooseMonth(new Date().getMonth() + 1);
-		            	this._hide();
+		            	this.Hide();
 		            	break;
 		            case keyCode.ESCAPE:
-		            	this._hide();
+		            	this.Hide();
 		            	break;
 	            }
             }, this));
@@ -533,7 +533,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
                 });
             },
 
-        _hide: function () {
+        Hide: function () {
 	        var _menu = this._monthPickerMenu, 
 	            _opts = this.options,
 	            _elem = this.element;
@@ -642,7 +642,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
                     _month: _counter
                 }, $.proxy(function (event) {
                     this._chooseMonth(event.data._month);
-                    this._hide();
+                    this.Hide();
                 }, this));
 
                 $('.button-' + _counter, _menu).button('option', 'label', _months[_month]);

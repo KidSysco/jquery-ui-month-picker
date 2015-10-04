@@ -101,6 +101,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             ShowAnim: null,
             HideAnim: null,
             Duration: 'normal',
+            ButtonIcon: 'ui-icon-calculator',
             OnBeforeMenuOpen: $noop,
             OnAfterMenuOpen: $noop,
             OnAfterMenuOpen: $noop,
@@ -418,10 +419,11 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             if (_button === null) {
                 if (_showIcon) {
                     _button = $('<span id="MonthPicker_Button_' + _elem.attr('id') + '" class="month-picker-open-button">' + this._i18n('buttonText') + '</span>').insertAfter(_elem);
+                    
                     _button.button({
                         text: false,
                         icons: {
-                            primary: 'ui-icon-calculator'
+                            primary: this.options.ButtonIcon
                         }
                     }).click($.proxy(this.Show, this));
                 } else {

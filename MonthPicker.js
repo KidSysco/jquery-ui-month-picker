@@ -151,7 +151,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
                 this._monthPickerMenu = null;
             }
 
-            if (this.monthPickerButton) {
+            if (this._monthPickerButton) {
                 this._monthPickerButton.remove();
                 this._monthPickerButton = null;
             }

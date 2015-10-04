@@ -101,7 +101,10 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             ShowAnim: null,
             HideAnim: null,
             Duration: 'normal',
+            OnBeforeMenuOpen: $noop,
             OnAfterMenuOpen: $noop,
+            OnAfterMenuOpen: $noop,
+            OnBeforeMenuClose: $noop, 
             OnAfterMenuClose: $noop,
             OnAfterNextYear: $noop,
             OnAfterNextYears: $noop,
@@ -119,7 +122,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
 
         _validationMessage: null,
 
-        _yearContainer: null,
+        //_yearContainer: null,
         
         _isMonthInputType: null,
 
@@ -452,18 +455,22 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
                 this._validationMessage = null;
             }
         },
-
-		Show: function() {
-			return this.Show();
-		},
 		
 		Toggle: function() {
 			return this._visible ? this.Hide() : this.Show();
 		},
 		
-        Show: function () {
-            var _selectedYear = this.GetSelectedYear();
+        Show: function (event) {
             var _elem = this.element;
+            var _opts = this.options;
+            
+            event = event || new $.Event('Show');
+			_opts.OnAfterMenuOpen.call(_elem, event);
+			if (event.isDefaultPrevented()) {
+				return false;
+			}
+            
+            var _selectedYear = this.GetSelectedYear();
             if (_elem.data(this._enum._overrideStartYear) !== void 0) {
                 this._setPickerYear(this.options.StartYear);
             } else if (!isNaN(_selectedYear)) {
@@ -474,10 +481,10 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             
             this._showMonths();
             
-            var _menu = this._monthPickerMenu, _opts = this.options;
+            var _menu = this._monthPickerMenu;
             if (!this._visible) {
-                this._addKeyEvents();
-                $(document).on('click' + _eventsNs + this.uuid, $.proxy(this.Hide, this));
+               	$(document).on('click' + _eventsNs + this.uuid, $.proxy(this.Hide, this))
+        	           	   .on('keydown' + _eventsNs + this.uuid, $.proxy(this._keyDown, this));
                 
                 var _anim = _opts.ShowAnim || _opts.Animation,
                 	_noAnim = _anim === 'none';
@@ -494,19 +501,17 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             return false;
         },
         
-        _addKeyEvents: function () {
-        	$(document).on('keydown' + _eventsNs, $.proxy(function(event) {
-	            var keyCode = $.ui.keyCode;
-	            switch (event.keyCode) {
-		            case keyCode.ENTER:
-		            	this._chooseMonth(new Date().getMonth() + 1);
-		            	this.Hide();
-		            	break;
-		            case keyCode.ESCAPE:
-		            	this.Hide();
-		            	break;
-	            }
-            }, this));
+        _keyDown: function() {
+	        var keyCode = $.ui.keyCode;
+            switch (event.keyCode) {
+	            case keyCode.ENTER:
+	            	this._chooseMonth(new Date().getMonth() + 1);
+	            	this.Hide();
+	            	break;
+	            case keyCode.ESCAPE:
+	            	this.Hide();
+	            	break;
+            }
         },
         
         _duration: function() {
@@ -533,13 +538,21 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
                 });
             },
 
-        Hide: function () {
-	        var _menu = this._monthPickerMenu, 
-	            _opts = this.options,
-	            _elem = this.element;
-	            
+        Hide: function (event) {	        
             if (this._visible) {
-	            $(document).off('keydown' + _eventsNs);
+	          	var _menu = this._monthPickerMenu, 
+		            _opts = this.options,
+		            _elem = this.element;
+		            
+		        event = event || new $.Event('Hide');
+		        _opts.OnBeforeMenuClose.call(_elem, event);
+		        if (event.isDefaultPrevented()) {
+			        return;
+		        }
+		            
+	            $(document).off('keydown' + _eventsNs + this.uuid)
+				           .off('click' + _eventsNs + this.uuid);
+	            
 	            var _callback = $.proxy(_opts.OnAfterMenuClose, _elem);
 	            
 	            var _anim = _opts.HideAnim || _opts.Animation;
@@ -548,11 +561,9 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
 	            } else {
                 	_menu[ _anim ](this._duration(), _callback);                
                 }
+                
+				this._visible = false;
             }
-            
-            $(document).off('click' + _eventsNs + this.uuid);
-            
-            this._visible = false;
         },
 		
         _setUseInputMask: function () {
@@ -693,14 +704,14 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
         },
 
         _nextYear: function () {
-            var _year = $('.month-picker-year-table .year', this._monthPickerMenu);
+            var _year = this._yearContainer;
             _year.text(parseInt(_year.text()) + 1, 10);
 
             this.options.OnAfterNextYear.call(this.element);
         },
 
         _nextYears: function () {
-            var _year = $('.month-picker-year-table .year', this._monthPickerMenu);
+            var _year = this._yearContainer;
             _year.text(parseInt(_year.text()) + 5, 10);
             this._showYears();
 
@@ -708,7 +719,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
         },
 
         _previousYears: function () {
-            var _year = $('.month-picker-year-table .year', this._monthPickerMenu);
+            var _year = this._yearContainer;
             _year.text(parseInt(_year.text()) - 5, 10);
             this._showYears();
 
@@ -716,7 +727,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
         },
 
         _previousYear: function () {
-            var _year = $('.month-picker-year-table .year', this._monthPickerMenu);
+            var _year = this._yearContainer;
             _year.text(parseInt(_year.text()) - 1, 10);
             
             this.options.OnAfterPreviousYear.call(this.element);

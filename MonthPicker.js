@@ -125,7 +125,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             if (jQuery.mask && this.options.UseInputMask) {
                 _elem.unmask();
                 
-                if (this.GetSelectedDate() === null) {
+                if (!this.GetSelectedDate()) {
 	                _elem.val('');
                 }
             }
@@ -356,6 +356,106 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             this._validationMessage.hide();
         },
         
+        Toggle: function () {
+		    return this._visible ? this.Hide() : this.Show();
+        },
+		
+        Show: function (event) {
+	        if (this.options.Disabled) {
+		        return false;
+	        }
+	        
+            var _elem = this.element, _opts = this.options;
+            
+            // Allow the user to prevent showing the menu.
+            event = event || new $.Event();
+			if (_opts.OnAfterMenuOpen.call(_elem, event) === false || event.isDefaultPrevented()) {
+				return false;
+			}
+            
+            var _selectedYear = this.GetSelectedYear();
+            if (_elem.data(this._enum._overrideStartYear) !== void 0) {
+                this._setPickerYear(this.options.StartYear);
+            } else if (!isNaN(_selectedYear)) {
+                this._setPickerYear(_selectedYear);
+            } else {
+                this._setPickerYear(new Date().getFullYear());
+            }
+            
+            if (!this._visible) {
+	            var _menu = this._monthPickerMenu;
+	            this._showMonths();
+	            
+               	$(document).on('click' + _eventsNs + this.uuid, $.proxy(this.Hide, this))
+        	           	   .on('keydown' + _eventsNs + this.uuid, $.proxy(this._keyDown, this));
+        	    
+        	    // Trun off validation so that clicking one of the months
+        	    // won't blur the input field and trogger vlaidation
+        	    // befroe the month was chosen (click event was triggered).
+        	    // It is turned back on when Hide() is called.
+        	    _elem.off('blur' + _eventsNs);
+                
+                var _anim = _opts.ShowAnim || _opts.Animation,
+                	_noAnim = _anim === 'none';
+                
+	            _menu[ _noAnim ? 'show' : _anim ]({
+	               duration: _noAnim ? 0 : this._duration(),
+	               start: $.proxy(this._position, this, _menu),
+	               complete: $.proxy(_opts.OnAfterMenuOpen, _elem)
+		        });
+		        
+			    _elem.focus();
+		        
+		        this._visible = true;
+            }
+            
+            return false;
+        },
+
+        Hide: function (event) {	        
+            if (this._visible) {
+	          	var _menu = this._monthPickerMenu, 
+		            _opts = this.options,
+		            _elem = this.element;
+		        
+		        if (event && event.target == _elem[0]) {
+			        return;
+		        }
+		        
+		        event = event || new $.Event();
+		        if (_opts.OnBeforeMenuClose.call(_elem, event) === false || event.isDefaultPrevented()) {
+			        return;
+		        }
+		        
+	            $(document).off('keydown' + _eventsNs + this.uuid)
+				           .off('click' + _eventsNs + this.uuid);
+	            
+	            this.Validate();
+	            _elem.on('blur' + _eventsNs, $.proxy(this.Validate, this));
+	            
+	            var _callback = $.proxy(_opts.OnAfterMenuClose, _elem);
+	            
+	            var _anim = _opts.HideAnim || _opts.Animation;
+	            if (_anim === 'none') {
+		            _menu.hide(0, _callback);
+	            } else {
+                	_menu[ _anim ](this._duration(), _callback);                
+                }
+                
+				this._visible = false;
+            }
+        },
+
+        // The API user can override this method to 
+        // change the way buttons are disabled.
+		SetDisabled: function (state, button) {
+			try {
+			    button.button('option', 'disabled', state);
+		    } catch (e) {
+			    button.prop('disabled', state);
+		    }
+	    },
+	            
         /**
          * Methods the user can override to use a third party library
          * such as http://momentjs.com for parsing and formatting months.
@@ -460,63 +560,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
                 }
             });
 		},
-		
-		Toggle: function () {
-			return this._visible ? this.Hide() : this.Show();
-		},
-		
-        Show: function (event) {
-	        if (this.options.Disabled) {
-		        return;
-	        }
-	        
-            var _elem = this.element, _opts = this.options;
-            
-            // Allow the user to prevent showing the menu.
-            event = event || new $.Event();
-			if (_opts.OnAfterMenuOpen.call(_elem, event) === false || event.isDefaultPrevented()) {
-				return false;
-			}
-            
-            var _selectedYear = this.GetSelectedYear();
-            if (_elem.data(this._enum._overrideStartYear) !== void 0) {
-                this._setPickerYear(this.options.StartYear);
-            } else if (!isNaN(_selectedYear)) {
-                this._setPickerYear(_selectedYear);
-            } else {
-                this._setPickerYear(new Date().getFullYear());
-            }
-            
-            this._showMonths();
-            
-            var _menu = this._monthPickerMenu;
-            if (!this._visible) {
-               	$(document).on('click' + _eventsNs + this.uuid, $.proxy(this.Hide, this))
-        	           	   .on('keydown' + _eventsNs + this.uuid, $.proxy(this._keyDown, this));
-        	    
-        	    // Trun off validation so that clicking one of the months
-        	    // won't blur the input field and trogger vlaidation
-        	    // befroe the month was chosen (click event was triggered).
-        	    // It is turned back on when Hide() is called.
-        	    _elem.off('blur' + _eventsNs);
-                
-                var _anim = _opts.ShowAnim || _opts.Animation,
-                	_noAnim = _anim === 'none';
-                
-	            _menu[ _noAnim ? 'show' : _anim ]({
-	               duration: _noAnim ? 0 : this._duration(),
-	               start: $.proxy(this._position, this, _menu),
-	               complete: $.proxy(_opts.OnAfterMenuOpen, _elem)
-		        });
 		        
-			    _elem.focus();
-		        
-		        this._visible = true;
-            }
-            
-            return false;
-        },
-        
         _keyDown: function() {
 	        var keyCode = $.ui.keyCode;
             switch (event.keyCode) {
@@ -559,41 +603,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
 				
 				return $menu.css(_css);
             },
-
-        Hide: function (event) {	        
-            if (this._visible) {
-	          	var _menu = this._monthPickerMenu, 
-		            _opts = this.options,
-		            _elem = this.element;
-		        
-		        if (event && event.target == _elem[0]) {
-			        return;
-		        }
-		        
-		        event = event || new $.Event();
-		        if (_opts.OnBeforeMenuClose.call(_elem, event) === false || event.isDefaultPrevented()) {
-			        return;
-		        }
-		        
-	            $(document).off('keydown' + _eventsNs + this.uuid)
-				           .off('click' + _eventsNs + this.uuid);
-	            
-	            this.Validate();
-	            _elem.on('blur' + _eventsNs, $.proxy(this.Validate, this));
-	            
-	            var _callback = $.proxy(_opts.OnAfterMenuClose, _elem);
-	            
-	            var _anim = _opts.HideAnim || _opts.Animation;
-	            if (_anim === 'none') {
-		            _menu.hide(0, _callback);
-	            } else {
-                	_menu[ _anim ](this._duration(), _callback);                
-                }
-                
-				this._visible = false;
-            }
-        },
-		
+            		
         _setUseInputMask: function () {
             if (!this._isMonthInputType) {
                 try {
@@ -620,16 +630,6 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
 	        this.SetDisabled(isDisabled, _button);
 	        this.options.OnAfterSetDisabled.call(this.element[0], isDisabled, _button);
         },
-        
-        // The API user can override this method to 
-        // change the way buttons are disabled.
-		SetDisabled: function (state, button) {
-			try {
-			    button.button('option', 'disabled', state);
-		    } catch (e) {
-			    button.prop('disabled', state);
-		    }
-	    },
 
         _setStartYear: function () {
             if (this.options.StartYear !== null) {

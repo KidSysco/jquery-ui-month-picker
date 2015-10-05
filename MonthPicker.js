@@ -20,6 +20,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
     var _eventsNs = '.MonthPicker';
     var _disabledClass = 'month-picker-disabled';
     var _defaultPos = { my: 'left top+1', at: 'left bottom' };
+    var _RTL_defaultPos = { my: 'right top+1', at: 'right bottom' };
     var _setupErr = 'MonthPicker Setup Error: ';
     var _posErr = _setupErr + 'The jQuery UI position plug-in must be loaded in order to specify a position.';
     var _badOptValErr = _setupErr + 'Unsupported % option value, supported (case sensitive) values are: ';
@@ -69,28 +70,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             '</table>' +
         '</div>' +
         '<div class="ui-widget ui-widget-content ui-helper-clearfix ui-corner-all">' +
-            '<table class="month-picker-month-table" width="100%" border="0" cellspacing="1" cellpadding="2">' +
-                '<tr>' +
-                    '<td><button class="button-1" /></td>' +
-                    '<td><button class="button-2" /></td>' +
-                    '<td><button class="button-3" /></td>' +
-                '</tr>' +
-                '<tr>' +
-                    '<td><button class="button-4" /></td>' +
-                    '<td><button class="button-5" /></td>' +
-                    '<td><button class="button-6" /></td>' +
-                '</tr>' +
-                '<tr>' +
-                    '<td><button class="button-7" /></td>' +
-                    '<td><button class="button-8" /></td>' +
-                    '<td><button class="button-9" /></td>' +
-                '</tr>' +
-                '<tr>' +
-                    '<td><button class="button-10" /></td>' +
-                    '<td><button class="button-11" /></td>' +
-                    '<td><button class="button-12" /></td>' +
-                '</tr>' +
-            '</table>' +
+            '<table class="month-picker-month-table" width="100%" border="0" cellspacing="1" cellpadding="2" />' +
         '</div>';
 
     $.widget("KidSysco.MonthPicker", {
@@ -99,6 +79,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
 
         options: {
             i18n: null,
+            IsRTL: false,
             Position: null,
             StartYear: null,
             ShowIcon: true,
@@ -274,7 +255,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             this._setStartYear();
 
             var _menu = this._monthPickerMenu = $('<div id="MonthPicker_' + _el.attr('id') + '" class="month-picker ui-helper-clearfix"></div>');
-
+            
             $(_markup).appendTo(_menu);
             $('body').append(_menu);
 
@@ -282,32 +263,35 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             _menu.find('.year-container-all').attr('title', this._i18n('jumpYears'));
 
             this._showIcon();
-
             this._createValidationMessage();
 
             this._yearContainer = $('.year', _menu);
-
+            
+			var _rtl = _opts.IsRTL;
             $('.previous-year button', _menu)
                 .button({
                 icons: {
-                    primary: 'ui-icon-circle-triangle-w'
+                    primary: 'ui-icon-circle-triangle-' + (_rtl ? 'e' : 'w')
                 },
                 text: false
-            });
-            
-            $('.previous-year button span.ui-button-icon-primary').text(this._i18n('prevLabel'));
-             
+            })
             $('.next-year button', _menu)
                 .button({
                 icons: {
-                    primary: 'ui-icon-circle-triangle-e'
+                    primary: 'ui-icon-circle-triangle-'+ (_rtl ? 'w' : 'e')
                 },
                 text: false
             });
             
-            $('.next-year button span.ui-button-icon-primary').text(this._i18n('nextLabel'));
+            $('.next-year button span.ui-button-icon-primary', _menu).text(this._i18n('nextLabel'));
+            $('.previous-year button span.ui-button-icon-primary', _menu).text(this._i18n('prevLabel'));
 
-            $('.month-picker-month-table td button', _menu).button();
+			var $table = $('.month-picker-month-table', _menu);
+			for (var i = 0; i < 12; i++) {
+				var $tr = !(i % 3) ? $('<tr />').appendTo($table) : $tr;
+				$tr.append('<td><button class="button-' + (i + 1) + '" /></td>');
+			}
+			$('button', $table).button();
 
             $('.year-container-all', _menu).click($.proxy(this._showYearsClickHandler, this));
             
@@ -455,11 +439,11 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
 	    },
 
         _createValidationMessage: function () {
-	        var _errorMsg = this.options.ValidationErrorMessage, _elem = this.element;
-            if ([null, ''].indexOf(_errorMsg) === -1) {
-                this._validationMessage = $('<span id="MonthPicker_Validation_' + _elem.attr('id') + '" class="month-picker-invalid-message">' + _errorMsg + '</span>');
+	        var _errMsg = this.options.ValidationErrorMessage, _elem = this.element;
+            if ([null, ''].indexOf(_errMsg) === -1) {
+                var _msgEl = $('<span id="MonthPicker_Validation_' + _elem[0].id + '" class="month-picker-invalid-message">' + _errMsg + '</span>');
 
-                this._validationMessage.insertAfter(this._monthPickerButton.length ? _elem.next() : _elem);
+                this._validationMessage = _msgEl.insertAfter(this._monthPickerButton.length ? _elem.next() : _elem);
                 
 				_elem.on('blur' + _eventsNs, $.proxy(this.Validate, this));
             }
@@ -469,7 +453,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
 	        this._validationMessage.remove();
         },
 		
-		Toggle: function() {
+		Toggle: function () {
 			return this._visible ? this.Hide() : this.Show();
 		},
 		
@@ -550,7 +534,8 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
         
         _position: $.ui.position ?
             function($menu) {
-                var _posOpts = $.extend(_defaultPos, this.options.Position);
+	            var _defauts = this.options.IsRTL ? _RTL_defaultPos : _defaultPos;
+                var _posOpts = $.extend(_defauts, this.options.Position);
                 return $menu.position($.extend({of: this.element}, _posOpts));
             } :
             function($menu) {
@@ -616,9 +601,8 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
 	        if (isDisabled) {
 		        this._validationMessage.hide();
 	        }
-	        if (this._visible) {
-		        this.Hide();
-	        }
+	        
+		    this.Hide();
 	        
 	        this.SetDisabled(isDisabled, _button);
 	        this.options.OnAfterSetDisabled.call(this.element[0], isDisabled, _button);
@@ -670,12 +654,12 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             $('.previous-year button', _menu)
                 .attr('title', this._i18n('prevYear'))
                 .unbind('click')
-                .bind('click' + _eventsNs, $.proxy(this._previousYear, this));
+                .bind('click' + _eventsNs, $.proxy(this._addToYear, this, -1));
 
             $('.next-year button', _menu)
                 .attr('title', this._i18n('nextYear'))
                 .unbind('click')
-                .bind('click' + _eventsNs, $.proxy(this._nextYear, this));
+                .bind('click' + _eventsNs, $.proxy(this._addToYear, this, 1));
 
             $('.year-container-all', _menu).css('cursor', 'pointer');
             $('.month-picker-month-table button', _menu).unbind(_eventsNs);
@@ -702,22 +686,16 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
 
         _showYears: function () {
             var _year = this._getPickerYear(), _menu = this._monthPickerMenu;
-			
+			var AMOUNT_TO_ADD = 5;
             $('.previous-year button', _menu)
                 .attr('title', this._i18n('prev5Years'))
                 .unbind('click')
-                .bind('click', $.proxy(function () {
-	                this._previousYears();
-	                return false;
-            	}, this));
+                .bind('click', $.proxy(this._addToYears, this, -AMOUNT_TO_ADD));
 
             $('.next-year button', _menu)
                 .attr('title', this._i18n('next5Years'))
                 .unbind('click')
-                .bind('click', $.proxy(function () {
-	                this._nextYears();
-	                return false;
-				}, this));
+                .bind('click', $.proxy(this._addToYears, this, AMOUNT_TO_ADD));
 
             $('.year-container-all', _menu).css('cursor', 'default');
             $('.month-picker-month-table button', _menu).unbind(_eventsNs);
@@ -736,39 +714,23 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
                 _yearDifferential++;
             }
         },
-
-        _nextYear: function () {
-            var _year = this._yearContainer;
-            _year.text(parseInt(_year.text()) + 1, 10);
-
-			this.element.focus();
-			
-            this.options.OnAfterNextYear.call(this.element);
-        },
-
-        _nextYears: function () {
-            var _year = this._yearContainer;
-            _year.text(parseInt(_year.text()) + 5, 10);
-            this._showYears();
-
-            this.options.OnAfterNextYears.call(this.element);
-        },
-
-        _previousYears: function () {
-            var _year = this._yearContainer;
-            _year.text(parseInt(_year.text()) - 5, 10);
-            this._showYears();
-
-            this.options.OnAfterPreviousYears.call(this.element);
-        },
-
-        _previousYear: function () {
-            var _year = this._yearContainer;
-            _year.text(parseInt(_year.text()) - 1, 10);
+        
+		_addToYear: function(amount) {
+			var _year = this._yearContainer;
+            _year.text(parseInt(_year.text()) + amount, 10);
             this.element.focus();
             
-            this.options.OnAfterPreviousYear.call(this.element);
-        }
+            this.options['OnAfter' + (amount > 0 ? 'Next' : 'Previous') + 'Year'].call(this.element);
+		},
+
+		_addToYears: function(amount) {
+            var _year = this._yearContainer;
+            _year.text(parseInt(_year.text()) + amount, 10);
+            this._showYears();
+            this.element.focus();
+
+            this.options['OnAfter' + (amount > 0 ? 'Next' : 'Previous') + 'Years'].call(this.element);
+		}
     });
     
     // Added in version 2.4.

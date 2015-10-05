@@ -1,7 +1,7 @@
 /*
 https://github.com/KidSysco/jquery-ui-month-picker/
 
-Version 2.2
+Version 2.4
 
 This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
@@ -129,15 +129,9 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             OnAfterChooseMonths: $noop
         },
 
-        _monthPickerMenu: null,
-
         _monthPickerButton: $(),
 
-        _validationMessage: null,
-
-        //_yearContainer: null,
-        
-        _isMonthInputType: null,
+        _validationMessage: $(),
 
         _enum: {
             _overrideStartYear: 'MonthPicker_OverrideStartYear'
@@ -149,27 +143,21 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
 	        var _elem = this.element;
             if (jQuery.mask && this.options.UseInputMask) {
                 _elem.unmask();
+                
+                if (this.GetSelectedDate() === null) {
+	                _elem.val('');
+                }
             }
 
-            _elem.val('')
-                .css('color', '')
-                .removeClass('month-year-input')
-                .removeData(this._enum._overrideStartYear)
-                .unbind(_eventsNs);
+            _elem.removeClass('month-year-input')
+                 .removeData(this._enum._overrideStartYear)
+                 .off(_eventsNs);
 
             $(document).off('click' + _eventsNs + this.uuid);
 
-            if(this._monthPickerMenu) {
-                this._monthPickerMenu.remove();
-                this._monthPickerMenu = null;
-            }
-
+            this._monthPickerMenu.remove();
             this._monthPickerButton.remove();
-
-            if (this._validationMessage) {
-                this._validationMessage.remove();
-                this._validationMessage = null;
-            }
+            this._validationMessage.remove();
         },
 
         _setOption: function (key, value) {
@@ -222,7 +210,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
 		            this._updateFieldEvents();
 	            	break;
                 case 'ValidationErrorMessage':
-                    if (this.options.ValidationErrorMessage !== null) {
+                    if (value !== null) {
                         this._createValidationMessage();
                     } else {
                         this._removeValidationMessage();
@@ -297,9 +285,9 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
 
             this._createValidationMessage();
 
-            this._yearContainer = $('.year', this._monthPickerMenu);
+            this._yearContainer = $('.year', _menu);
 
-            $('.previous-year button', this._monthPickerMenu)
+            $('.previous-year button', _menu)
                 .button({
                 icons: {
                     primary: 'ui-icon-circle-triangle-w'
@@ -309,7 +297,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             
             $('.previous-year button span.ui-button-icon-primary').text(this._i18n('prevLabel'));
              
-            $('.next-year button', this._monthPickerMenu)
+            $('.next-year button', _menu)
                 .button({
                 icons: {
                     primary: 'ui-icon-circle-triangle-e'
@@ -323,7 +311,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
 
             $('.year-container-all', _menu).click($.proxy(this._showYearsClickHandler, this));
             
-            _menu.bind('click' + _eventsNs, function (event) {
+            _menu.on('click' + _eventsNs, function (event) {
                 return false;
             });
 
@@ -334,7 +322,6 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
         /****** Misc. Utility functions ******/
 
         _i18n: function(str) {
-            //return $.extend({}, $.MonthPicker.i18n, this.options.i18n)[str];
             return this.options.i18n[str];
         },
 
@@ -391,10 +378,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
 
         Clear: function () {
             this.element.val('');
-
-            if (this._validationMessage !== null) {
-                this._validationMessage.hide();
-            }
+            this._validationMessage.hide();
         },
         
         /**
@@ -462,7 +446,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
 		_updateFieldEvents: function() {
 			if (this.options.ShowOn === 'both') {
 				this.element
-		        	.off(_eventsNs)
+		        	.off('click' + _eventsNs)
 		        	.on('click' + _eventsNs, $.proxy(this.Show, this));
 			} else {		        	
 				var _meth = $.fn[!this.options.ShowIcon ? 'on' : 'off'];
@@ -472,7 +456,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
 
         _createValidationMessage: function () {
 	        var _errorMsg = this.options.ValidationErrorMessage, _elem = this.element;
-            if (_errorMsg !== null && _errorMsg !== '') {
+            if ([null, ''].indexOf(_errorMsg) === -1) {
                 this._validationMessage = $('<span id="MonthPicker_Validation_' + _elem.attr('id') + '" class="month-picker-invalid-message">' + _errorMsg + '</span>');
 
                 this._validationMessage.insertAfter(this._monthPickerButton.length ? _elem.next() : _elem);
@@ -482,10 +466,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
         },
 
         _removeValidationMessage: function () {
-            if (this.options.ValidationErrorMessage === null) {
-                this._validationMessage.remove();
-                this._validationMessage = null;
-            }
+	        this._validationMessage.remove();
         },
 		
 		Toggle: function() {
@@ -633,7 +614,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
 		        
 	        this.element[isDisabled ? 'addClass' : 'removeClass']('disabled');
 	        if (isDisabled) {
-		        (this._validationMessage || $()).hide();
+		        this._validationMessage.hide();
 	        }
 	        if (this._visible) {
 		        this.Hide();
@@ -791,5 +772,5 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
     });
     
     // Added in version 2.4.
-    $.KidSysco.MonthPicker.VERSION = '2.4';
+    $.MonthPicker.VERSION = '2.4';
 }(jQuery, window, document));

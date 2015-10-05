@@ -468,20 +468,6 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
 				var _meth = $.fn[!this.options.ShowIcon ? 'on' : 'off'];
 			    _meth.call(this.element, 'click' + _eventsNs, $.proxy(this.Show, this));
 			}
-			
-			/*
-	        switch (this.options.ShowOn) {
-		        case 'click':
-		        case 'focus':
-		        	this.element
-		        		.off(_eventsNs)
-		        		.on(this.options.ShowOn + _eventsNs, $.proxy(this.Show, this));
-		        default:
-		        	var _meth = $.fn[!this.options.ShowIcon ? 'on' : 'off'];
-			        _meth.call(this.element, 'click' + _eventsNs, $.proxy(this.Show, this));
-			        break;
-	        }
-	        */
 	    },
 
         _createValidationMessage: function () {
@@ -490,8 +476,8 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
                 this._validationMessage = $('<span id="MonthPicker_Validation_' + _elem.attr('id') + '" class="month-picker-invalid-message">' + _errorMsg + '</span>');
 
                 this._validationMessage.insertAfter(this._monthPickerButton.length ? _elem.next() : _elem);
-
-                _elem.blur($.proxy(this.Validate, this));
+                
+				_elem.on('blur' + _eventsNs, $.proxy(this.Validate, this));
             }
         },
 
@@ -513,9 +499,9 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
 	        
             var _elem = this.element, _opts = this.options;
             
-            event = event || new $.Event('Show');
-			_opts.OnAfterMenuOpen.call(_elem, event);
-			if (event.isDefaultPrevented()) {
+            // Allow the user to prevent showing the menu.
+            event = event || new $.Event();
+			if (_opts.OnAfterMenuOpen.call(_elem, event) === false || event.isDefaultPrevented()) {
 				return false;
 			}
             
@@ -534,6 +520,12 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             if (!this._visible) {
                	$(document).on('click' + _eventsNs + this.uuid, $.proxy(this.Hide, this))
         	           	   .on('keydown' + _eventsNs + this.uuid, $.proxy(this._keyDown, this));
+        	    
+        	    // Trun off validation so that clicking one of the months
+        	    // won't blur the input field and trogger vlaidation
+        	    // befroe the month was chosen (click event was triggered).
+        	    // It is turned back on when Hide() is called.
+        	    _elem.off('blur' + _eventsNs);
                 
                 var _anim = _opts.ShowAnim || _opts.Animation,
                 	_noAnim = _anim === 'none';
@@ -543,6 +535,8 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
 	               start: $.proxy(this._position, this, _menu),
 	               complete: $.proxy(_opts.OnAfterMenuOpen, _elem)
 		        });
+		        
+			    _elem.focus();
 		        
 		        this._visible = true;
             }
@@ -593,14 +587,20 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
 		            _opts = this.options,
 		            _elem = this.element;
 		        
-		        event = event || new $.Event('Hide');
-		        _opts.OnBeforeMenuClose.call(_elem, event);
-		        if (event.isDefaultPrevented()) {
+		        if (event && event.target == _elem[0]) {
 			        return;
 		        }
-		            
+		        
+		        event = event || new $.Event();
+		        if (_opts.OnBeforeMenuClose.call(_elem, event) === false || event.isDefaultPrevented()) {
+			        return;
+		        }
+		        
 	            $(document).off('keydown' + _eventsNs + this.uuid)
 				           .off('click' + _eventsNs + this.uuid);
+	            
+	            this.Validate();
+	            _elem.on('blur' + _eventsNs, $.proxy(this.Validate, this));
 	            
 	            var _callback = $.proxy(_opts.OnAfterMenuClose, _elem);
 	            
@@ -760,6 +760,8 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             var _year = this._yearContainer;
             _year.text(parseInt(_year.text()) + 1, 10);
 
+			this.element.focus();
+			
             this.options.OnAfterNextYear.call(this.element);
         },
 
@@ -782,6 +784,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
         _previousYear: function () {
             var _year = this._yearContainer;
             _year.text(parseInt(_year.text()) - 1, 10);
+            this.element.focus();
             
             this.options.OnAfterPreviousYear.call(this.element);
         }

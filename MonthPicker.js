@@ -111,7 +111,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
         },
 
         _monthPickerButton: $(),
-
+        
         _validationMessage: $(),
 
         _enum: {
@@ -190,6 +190,9 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
 	            case 'ShowOn':
 		            this._updateFieldEvents();
 	            	break;
+				case 'IsRTL' :
+					this._setRTL(value);
+					break;
                 case 'ValidationErrorMessage':
                     if (value !== null) {
                         this._createValidationMessage();
@@ -267,21 +270,9 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
 
             this._yearContainer = $('.year', _menu);
             
-			var _rtl = _opts.IsRTL;
-            $('.previous-year button', _menu)
-                .button({
-                icons: {
-                    primary: 'ui-icon-circle-triangle-' + (_rtl ? 'e' : 'w')
-                },
-                text: false
-            })
-            $('.next-year button', _menu)
-                .button({
-                icons: {
-                    primary: 'ui-icon-circle-triangle-'+ (_rtl ? 'w' : 'e')
-                },
-                text: false
-            });
+            $('.previous-year button', _menu).button({ text: false });
+            $('.next-year button', _menu).button({ text: false });
+            this._setRTL(_opts.IsRTL); //Assigns icons to the next/prev buttons.
             
             $('.next-year button span.ui-button-icon-primary', _menu).text(this._i18n('nextLabel'));
             $('.previous-year button span.ui-button-icon-primary', _menu).text(this._i18n('prevLabel'));
@@ -453,6 +444,23 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
 	        this._validationMessage.remove();
         },
 		
+		_setRTL: function(value) {
+			var _menu = this._monthPickerMenu;
+			$('.previous-year button', _menu)
+                .button('option', {
+                icons: {
+                    primary: 'ui-icon-circle-triangle-' + (value ? 'e' : 'w')
+                }
+            });
+            
+            $('.next-year button', this._monthPickerMenu)
+                .button('option', {
+                icons: {
+                    primary: 'ui-icon-circle-triangle-'+ (value ? 'w' : 'e')
+                }
+            });
+		},
+		
 		Toggle: function () {
 			return this._visible ? this.Hide() : this.Show();
 		},
@@ -536,15 +544,20 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             function($menu) {
 	            var _defauts = this.options.IsRTL ? _RTL_defaultPos : _defaultPos;
                 var _posOpts = $.extend(_defauts, this.options.Position);
+                
                 return $menu.position($.extend({of: this.element}, _posOpts));
             } :
             function($menu) {
-                var _el = this.element;
+                var _el = this.element, 
+                	_css = { top: (_el.offset().top + _el.height() + 7) + 'px' };
 
-                return $menu.css({
-                    top: (_el.offset().top + _el.height() + 7) + 'px',
-                    left: _el.offset().left + 'px'
-                });
+				if (this.options.IsRTL) {
+					_css.left = (_el.offset().left-$menu.width()+_el.width() + 7) + 'px';
+				} else {
+	                _css.left = _el.offset().left + 'px';
+				}
+				
+				return $menu.css(_css);
             },
 
         Hide: function (event) {	        

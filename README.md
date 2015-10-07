@@ -1,4 +1,4 @@
-<h1>The jQuery UI Month Picker Version 2.4</h1>
+<h1>The jQuery UI Month Picker Version 2.5</h1>
 <p>The jQuery UI Month Picker Plugin is designed to allow user input for only a month and year when only that input is 
 required. Clicking on the year, allows the user to jump ahead or back 5 years at a time. Clicking anywhere on the 
 page, except on the month picker menu itself, will cause the month picker to hide. The Month Picker has lots of options 
@@ -127,6 +127,76 @@ var disabled = $('.selector').MonthPicker('option', 'Disabled');
 
 //setter
 $('.selector').MonthPicker('option', 'Disabled', true );
+</pre>
+</p>
+
+<p>
+    <h3>Button</h3>
+    Types: Function that returns jQuery or HTML string or selector or DOM element.<br />
+    Default: 
+    <pre>
+// Creates the default button.
+Button: function(options, i18n) {
+    // this refers to the associated input field.
+    return $('<span id="MonthPicker_Button_' + this.id + '" class="month-picker-open-button">' + i18n('buttonText') + '</span>')
+        .button({
+            text: false,
+            icons: {
+                // Defaults to 'ui-icon-calculator'.
+                primary: options.ButtonIcon
+            }
+        });
+}
+    </pre>
+    Create or assign an existing element as a button that opens the month picker menu. Set to false to hide the button and show the menu upon focus of the text box.
+</p>
+
+<p>
+If the element was not added to the document (is not a descendant of document.body)
+it will be inserted after the associated input field.
+</p>
+
+<p>
+    Create a button similar to the default button created by jQuery UI Datepicker's <a href='http://api.jqueryui.com/datepicker/#option-showOn'>showOn:</a> 'both' option.
+<pre>
+$('.selector').MonthPicker({ 
+    Button: '<button type="button" class="ui-datepicker-trigger">...</button>'
+});
+</pre>
+
+    Create a button out of an image.
+<pre>
+$('.selector').MonthPicker({ 
+    Button: function() {
+        return '<img src="images/calendar.gif" title="Select date" />';
+    }
+});
+</pre>
+
+    Assign the element with a class of .selector that immediately follows
+    the associated input field as a button.
+<pre>
+$('.selector').MonthPicker({ 
+    Button: function() {
+        return $(this).next('.selector');
+    }
+});
+</pre>
+
+    Assign a specific element with the class .selector
+<pre>
+$('.selector').MonthPicker({ 
+    Button: '.selector'
+});
+</pre>
+
+    Get or set the option, after init. 
+<pre>
+//getter
+var Button = $('.selector').MonthPicker('option', 'Button');
+
+//setter (hide the button and show the menu upon focus of the text box).
+$('.selector').MonthPicker('option', 'Button', false );
 </pre>
 </p>
 

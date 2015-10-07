@@ -179,13 +179,20 @@ $('.selector').MonthPicker({
 });
 </pre>
 
-    Assign the element with a class of .selector that immediately follows
+    Assign the element with a class of button that immediately follows
     the associated input field as a button.
 <pre>
 $('.selector').MonthPicker({ 
     Button: function() {
-        return $(this).next('.selector');
+        return $(this).next('.button');
     }
+});
+</pre>
+
+    Create a button using a <a href='http://handlebarsjs.com/'>Handlebars.js</a> template.  The same can be done with other popular template engines.
+<pre>
+$('.selector').MonthPicker({ 
+    Button: Handlebars.compile( $('#template').html() )
 });
 </pre>
 

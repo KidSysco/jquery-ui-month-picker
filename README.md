@@ -138,7 +138,7 @@ $('.selector').MonthPicker('option', 'Disabled', true );
 // Creates the default button.
 Button: function(options, i18n) {
     // this refers to the associated input field.
-    return $('<span id="MonthPicker_Button_' + this.id + '" class="month-picker-open-button">' + i18n('buttonText') + '</span>')
+    return $('&lt;span id="MonthPicker_Button_' + this.id + '" class="month-picker-open-button">' + i18n('buttonText') + '&lt;/span>')
         .button({
             text: false,
             icons: {
@@ -160,7 +160,7 @@ it will be inserted after the associated input field.
     Create a button similar to the default button created by jQuery UI Datepicker's <a href='http://api.jqueryui.com/datepicker/#option-showOn'>showOn:</a> 'both' option.
 <pre>
 $('.selector').MonthPicker({ 
-    Button: '<button type="button" class="ui-datepicker-trigger">...</button>'
+    Button: '&lt; button type="button" class="ui-datepicker-trigger">...&lt;/button>'
 });
 </pre>
 
@@ -168,7 +168,7 @@ $('.selector').MonthPicker({
 <pre>
 $('.selector').MonthPicker({ 
     Button: function() {
-        return '<img src="images/calendar.gif" title="Select date" />';
+        return '&lt;img src="images/calendar.gif" title="Select date" />';
     }
 });
 </pre>

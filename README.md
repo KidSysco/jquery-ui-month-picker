@@ -142,9 +142,9 @@ $('.selector').MonthPicker('option', 'Disabled', true );
     Default: 
     <pre>
 // Creates the default button.
-Button: function(options, i18n) {
+Button: function(options) {
     // this refers to the associated input field.
-    return $('&lt;span id="MonthPicker_Button_' + this.id + '" class="month-picker-open-button">' + i18n('buttonText') + '&lt;/span>')
+    return $('&lt;span id="MonthPicker_Button_' + this.id + '" class="month-picker-open-button">' + options.i18n.buttonText + '&lt;/span>')
         .button({
             text: false,
             icons: {
@@ -187,8 +187,11 @@ $('.selector').MonthPicker({
 });
 </pre>
 
-    Create a button using a <a href='http://handlebarsjs.com/'>Handlebars.js</a> template.  The same can be done with other popular template engines.
+    Create a button using a <a href='http://handlebarsjs.com/'>Handlebars.js</a> template. The same can be done with other popular template engines.
 <pre>
+&lt;script id='template' type='text/template'>
+&lt;img src="images/{{ButtonIcon}}" title="{{i18n.buttonText}}" />
+&lt;/script>
 $('.selector').MonthPicker({ 
     Button: Handlebars.compile( $('#template').html() )
 });

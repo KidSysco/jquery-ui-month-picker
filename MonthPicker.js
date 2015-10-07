@@ -32,8 +32,9 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
     var $noop = $.noop;
     var $datepicker = $.datepicker;
     
-    function _makeDefaultButton(options, i18n) {
-        return $('<span id="MonthPicker_Button_' + this.id + '" class="month-picker-open-button">' + i18n('buttonText') + '</span>')
+    function _makeDefaultButton(options) {
+        console.log(options.i18n);
+        return $('<span id="MonthPicker_Button_' + this.id + '" class="month-picker-open-button">' + options.i18n.buttonText + '</span>')
             .button({
                 text: false,
                 icons: {
@@ -79,7 +80,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
         /******* Properties *******/
 
         options: {
-            i18n: $noop,
+            i18n: {},
             IsRTL: false,
             Position: null,
             StartYear: null,
@@ -505,7 +506,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
         _createButton: function() {
             var _btnOpt = this.options.Button, _elem = this.element;
             if ($.isFunction(_btnOpt)) {
-                _btnOpt = _btnOpt.call(_elem[0], this.options, this.i18n);
+                _btnOpt = _btnOpt.call(_elem[0], $.extend(true, {i18n: $.MonthPicker.i18n}, this.options));
             }
             
             this._monthPickerButton = ( _btnOpt instanceof $ ? _btnOpt : $(_btnOpt) )

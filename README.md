@@ -41,7 +41,7 @@ $('#TextBox1').MonthPicker({ StartYear: 2020, ShowIcon: false });
 $('input[type=month]').MonthPicker().css('backgroundColor', 'lightyellow');
 </pre>
 
-<h2>Internationalization and Localization i18n</h2>
+<h2>Internationalization, Localization with i18n and RTL support</h2>
 <p>
 All buttons, labels and other text can be changed out using the i18n support.<br/>
 <pre>
@@ -51,6 +51,12 @@ $('#TextBox1').MonthPicker({
          prevYear: "l'année dernière",
          nextYear: "l'année prochaine"
       }
+});
+</pre>
+You can set the menu's run direction as right to left by using the <a href='#isrtl'>IsRTL option.</a><br/>
+<pre>
+$('#TextBox1').MonthPicker({
+      IsRTL: true
 });
 </pre>
 </p>
@@ -217,6 +223,30 @@ var disabled = $('.selector').MonthPicker('option', 'ShowIcon');
 
 //setter
 $('.selector').MonthPicker('option', 'ShowIcon', false );
+</pre>
+</p>
+
+<p>
+    <h3>IsRTL</h3>
+    Type: Boolean<br />
+    Default: false<br />
+    Sets the menu's run direction as right to left.
+</p>
+<p>
+NOTE: This option expects that the body's (or other parent element)
+dir='rtl'.
+</p>
+<p>
+    Set the option upon init.
+    <pre>$('.selector').MonthPicker({ IsRTL: true });</pre>
+    
+    Get or set the option, after init. 
+<pre>
+//getter
+var IsRTL = $('.selector').MonthPicker('option', 'IsRTL');
+
+//setter
+$('.selector').MonthPicker('option', 'IsRTL', true );
 </pre>
 </p>
 

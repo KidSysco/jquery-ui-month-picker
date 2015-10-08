@@ -460,7 +460,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
          * Methods the user can override to use a third party library
          * such as http://momentjs.com for parsing and formatting months.
          */
-        MonthInputFormat: 'mm/yy',
+        MonthInputFormat: 'yy-mm',
          
         ParseMonth: function (str, format) {
             try {

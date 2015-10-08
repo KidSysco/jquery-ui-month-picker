@@ -1,6 +1,6 @@
 /*
 
-The jQuery UI Month Picker Version 2.2
+The jQuery UI Month Picker Version 2.5
 
 https://github.com/KidSysco/jquery-ui-month-picker/
 
@@ -31,17 +31,16 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
 .month-picker-year-table .year-container-all {
     text-align: center;
 }
-.month-picker-year-table .year-title, .month-picker-year-table .year-container {
-    float: left;
-    display: inline-block;
+.month-picker-year-table .year-container {
+    margin: 0 auto;
 }
 .month-picker-year-table .year-title {
-    margin-left: 20px;
+    margin: 3px;
     font-size: 12px;
     font-family: Verdana, Arial, sans-serif;
 }
 .month-picker-year-table .year {
-    margin-right: 15px;
+    margin: 3px;
     font-size: 12px;
     font-family: Verdana, Arial, sans-serif;
 }
@@ -50,12 +49,18 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
 }
 .month-picker-year-table .previous-year {
     width: 35px;
+    /* 
+	 In case the user's css reset the user agent stylesheet
+	 this is often done in RTL pages.
+	*/
+    text-align: left;
 }
 .month-picker-year-table .next-year {
     width: 35px;
     text-align: right;
 }
 .month-picker-year-table button {
+    width: 28px;
     width: 1.8em;
     height: 1.8em;
     text-align: center;

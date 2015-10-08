@@ -1,7 +1,7 @@
 /*
 https://github.com/KidSysco/jquery-ui-month-picker/
 
-Version 2.4
+Version 2.5
 
 This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
@@ -62,12 +62,14 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
         '<div class="ui-widget-header ui-helper-clearfix ui-corner-all">' +
             '<table class="month-picker-year-table" width="100%" border="0" cellspacing="1" cellpadding="2">' +
                 '<tr>' +
-                    '<td class="previous-year"><button>&nbsp;</button></td>' +
+                    '<td class="previous-year"><button /></td>' +
                     '<td class="year-container-all">' +
-                        '<div class="year-title"></div>' +
-                        '<div id="year-container"><span class="year" /></div>' +
+                        '<div id="year-container">' +
+                            '<span class="year-title" />' +
+                            '<span class="year" />' +
+                        '</div>' +
                     '</td>' +
-                    '<td class="next-year"><button>&nbsp;</button></td>' +
+                    '<td class="next-year"><button /></td>' +
                 '</tr>' +
             '</table>' +
         '</div>' +
@@ -98,7 +100,6 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             OnAfterSetDisabled: $noop,
             ButtonIcon: 'ui-icon-calculator',
             OnBeforeMenuOpen: $noop,
-            OnAfterMenuOpen: $noop,
             OnAfterMenuOpen: $noop,
             OnBeforeMenuClose: $noop, 
             OnAfterMenuClose: $noop,
@@ -417,10 +418,6 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
                 var _menu = this._monthPickerMenu, 
                     _opts = this.options,
                     _elem = this.element;
-                
-                if (event && event.target == _elem[0]) {
-                    return;
-                }
                 
                 event = event || new $.Event();
                 if (_opts.OnBeforeMenuClose.call(_elem[0], event) === false || event.isDefaultPrevented()) {
@@ -747,5 +744,5 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
     });
     
     // Added in version 2.4.
-    $.MonthPicker.VERSION = '2.4';
+    $.MonthPicker.VERSION = '2.5';
 }(jQuery, window, document));

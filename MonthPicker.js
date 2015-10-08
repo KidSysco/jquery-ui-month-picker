@@ -33,7 +33,6 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
     var $datepicker = $.datepicker;
     
     function _makeDefaultButton(options) {
-        console.log(options.i18n);
         return $('<span id="MonthPicker_Button_' + this.id + '" class="month-picker-open-button">' + options.i18n.buttonText + '</span>')
             .button({
                 text: false,

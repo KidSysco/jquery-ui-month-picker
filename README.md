@@ -235,6 +235,27 @@ $('.selector').MonthPicker('option', 'ShowIcon', false );
 </p>
 
 <p>
+    <h3>ShowOn</h3>
+    Type: String<br />
+    Default: button or focus only
+    Allows setting the menu to open on when clicking the button and when focusing on the associated input field.
+</p>
+<p>
+    Set the option upon init.
+    <pre>$('.selector').MonthPicker({ ShowOn: 'both' });</pre>
+    
+    Get or set the option, after init. 
+<pre>
+//getter
+var ShowOn = $('.selector').MonthPicker('option', 'ShowOn');
+
+//setter
+$('.selector').MonthPicker('option', 'ShowOn', 'both' );
+</pre>
+</p>
+
+
+<p>
     <h3>IsRTL</h3>
     Type: Boolean<br />
     Default: false<br />

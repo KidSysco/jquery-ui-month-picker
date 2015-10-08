@@ -1,4 +1,4 @@
-<h1>The jQuery UI Month Picker Version 2.3</h1>
+<h1>The jQuery UI Month Picker Version 2.4</h1>
 <p>The jQuery UI Month Picker Plugin is designed to allow user input for only a month and year when only that input is 
 required. Clicking on the year, allows the user to jump ahead or back 5 years at a time. Clicking anywhere on the 
 page, except on the month picker menu itself, will cause the month picker to hide. The Month Picker has lots of options 
@@ -16,7 +16,7 @@ for date validation, setting the start year, using an icon button, input masking
             <li>jQuery UI Widget Factory required</li>
             <li>.button() plugin required</li>
             <li>.datepicker() plugin required</li>
-            <li>.position() plugin optional (highly recommended see Position option)</li>
+            <li>.position() plugin optional (highly recommended see <a href='#position'>Position option</a>)</li>
         </ul>
     </li>
     <li>(optional) <a target="_new" href="http://digitalbush.com/projects/masked-input-plugin/">Digital Bush Masked Input jQuery Plugin</a></li>
@@ -28,10 +28,10 @@ for date validation, setting the start year, using an icon button, input masking
 &lt;link href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" media="all" rel="stylesheet" type="text/css" />
 &lt;link href="css/MonthPicker.css" media="all" rel="stylesheet" type="text/css" />
 
-&lt;script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js" type="text/javascript"></script>
-&lt;script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js" type="text/javascript"></script>
-&lt;script src="https://raw.github.com/digitalBush/jquery.maskedinput/1.3.1/dist/jquery.maskedinput.min.js" type="text/javascript"></script>
-&lt;script src="MonthPicker.min.js" type="text/javascript"></script>
+&lt;script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js" type="text/javascript">&lt;/script>
+&lt;script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js" type="text/javascript">&lt;/script>
+&lt;script src="https://raw.github.com/digitalBush/jquery.maskedinput/1.3.1/dist/jquery.maskedinput.min.js" type="text/javascript">&lt;/script>
+&lt;script src="MonthPicker.min.js" type="text/javascript">&lt;/script>
 </pre>
 
 <h2>Source Code Example</h2>
@@ -73,8 +73,15 @@ $('#TextBox1').MonthPicker({
 <p> <b>$('.selector').MonthPicker('Enable')</b>
 <br />Enables the MonthPicker and its associated elements.</p>
 
+<p> <b>$('.selector').MonthPicker('GetSelectedDate')</b>
+<br />Returns the selected month as a <a href='https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Date'>Date</a> object. (Added in version 2.4)</p>
+
+<p> <b>$('.selector').MonthPicker('Validate')</b>
+<br />Validates the selected month/year and returns the selected value as a <a href='https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Date'>Date</a> object if it is a valid date. Returns null if there is no valid date, displays an error message if the message is specified, focuses and selects the violating text.</p>
+
 <p> <b>$('.selector').MonthPicker('GetSelectedMonthYear')</b>
-<br />Validates the selected month/year and returns the selected value if it is a valid date. Returns null if there is no valid date, displays an error message if the message is specified, focuses and selects the violating text.</p>
+<br />Validates the selected month/year and returns the selected value as a string (for example '1/2015') if it is a valid date. Returns null if there is no valid date, displays an error message if the message is specified, focuses and selects the violating text.
+NOTE: This method is <b>not</b> affected by the <a href='#monthformat'>MonthFormat option</a>.</p>
 
 <p> <b>$('.selector').MonthPicker('GetSelectedMonth')</b>
 <br />Returns only the month portion of the selected date as an integer. Returns NaN if there is no valid date.</p>
@@ -184,10 +191,85 @@ $('.selector').MonthPicker('option', 'ValidationErrorMessage', null );
 </p>
 
 <p>
+    <h3>MonthFormat</h3>
+    Type: String<br />
+    Default: 'mm/yy' which results in 12/2015.<br />
+    Since: 2.4</br>
+    The format for parsed and displayed months. For a full list of the possible formats see the <a href='http://api.jqueryui.com/datepicker/#utility-formatDate'>$.datepicker.formatDate()</a> function.
+</p>
+<p>
+    Set the option upon init.
+    
+    <pre>// Results in December, 2015
+$('.selector').MonthPicker({ MonthFormat: 'MM, yy' });</pre>
+    
+    Get or set the option, after init. 
+<pre>
+//getter
+var disabled = $('.selector').MonthPicker('option', 'MonthFormat');
+
+//setter (Results in December, 2015)
+$('.selector').MonthPicker('option', MonthFormat: 'MM, yy' );
+</pre>
+
+The following example shows how to use the popular <a href='http://momentjs.com'>Moment.js</a> library
+for parsing and formatting dates, but you can use any third party library you would like:
+<pre>
+$.widget('MyOrg.MomentMonthPicker', $.KidSysco.MonthPicker, {
+	
+	// Set the default format.
+	options: {
+		MonthFormat: 'MM/YYYY',
+	},
+	
+	// Set the format to use with the HTML 5 month input.
+	MonthInputFormat: 'YYYY-MM',
+	
+    /**
+     * @param str		{String} A string representing a date in the given format.
+     * @param format	{String} The format used to parse the str argument.
+     * 
+     * @returns	{Date}	 A JavaScript date.
+     */
+    ParseMonth: function(str, format) {
+        var wrapper = moment(str, format);
+        return wrapper.isValid() ? wrapper.toDate() : null;
+    },
+    
+    /**
+     * @param date		{Date} A string representing a date in the given format.
+     * @param format	{String} The format to use to convert the date to a string.
+     * 
+     * @returns	{String}  A string representing a date in the given format.
+     */
+    FormatMonth: function(date, format) {
+        var wrapper = moment(date);
+        return wrapper.isValid() ? wrapper.format(format) : null;
+    }
+});
+</pre>
+
+And then you can use the plugin as shown:
+<pre>// Creates a month picker which uses the Moment.js library to display and parse months
+// which will set "December, 2015" in the input field when a month is selected.
+// Of course you can also pass in any of the other supported options mentioned in
+// the documentation.
+$('.selector').MomentMonthPicker({
+	MonthFormat: 'MMMM, YY'
+});
+</pre>
+</p>
+<p>
     <h3>UseInputMask</h3>
     Type: Bool<br />
     Default: false<br />
     Directs the MonthPicker to use the <a href="http://digitalbush.com/projects/masked-input-plugin/">Digital Bush Masked Input jQuery Plugin</a> on text inputs, the plugin must be loaded to the page if this option is to be used. This option will be ignored if the HTML 5 Input Type is used.
+</p>
+<p>
+In version 2.4 and later the mask is constructed according to the <a href='#monthformat'>MonthFormat option</a>.
+</p>
+<p>
+NOTE: numeric literals in the MonthFormat will be editable by the user, if this is not the desired behavior you will have to use the <a href='http://digitalbush.com/projects/masked-input-plugin/'>.mask()</a> method manually.
 </p>
 <p>
     Set the option upon init.
@@ -204,8 +286,130 @@ $('.selector').MonthPicker('option', 'UseInputMask', false );
 </p>
 
 <p>
+    <h3>Animation</h3>
+    Type: String<br />
+    Default: 'fadeToggle'<br />
+    Supported values: ['fadeToggle', 'slideToggle', 'none']<br />
+    Since: 2.4</br>
+    Sets the animation to use when the menu both opens and closes, you can disable animation
+    by passing in none.
+    <p>
+    If you want to have different animations for opening and closing the menu
+    see the <a href='#showanim'>ShowAnim</a> and <a href='#hideanim'>HideAnim</a> options.
+    </p>
+</p>
+<p>
+    Set the option upon init.
+    <pre>$('.selector').MonthPicker({ Animation: 'slideToggle' });</pre>
+    
+    Get or set the option, after init. 
+<pre>
+//getter
+var Animation = $('.selector').MonthPicker('option', 'Animation');
+
+//setter
+$('.selector').MonthPicker('option', 'Animation', 'slideToggle' );
+</pre>
+</p>
+
+<p>
+    <h3>Duration</h3>
+    Type: Number or String<br />
+    Default: 'fadeToggle'<br />
+    Supported values: ['normal', 'fast', 'slow'] or number of milliseconds<br />
+    Since: 2.4</br>
+    Sets the speed of the animation used to open and close the menu.
+</p>
+<p>F
+	You choose from three predefined speeds:
+	<ul>
+	<li>normal (the default) 400ms</li>
+	<li>fast 200ms</li>
+	<li>slow 600ms</li>
+	</ul>
+	
+	Or you can specify the speed in milliseconds by passing in a number.
+</p>
+<p>
+    Set the option upon init.
+    <pre>$('.selector').MonthPicker({ Duration: 'fast' });</pre>
+    
+    Get or set the option, after init. 
+<pre>
+//getter
+var Duration = $('.selector').MonthPicker('option', 'Duration');
+
+//setter
+$('.selector').MonthPicker('option', 'Duration', 'fast' );
+</pre>
+</p>
+
+<p>
+    <h3>ShowAnim</h3>
+    Type: String<br />
+    Default: 'fadeIn'<br />
+    Supported values: ['fadeIn', 'slideDown', 'none']<br />
+    Since: 2.4</br>
+    Sets the animation to use only when the  menu is open, you can disable the show animation by
+    passing in none.
+    <p>
+    If you want to have the same animation for both opening and closing the menu use
+    the <a href='#animation'>Animation option</a> instead.
+    </p>
+    
+    <p>
+    To set the animation for closing the menu see the <a href='#hideanim'>HideAnim option</a>.
+    </p>
+</p>
+<p>
+    Set the option upon init.
+    <pre>$('.selector').MonthPicker({ ShowAnim: 'slideDown' });</pre>
+    
+    Get or set the option, after init. 
+<pre>
+//getter
+var ShowAnim = $('.selector').MonthPicker('option', 'ShowAnim');
+
+//setter
+$('.selector').MonthPicker('option', 'ShowAnim', 'slideDown' );
+</pre>
+</p>
+
+<p>
+    <h3>HideAnim</h3>
+    Type: String<br />
+    Default: 'fadeOut'<br />
+    Supported values: ['fadeOut', 'slideUp', 'none']<br />
+    Since: 2.4</br>
+    Sets the animation to use only when the menu is opened, you can disable the hide animation by
+    passing in none.
+    <p>
+    If you want to have the same animation for both opening and closing the menu use
+    the <a href='#animation'>Animation option</a> instead.
+    </p>
+    
+    <p>
+    To set the animation for opening the menu see the <a href='#showanim'>ShowAnim option</a>.
+    </p>
+</p>
+<p>
+    Set the option upon init.
+    <pre>$('.selector').MonthPicker({ HideAnim: 'slideUp' });</pre>
+    
+    Get or set the option, after init. 
+<pre>
+//getter
+var HideAnim = $('.selector').MonthPicker('option', 'HideAnim');
+
+//setter
+$('.selector').MonthPicker('option', 'HideAnim', 'slideUp' );
+</pre>
+</p>
+
+<p>
     <h3>Position</h3>
     Type: Object<br />
+	Since: 2.3<br />
     Default: <pre>{ my: 'left top+1', at: 'left bottom', collision: 'flip', of: $('.selector') }</pre><br />
     If the <a href='http://api.jqueryui.com/position/'>jQuery UI .position() plugin</a> is loaded
     the menu will be moved to an alternative position when it overflows the window in some direction. <br />
@@ -246,7 +450,7 @@ $('.selector').MonthPicker('option', 'Position', {collision: 'fit', at: 'left bo
     <h3>OnAfterMenuOpen</h3>
     Type: function<br />
     Default: null<br />
-    This event is triggered after the Month Picker menu opens.
+    This event is triggered after the Month Picker menu opens. As of version 2.4 this refers to the associated input field.
 </p>
 <p>
     Supply a callback function to handle the event as an init option.
@@ -266,7 +470,7 @@ $('.selector').MonthPicker('option', 'OnAfterMenuOpen', function(){ ... } );
     <h3>OnAfterMenuClose</h3>
     Type: function<br />
     Default: null<br />
-    This event is triggered after the Month Picker menu closes.
+    This event is triggered after the Month Picker menu closes. As of version 2.4 this refers to the associated input field.
 </p>
 <p>
     Supply a callback function to handle the event as an init option.
@@ -286,7 +490,7 @@ $('.selector').MonthPicker('option', 'OnAfterNextYear', function(){ ... } );
     <h3>OnAfterNextYear</h3>
     Type: function<br />
     Default: null<br />
-    This event is triggered after the Month Picker next year button has been clicked.
+    This event is triggered after the Month Picker next year button has been clicked. As of version 2.4 this refers to the associated input field.
 </p>
 <p>
     Supply a callback function to handle the event as an init option.
@@ -306,7 +510,7 @@ $('.selector').MonthPicker('option', 'OnAfterNextYear', function(){ ... } );
     <h3>OnAfterNextYears</h3>
     Type: function<br />
     Default: null<br />
-    This event is triggered after the Month Picker next 5 years button has been clicked.
+    This event is triggered after the Month Picker next 5 years button has been clicked. As of version 2.4 this refers to the associated input field.
 </p>
 <p>
     Supply a callback function to handle the event as an init option.
@@ -326,7 +530,7 @@ $('.selector').MonthPicker('option', 'OnAfterNextYears', function(){ ... } );
     <h3>OnAfterPreviousYear</h3>
     Type: function<br />
     Default: null<br />
-    This event is triggered after the Month Picker previous year button has been clicked.
+    This event is triggered after the Month Picker previous year button has been clicked. As of version 2.4 this refers to the associated input field.
 </p>
 <p>
     Supply a callback function to handle the event as an init option.
@@ -346,7 +550,7 @@ $('.selector').MonthPicker('option', 'OnAfterPreviousYear', function(){ ... } );
     <h3>OnAfterPreviousYears</h3>
     Type: function<br />
     Default: null<br />
-    This event is triggered after the Month Picker previous 5 years button has been clicked.
+    This event is triggered after the Month Picker previous 5 years button has been clicked. As of version 2.4 this refers to the associated input field.
 </p>
 <p>
     Supply a callback function to handle the event as an init option.
@@ -366,7 +570,7 @@ $('.selector').MonthPicker('option', 'OnAfterPreviousYears', function(){ ... } )
     <h3>OnAfterChooseMonth</h3>
     Type: function<br />
     Default: null<br />
-    This event is triggered after the Month Picker month button has been clicked.
+    This event is triggered after the Month Picker month button has been clicked. As of version 2.4 this refers to the associated input field.
 </p>
 <p>
     Supply a callback function to handle the event as an init option.
@@ -386,7 +590,7 @@ $('.selector').MonthPicker('option', 'OnAfterChooseMonth', function(){ ... } );
     <h3>OnAfterChooseMonths</h3>
     Type: function<br />
     Default: null<br />
-    This event is triggered after the Month Picker choose months button has been clicked.
+    This event is triggered after the Month Picker choose months button has been clicked. As of version 2.4 this refers to the associated input field.
 </p>
 <p>
     Supply a callback function to handle the event as an init option.
@@ -406,7 +610,7 @@ $('.selector').MonthPicker('option', 'OnAfterChooseMonths', function(){ ... } );
     <h3>OnAfterChooseYear</h3>
     Type: function<br />
     Default: null<br />
-    This event is triggered after the Month Picker choose year button has been clicked.
+    This event is triggered after the Month Picker choose year button has been clicked. As of version 2.4 this refers to the associated input field.
 </p>
 <p>
     Supply a callback function to handle the event as an init option.
@@ -426,7 +630,7 @@ $('.selector').MonthPicker('option', 'OnAfterChooseYear', function(){ ... } );
     <h3>OnAfterChooseYears</h3>
     Type: function<br />
     Default: null<br />
-    This event is triggered after the Month Picker choose years button has been clicked.
+    This event is triggered after the Month Picker choose years button has been clicked. As of version 2.4 this refers to the associated input field.
 </p>
 <p>
     Supply a callback function to handle the event as an init option.
@@ -440,6 +644,13 @@ var disabled = $('.selector').MonthPicker('option', 'OnAfterChooseYears');
 //setter
 $('.selector').MonthPicker('option', 'OnAfterChooseYears', function(){ ... } );
 </pre>
+
+<h2>Plugin version</h2>
+The version can be determined using:
+<pre>
+$.KidSysco.MonthPicker.VERSION
+</pre>
+If the value is undefined you are using an old version (2.3 and under).
 </p>
 
 

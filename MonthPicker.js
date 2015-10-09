@@ -527,13 +527,9 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
         },
 
         _updateFieldEvents: function() {
-            if (this.options.ShowOn === 'both') {
-                this.element
-                    .off('click' + _eventsNs)
-                    .on('click' + _eventsNs, $.proxy(this.Open, this));
-            } else {                    
-                var _meth = $.fn[!this.options.ShowIcon ? 'on' : 'off'];
-                _meth.call(this.element, 'click' + _eventsNs, $.proxy(this.Open, this));
+	        this.element.off('click' + _eventsNs);
+            if (this.options.ShowOn === 'both' || !this._monthPickerButton.length) {
+				this.element.on('click' + _eventsNs, $.proxy(this.Open, this));
             }
         },
 

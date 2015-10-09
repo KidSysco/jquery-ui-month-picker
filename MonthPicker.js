@@ -33,10 +33,12 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
     var $datepicker = $.datepicker;
     
     function _makeDefaultButton(options) {
+	    // this refers to the associated input field.
         return $('<span id="MonthPicker_Button_' + this.id + '" class="month-picker-open-button">' + options.i18n.buttonText + '</span>')
             .button({
                 text: false,
                 icons: {
+	                // Defaults to 'ui-icon-calculator'.
                     primary: options.ButtonIcon
                 }
             });
@@ -615,7 +617,8 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
 
         _setDisabledState: function () {
             var isDisabled = this.options.Disabled;
-                
+            
+            this.element[0].disabled = isDisabled;
             this.element[isDisabled ? 'addClass' : 'removeClass']('disabled');
             if (isDisabled) {
                 this._validationMessage.hide();

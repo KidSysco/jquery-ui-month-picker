@@ -182,7 +182,7 @@ Button: function(options) {
 </p>
 
 <p>
-NOTE: If you just want to use a different <a href='http://api.jqueryui.com/theming/icons/'>icon class name</a> for the default icon see the <a href='#buttonicon'>ButtonIcon option</a>.
+<b>NOTE:</b> If you just want to use a different <a href='http://api.jqueryui.com/theming/icons/'>icon class name</a> for the default icon see the <a href='#buttonicon'>ButtonIcon option</a>.
 </p>
 
 <p>
@@ -224,7 +224,7 @@ $('.selector').MonthPicker({
     Create a button using a <a href='http://handlebarsjs.com/'>Handlebars.js</a> template. The same can be done with other popular template engines.
 <pre>
 &lt;script id='template' type='text/template'>
-&lt;img src="images/{{ButtonIcon}}{{#if Disabled}}_disabled{{/if}}.gif" title="{{i18n.buttonText}}" />
+&lt;img src="images/{{ButtonIcon}}{{#if Disabled}}-disabled{{/if}}.gif" title="{{i18n.buttonText}}" />
 &lt;/script>
 &lt;script>
 $('.selector').MonthPicker({ 
@@ -331,7 +331,7 @@ $('.selector').MonthPicker('option', 'ShowOn', 'both' );
     Sets the menu's run direction as right to left.
 </p>
 <p>
-NOTE: This option expects that the body's (or other parent element)
+<b>NOTE:</b> This option expects that the body's (or other parent element)
 dir='rtl'.
 </p>
 <p>
@@ -467,7 +467,7 @@ $('.selector').MomentMonthPicker({
 In version 2.4 and later the mask is constructed according to the <a href='#monthformat'>MonthFormat option</a>.
 </p>
 <p>
-NOTE: numeric literals in the MonthFormat will be editable by the user, if this is not the desired behavior you will have to use the <a href='http://digitalbush.com/projects/masked-input-plugin/'>.mask()</a> method manually.
+<b>NOTE:</b> numeric literals in the MonthFormat will be editable by the user, if this is not the desired behavior you will have to use the <a href='http://digitalbush.com/projects/masked-input-plugin/'>.mask()</a> method manually.
 </p>
 <p>
     Set the option upon init.

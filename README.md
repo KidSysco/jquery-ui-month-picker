@@ -110,7 +110,7 @@ The menu will immediately close itself, you can prevent the menu from closing us
 
 <p><b>NOTE:</b> It might be possible to prevent the menu from closing by calling <a href='https://api.jquery.com/event.stoppropagation/'>event.stopPropagation()</a> in the click event that called the Open method. 
 
-However this is <b>not supported</b> and might stop working in future releases if we change the way the plugin handles events.  To prevent the menu from hiding use the <a href='#onbeforemenuclose'>OnBeforeMenuClose event</a> (example included) and call <a href='http://api.jquery.com/event.preventdefault/'>event.preventDefault()</a> for the element triggering the event.
+However this is <b>not supported</b> and might stop working in future releases if we change the way the plugin handles events.  To prevent the menu from hideing use the <a href='#onbeforemenuclose'>OnBeforeMenuClose event</a> (example included) and call <a href='http://api.jquery.com/event.preventdefault/'>event.preventDefault()</a> for the element triggering the event.
 
 <p> <b>$('.selector').MonthPicker('Close')</b>
 <br />Closes the month picker if it's already open. You can prevent the menu from closing using the <a href='#onbeforemenuclose'>OnBeforeMenuClose event</a> and calling <a href='http://api.jquery.com/event.preventdefault/'>event.preventDefault()</a>. (Added in version 2.5).

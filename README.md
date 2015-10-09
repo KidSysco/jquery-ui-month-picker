@@ -193,7 +193,7 @@ it will be inserted after the associated input field.
 <p>
 When you change the <a href='#disabled'>Disabled</a> option the button will be visualy disabled if it's a <a href='https://jqueryui.com/button/'>jQuery UI button</a> or if it's a DOM element
 that responds to the disabled property (for example the <a href='https://developer.mozilla.org/en/docs/Web/HTML/Element/button'>button tag</a>, an <a href='https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/button'>input type button</a> etc...).  <br />
-This means that if you assign an image button and you are changing the Disabled option you must provide a disabled image as shown in the <a href='#disabledimgbtn>example</a> below.
+This means that if you assign an image button and you are changing the Disabled option you must provide a disabled image as shown in the <a href='#disabledimgbtn'>example</a> below.
 </p>
 
 <p>

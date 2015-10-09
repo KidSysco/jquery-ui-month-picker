@@ -108,7 +108,8 @@ NOTE: This method is <b>not</b> affected by the <a href='#monthformat'>MonthForm
 The menu will immediately close itself, you can prevent the menu from closing using the
 <a href='#onbeforemenuclose'>OnBeforeMenuClose event</a> (example included) and calling <a href='http://api.jquery.com/event.preventdefault/'>event.preventDefault()</a> for the element triggering the event.
 
-<p><b>NOTE:</b> It might be possible to prevent the menu from closing by calling <a href='https://api.jquery.com/event.stoppropagation/'>event.stopPropagation()</a> however this is not supported and might stop working in future releases if we change the way the plugin handles events.  To prevent the menu from hiding use the <a href='#onbeforemenuclose'>OnBeforeMenuClose event</a> (example included) and call <a href='http://api.jquery.com/event.preventdefault/'>event.preventDefault()</a> for the element triggering the event.
+<p><b>NOTE:</b> It might be possible to prevent the menu from closing by calling <a href='https://api.jquery.com/event.stoppropagation/'>event.stopPropagation()</a> in the click event that called the Open method. 
+However this is <b>not supported</b> and might stop working in future releases if we change the way the plugin handles events.  To prevent the menu from hiding use the <a href='#onbeforemenuclose'>OnBeforeMenuClose event</a> (example included) and call <a href='http://api.jquery.com/event.preventdefault/'>event.preventDefault()</a> for the element triggering the event.
 
 <p> <b>$('.selector').MonthPicker('Close')</b>
 <br />Closes the month picker if it's already open. You can prevent the menu from closing using the <a href='#onbeforemenuclose'>OnBeforeMenuClose event</a> and calling <a href='http://api.jquery.com/event.preventdefault/'>event.preventDefault()</a>. (Added in version 2.5).
@@ -153,7 +154,13 @@ $('.selector').MonthPicker('option', 'Disabled', true );
 
 <p>
     <h3>Button</h3>
-    Types: Function that returns jQuery or HTML string or selector or DOM element.<br />
+    Types: 
+    <ul>
+    	<li>Function that returns jQuery</li>
+    	<li>HTML string</li>
+    	<li>jQuery selector</li>
+    	<li>DOM element.</li>
+	</ul>
     Since: 2.5<br />
     Default: 
     <pre>
@@ -174,15 +181,18 @@ Button: function(options) {
 </p>
 
 <p>
+NOTE: If you just want to use a different <a href='http://api.jqueryui.com/theming/icons/'>icon class name</a> for the default icon see the <a href='#buttonimage'>ButtonImage option</a>.
+</p>
+
+<p>
 If the element was not added to the document (is not a descendant of document.body)
 it will be inserted after the associated input field.
 </p>
 
 <p>
 When you change the <a href='#disabled'>Disabled</a> option the button will be visualy disabled if it's a <a href='https://jqueryui.com/button/'>jQuery UI button</a> or if it's a DOM element
-that responds to the disabled property (for example the <a href='https://developer.mozilla.org/en/docs/Web/HTML/Element/button'>button tag</a>, an <a href='https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/button'>input type button</a> etc...).  <br>
-This means that if you assign an image button and you are changing the Disabled option you must
-provide a disabled image as shown in the <a href='#disabledimgbtn>example</a> below.
+that responds to the disabled property (for example the <a href='https://developer.mozilla.org/en/docs/Web/HTML/Element/button'>button tag</a>, an <a href='https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/button'>input type button</a> etc...).  <br />
+This means that if you assign an image button and you are changing the Disabled option you must provide a disabled image as shown in the <a href='#disabledimgbtn>example</a> below.
 </p>
 
 <p>
@@ -215,12 +225,14 @@ $('.selector').MonthPicker({
 &lt;script id='template' type='text/template'>
 &lt;img src="images/{{ButtonIcon}}{{#if Disabled}}_disabled{{/if}}.gif" title="{{i18n.buttonText}}" />
 &lt;/script>
+&lt;script>
 $('.selector').MonthPicker({ 
     Button: Handlebars.compile( $('#template').html() )
 });
+&lt;/script>
 </pre>
 
-    Assign the element with a class of button that immediately follows
+    Assign an existing element with a class of button that immediately follows
     the associated input field as a button.
 <pre>
 $('.selector').MonthPicker({ 
@@ -240,7 +252,7 @@ $('.selector').MonthPicker({
     Get or set the option, after init. 
 <pre>
 //getter
-var Button = $('.selector').MonthPicker('option', 'Button');
+var button = $('.selector').MonthPicker('option', 'Button');
 
 //setter (hide the button and show the menu upon focus of the text box).
 $('.selector').MonthPicker('option', 'Button', false );
@@ -264,6 +276,27 @@ var disabled = $('.selector').MonthPicker('option', 'ShowIcon');
 
 //setter
 $('.selector').MonthPicker('option', 'ShowIcon', false );
+</pre>
+</p>
+
+<p>
+    <h3>ButtonIcon</h3>
+    Type: String<br />
+    Default: ui-icon-calculator<br />
+    
+    Allows setting a different primary <a href='http://api.jqueryui.com/theming/icons/'>icon class name</a> for the default icon. Feel free to use this option in your custom buttons as show in the <a href='#button'>Button option</a> examples.
+</p>
+<p>
+    Set the option upon init.
+    <pre>$('.selector').MonthPicker({ ButtonIcon: 'ui-icon-clock' });</pre>
+    
+    Get or set the option, after init. 
+<pre>
+//getter
+var image = $('.selector').MonthPicker('option', 'ButtonIcon');
+
+//setter
+$('.selector').MonthPicker('option', 'ButtonIcon', false );
 </pre>
 </p>
 
@@ -714,12 +747,12 @@ $('.selector').MonthPicker('option', 'OnAfterNextYear', function(){ ... } );
     Type: function<br />
     Default: null<br />
     Since: 2.5<br />
-    This event is triggered before the Month Picker menu will close, and it allows you to prevent the menu from closing. this refers to the associated input field.</p>
+    This event is triggered after the <a href='#disabled'>Disabled</a> options was changed.
 <p>
     Supply a callback function to handle the event as an init option.
     <pre>
 $('.selector').MonthPicker({
-	OnAfterSetDisabled: function(isDisabled, button){
+	OnAfterSetDisabled: function(isDisabled){
 		
 	}
 });

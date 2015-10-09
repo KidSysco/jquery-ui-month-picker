@@ -83,7 +83,7 @@ $('#TextBox1').MonthPicker({
 <br />Returns the selected month as a <a href='https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Date'>Date</a> object. (Added in version 2.4)</p>
 
 <p> <b>$('.selector').MonthPicker('Validate')</b>
-<br />Validates the selected month/year and returns the selected value as a <a href='https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Date'>Date</a> object if it is a valid date. Returns null if there is no valid date, displays an error message if the message is specified, focuses and selects the violating text.</p>
+<br />Validates the selected month/year and returns the selected value as a <a href='https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Date'>Date</a> object if it is a valid date. Returns null if there is no valid date, displays an error message if the message is specified, focuses and selects the violating text. (Added in version 2.4)</p>
 
 <p> <b>$('.selector').MonthPicker('GetSelectedMonthYear')</b>
 <br />Validates the selected month/year and returns the selected value as a string (for example '1/2015') if it is a valid date. Returns null if there is no valid date, displays an error message if the message is specified, focuses and selects the violating text.
@@ -97,6 +97,21 @@ NOTE: This method is <b>not</b> affected by the <a href='#monthformat'>MonthForm
 
 <p> <b>$('.selector').val()</b>
 <br />Use jQuery .val() to get the input without any date validation.</p>
+
+<p> <b>$('.selector').MonthPicker('Open')</b>
+<br />Opens the month picker menu and keeps it open if it already is open, see the <a href='#onbeforemenuclose'>OnBeforeMenuClose event</a> to prevent the menu from closing on click (or other) events. (Added in version 2.5).
+
+<p> <b>$('.selector').MonthPicker('Toggle')</b>
+<br />Opens the month picker menu or closes the menu if it's already open, see the <a href='#onbeforemenuclose'>OnBeforeMenuClose event</a> to prevent the menu from closing on click (or other) events. (Added in version 2.5).
+
+<p>IMPORTANT: If you are Opening or Toggling the menu in response to events like click, mousedown, mouseup, focus etc...
+The menu will immediately close itself, you can prevent the menu from immediately closing using the
+<a href='#onbeforemenuclose'>OnBeforeMenuClose event</a> (example included) and calling <a href='http://api.jquery.com/event.preventdefault/'>event.preventDefault()</a> for the element triggering the event.
+
+<p>NOTE: It might be possible to prevent the menu from closing by calling <a href='https://api.jquery.com/event.stoppropagation/'>event.stopPropagation()</a> however this is not supported and might stop working in future releases if we change the way the plugin handles events.  To prevent the menu from hiding use the <a href='#onbeforemenuclose'>OnBeforeMenuClose event</a> (example included) and call <a href='http://api.jquery.com/event.preventdefault/'>event.preventDefault()</a> for the element triggering the event.
+
+<p> <b>$('.selector').MonthPicker('Close')</b>
+<br />Closes the month picker if it's already open. You can prevent the menu from closing using the <a href='#onbeforemenuclose'>OnBeforeMenuClose event</a> and calling <a href='http://api.jquery.com/event.preventdefault/'>event.preventDefault()</a>. (Added in version 2.5).
 
 <p> <b>$('.selector').Destroy()</b>
 <br />Destroys the month picker widget.</p>
@@ -139,6 +154,7 @@ $('.selector').MonthPicker('option', 'Disabled', true );
 <p>
     <h3>Button</h3>
     Types: Function that returns jQuery or HTML string or selector or DOM element.<br />
+    Since: 2.5<br />
     Default: 
     <pre>
 // Creates the default button.
@@ -237,6 +253,7 @@ $('.selector').MonthPicker('option', 'ShowIcon', false );
 <p>
     <h3>ShowOn</h3>
     Type: String<br />
+    Since: 2.5<br />
     Default: button or focus only
     Allows setting the menu to open on when clicking the button and when focusing on the associated input field.
 </p>
@@ -259,6 +276,7 @@ $('.selector').MonthPicker('option', 'ShowOn', 'both' );
     <h3>IsRTL</h3>
     Type: Boolean<br />
     Default: false<br />
+    Since: 2.5<br />
     Sets the menu's run direction as right to left.
 </p>
 <p>
@@ -576,6 +594,35 @@ $('.selector').MonthPicker('option', 'Position', {collision: 'fit', at: 'left bo
 <h2>Events</h2>
 
 <p>
+    <h3>OnBeforeMenuOpen</h3>
+    Type: function<br />
+    Default: null<br />
+    Since: 2.5<br />
+    This event is triggered before the Month Picker menu will open and it allows you to prevent the menu from opening. this refers to the associated input field.</p>
+<p>
+    Supply a callback function to handle the event as an init option.
+    <pre>
+$('.selector').MonthPicker({
+	OnBeforeMenuOpen: function(event){
+		// Prevent the menu from opening when clicking if the user says no.
+		if ( !confirm('The field "' + this.id + '" is destructive. Are you sure you want to proceed?') ) {
+			event.preventDefault();
+		}
+	}
+});
+</pre>
+    
+    Get or set the callback function, after init. 
+<pre>
+//getter
+var callback = $('.selector').MonthPicker('option', 'OnBeforeMenuClose');
+
+//setter
+$('.selector').MonthPicker('option', 'OnBeforeMenuClose', function(){ ... } );
+</pre>
+</p>
+
+<p>
     <h3>OnAfterMenuOpen</h3>
     Type: function<br />
     Default: null<br />
@@ -612,6 +659,36 @@ var disabled = $('.selector').MonthPicker('option', 'OnAfterMenuClose');
 
 //setter
 $('.selector').MonthPicker('option', 'OnAfterNextYear', function(){ ... } );
+</pre>
+</p>
+
+<p>
+    <h3>OnBeforeMenuClose</h3>
+    Type: function<br />
+    Default: null<br />
+    Since: 2.5<br />
+    This event is triggered before the Month Picker menu will closes, and it allows you to prevent the menu from closing. this refers to the associated input field.</p>
+<p>
+    Supply a callback function to handle the event as an init option.
+    <pre>
+$('.selector').MonthPicker({
+	OnBeforeMenuClose: function(event){
+		// Prevent the menu from closing when clicking on 
+		// the external button or one of it's child nodes.
+		if ( $.contains($('#extarnal_button', event.target)) ) {
+			event.preventDefault();
+		}
+	}
+});
+</pre>
+    
+    Get or set the callback function, after init. 
+<pre>
+//getter
+var callback = $('.selector').MonthPicker('option', 'OnBeforeMenuClose');
+
+//setter
+$('.selector').MonthPicker('option', 'OnBeforeMenuClose', function(){ ... } );
 </pre>
 </p>
 

@@ -357,19 +357,19 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
         },
         
         Toggle: function () {
-            return this._visible ? this.Hide() : this.Show();
+            return this._visible ? this.Close() : this.Open();
         },
         
-        Show: function (event) {
+        Open: function (event) {
             if (this.options.Disabled) {
                 return false;
             }
             
             var _elem = this.element, _opts = this.options;
             
-            // Allow the user to prevent showing the menu.
+            // Allow the user to prevent opening the menu.
             event = event || new $.Event();
-            if (_opts.OnAfterMenuOpen.call(_elem[0], event) === false || event.isDefaultPrevented()) {
+            if (_opts.OnBeforeMenuOpen.call(_elem[0], event) === false || event.isDefaultPrevented()) {
                 return false;
             }
             
@@ -386,7 +386,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
                 var _menu = this._monthPickerMenu;
                 this._showMonths();
                 
-                $(document).on('click' + _eventsNs + this.uuid, $.proxy(this.Hide, this))
+                $(document).on('click' + _eventsNs + this.uuid, $.proxy(this.Close, this))
                            .on('keydown' + _eventsNs + this.uuid, $.proxy(this._keyDown, this));
                 
                 // Trun off validation so that clicking one of the months
@@ -412,7 +412,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             return false;
         },
 
-        Hide: function (event) {            
+        Close: function (event) {            
             if (this._visible) {
                 var _menu = this._monthPickerMenu, 
                     _opts = this.options,
@@ -451,7 +451,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
                 button.prop('disabled', state);
             }
         },
-                
+        
         /**
          * Methods the user can override to use a third party library
          * such as http://momentjs.com for parsing and formatting months.
@@ -518,10 +518,10 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             if (this.options.ShowOn === 'both') {
                 this.element
                     .off('click' + _eventsNs)
-                    .on('click' + _eventsNs, $.proxy(this.Show, this));
+                    .on('click' + _eventsNs, $.proxy(this.Open, this));
             } else {                    
                 var _meth = $.fn[!this.options.ShowIcon ? 'on' : 'off'];
-                _meth.call(this.element, 'click' + _eventsNs, $.proxy(this.Show, this));
+                _meth.call(this.element, 'click' + _eventsNs, $.proxy(this.Open, this));
             }
         },
 
@@ -530,7 +530,8 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             if ([null, ''].indexOf(_errMsg) === -1) {
                 var _msgEl = $('<span id="MonthPicker_Validation_' + _elem[0].id + '" class="month-picker-invalid-message">' + _errMsg + '</span>');
 
-                this._validationMessage = _msgEl.insertAfter(this._monthPickerButton.length ? _elem.next() : _elem);
+				var _button = this._monthPickerButton;
+                this._validationMessage = _msgEl.insertAfter(_button.length ? _button : _elem);
                 
                 _elem.on('blur' + _eventsNs, $.proxy(this.Validate, this));
             }
@@ -556,16 +557,16 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
                 }
             });
         },
-                
+        
         _keyDown: function() {
             var keyCode = $.ui.keyCode;
             switch (event.keyCode) {
                 case keyCode.ENTER:
                     this._chooseMonth(new Date().getMonth() + 1);
-                    this.Hide();
+                    this.Close();
                     break;
                 case keyCode.ESCAPE:
-                    this.Hide();
+                    this.Close();
                     break;
             }
         },
@@ -621,7 +622,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
                 this._validationMessage.hide();
             }
             
-            this.Hide();
+            this.Close();
             
             this.SetDisabled(isDisabled, _button);
             this.options.OnAfterSetDisabled.call(this.element[0], isDisabled, _button);
@@ -680,7 +681,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
                     _month: _counter
                 }, $.proxy(function (event) {
                     this._chooseMonth(event.data._month);
-                    this.Hide();
+                    this.Close();
                 }, this));
 
                 $('.button-' + _counter, _menu).button('option', 'label', _months[_month]);

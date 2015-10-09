@@ -285,11 +285,7 @@ $('.selector').MonthPicker('option', 'ShowIcon', false );
     Type: String<br />
     Default: ui-icon-calculator<br />
     
-<<<<<<< HEAD
     Allows setting a different primary <a href='http://api.jqueryui.com/theming/icons/'>icon class name</a> for the default icon. Feel free to use this option in your custom buttons as show in the <a href='#button'>Button option</a> examples.
-=======
-    Allows setting a different primary <a href='http://api.jqueryui.com/theming/icons/>icon class name</a> for the default icon. Feel free to use this option in your custom buttons as show in the <a href='#button'>Button option</a> examples.
->>>>>>> origin/2.5
 </p>
 <p>
     Set the option upon init.

@@ -99,7 +99,7 @@ NOTE: This method is <b>not</b> affected by the <a href='#monthformat'>MonthForm
 <br />Use jQuery .val() to get the input without any date validation.</p>
 
 <p> <b>$('.selector').MonthPicker('Open')</b>
-<br />Opens the month picker menu and keeps it open if it already is open, see the <a href='#onbeforemenuclose'>OnBeforeMenuClose event</a> to prevent the menu from closing on click (or other) events. (Added in version 2.5).
+<br />Opens the month picker menu and keeps it open if it's already open, see the <a href='#onbeforemenuclose'>OnBeforeMenuClose event</a> to prevent the menu from closing on click (or other) events. (Added in version 2.5).
 
 <p> <b>$('.selector').MonthPicker('Toggle')</b>
 <br />Opens the month picker menu or closes the menu if it's already open, see the <a href='#onbeforemenuclose'>OnBeforeMenuClose event</a> to prevent the menu from closing on click (or other) events. (Added in version 2.5).

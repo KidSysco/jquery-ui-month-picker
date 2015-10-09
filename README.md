@@ -416,7 +416,7 @@ $.widget('MyOrg.MomentMonthPicker', $.KidSysco.MonthPicker, {
 	
 	// Set the default format.
 	options: {
-		MonthFormat: 'MM {YYYY}',
+		MonthFormat: 'MM/YYYY',
 	},
 	
 	// Set the format to use with the HTML 5 month input.

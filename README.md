@@ -105,7 +105,7 @@ NOTE: This method is <b>not</b> affected by the <a href='#monthformat'>MonthForm
 <br />Opens the month picker menu or closes the menu if it's already open, see the <a href='#onbeforemenuclose'>OnBeforeMenuClose event</a> to prevent the menu from closing on click (or other) events. (Added in version 2.5).
 
 <p><b>IMPORTANT:</b> If you are <b>Opening</b> or <b>Toggling</b> the menu in response to events like click, mousedown, mouseup, focus etc...
-The menu will immediately close itself, you can prevent the menu from immediately closing using the
+The menu will immediately close itself, you can prevent the menu from closing using the
 <a href='#onbeforemenuclose'>OnBeforeMenuClose event</a> (example included) and calling <a href='http://api.jquery.com/event.preventdefault/'>event.preventDefault()</a> for the element triggering the event.
 
 <p><b>NOTE:</b> It might be possible to prevent the menu from closing by calling <a href='https://api.jquery.com/event.stoppropagation/'>event.stopPropagation()</a> however this is not supported and might stop working in future releases if we change the way the plugin handles events.  To prevent the menu from hiding use the <a href='#onbeforemenuclose'>OnBeforeMenuClose event</a> (example included) and call <a href='http://api.jquery.com/event.preventdefault/'>event.preventDefault()</a> for the element triggering the event.
@@ -179,10 +179,17 @@ it will be inserted after the associated input field.
 </p>
 
 <p>
+When you change the <a href='#disabled'>Disabled</a> option the button will be visualy disabled if it's a <a href='https://jqueryui.com/button/'>jQuery UI button</a> or if it's a DOM element
+that responds to the disabled property (for example the <a href='https://developer.mozilla.org/en/docs/Web/HTML/Element/button'>button tag</a>, an <a href='https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/button'>input type button</a> etc...).  <br>
+This means that if you assign an image button and you are changing the Disabled option you must
+provide a disabled image as shown in the <a href='#disabledimgbtn>example</a> below.
+</p>
+
+<p>
     Create a button similar to the default button created by jQuery UI Datepicker's <a href='http://api.jqueryui.com/datepicker/#option-showOn'>showOn:</a> 'both' option.
 <pre>
 $('.selector').MonthPicker({ 
-    Button: '&lt; button type="button" class="ui-datepicker-trigger">...&lt;/button>'
+    Button: '&lt;button type="button" class="ui-datepicker-trigger">...&lt;/button>'
 });
 </pre>
 
@@ -193,12 +200,12 @@ $('.selector').MonthPicker({
 });
 </pre>
 
-    Assign the element with a class of button that immediately follows
-    the associated input field as a button.
+    Create a button with different images for enabled and disabled state.
 <pre>
 $('.selector').MonthPicker({ 
-    Button: function() {
-        return $(this).next('.button');
+    Button: function(opts) {
+	    var src = 'images/calendar_' + (opts.Disabled ? 'disabled' : 'enabled') + '.gif';
+	    return '&lt;img src="' + src + '" title="Select date" />';
     }
 });
 </pre>
@@ -206,10 +213,20 @@ $('.selector').MonthPicker({
     Create a button using a <a href='http://handlebarsjs.com/'>Handlebars.js</a> template. The same can be done with other popular template engines.
 <pre>
 &lt;script id='template' type='text/template'>
-&lt;img src="images/{{ButtonIcon}}" title="{{i18n.buttonText}}" />
+&lt;img src="images/{{ButtonIcon}}{{#if Disabled}}_disabled{{/if}}.gif" title="{{i18n.buttonText}}" />
 &lt;/script>
 $('.selector').MonthPicker({ 
     Button: Handlebars.compile( $('#template').html() )
+});
+</pre>
+
+    Assign the element with a class of button that immediately follows
+    the associated input field as a button.
+<pre>
+$('.selector').MonthPicker({ 
+    Button: function() {
+        return $(this).next('.button');
+    }
 });
 </pre>
 
@@ -643,26 +660,6 @@ $('.selector').MonthPicker('option', 'OnAfterMenuOpen', function(){ ... } );
 </p>
 
 <p>
-    <h3>OnAfterMenuClose</h3>
-    Type: function<br />
-    Default: null<br />
-    This event is triggered after the Month Picker menu closes. As of version 2.4 this refers to the associated input field.
-</p>
-<p>
-    Supply a callback function to handle the event as an init option.
-    <pre>$('.selector').MonthPicker({ OnAfterMenuClose: function(){ ... } });</pre>
-    
-    Get or set the callback function, after init. 
-<pre>
-//getter
-var disabled = $('.selector').MonthPicker('option', 'OnAfterMenuClose');
-
-//setter
-$('.selector').MonthPicker('option', 'OnAfterNextYear', function(){ ... } );
-</pre>
-</p>
-
-<p>
     <h3>OnBeforeMenuClose</h3>
     Type: function<br />
     Default: null<br />
@@ -689,6 +686,52 @@ var callback = $('.selector').MonthPicker('option', 'OnBeforeMenuClose');
 
 //setter
 $('.selector').MonthPicker('option', 'OnBeforeMenuClose', function(){ ... } );
+</pre>
+</p>
+
+<p>
+    <h3>OnAfterMenuClose</h3>
+    Type: function<br />
+    Default: null<br />
+    This event is triggered after the Month Picker menu closes. As of version 2.4 this refers to the associated input field.
+</p>
+<p>
+    Supply a callback function to handle the event as an init option.
+    <pre>$('.selector').MonthPicker({ OnAfterMenuClose: function(){ ... } });</pre>
+    
+    Get or set the callback function, after init. 
+<pre>
+//getter
+var disabled = $('.selector').MonthPicker('option', 'OnAfterMenuClose');
+
+//setter
+$('.selector').MonthPicker('option', 'OnAfterNextYear', function(){ ... } );
+</pre>
+</p>
+
+<p>
+    <h3>OnAfterSetDisabled</h3>
+    Type: function<br />
+    Default: null<br />
+    Since: 2.5<br />
+    This event is triggered before the Month Picker menu will close, and it allows you to prevent the menu from closing. this refers to the associated input field.</p>
+<p>
+    Supply a callback function to handle the event as an init option.
+    <pre>
+$('.selector').MonthPicker({
+	OnAfterSetDisabled: function(isDisabled, button){
+		
+	}
+});
+</pre>
+    
+    Get or set the callback function, after init. 
+<pre>
+//getter
+var callback = $('.selector').MonthPicker('option', 'OnAfterSetDisabled');
+
+//setter
+$('.selector').MonthPicker('option', 'OnAfterSetDisabled', function(){ ... } );
 </pre>
 </p>
 

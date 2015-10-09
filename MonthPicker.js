@@ -485,21 +485,21 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
         },
 
         _showIcon: function () {
-            var _button = this._monthPickerButton, 
-                _showIcon = this.options.ShowIcon;
+            var _button = this._monthPickerButton;
                 
             if (!_button.length) {
-                if (_showIcon) {
-                    this._createButton();
-                }
+	            this._createButton();
             } else {
-                _button[_showIcon ? 'show' : 'hide']();
+                _button[this.options.ShowIcon ? 'show' : 'hide']();
             }
             
             this._updateFieldEvents();
         },
 
         _createButton: function() {
+	        if (!this.options.ShowIcon) return;
+	        this._monthPickerButton.remove();
+	        
             var _btnOpt = this.options.Button, _elem = this.element;
             if ($.isFunction(_btnOpt)) {
                 _btnOpt = _btnOpt.call(_elem[0], $.extend(true, {i18n: $.MonthPicker.i18n}, this.options));
@@ -614,8 +614,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
         },
 
         _setDisabledState: function () {
-            var isDisabled = this.options.Disabled,
-                _button = this._monthPickerButton;
+            var isDisabled = this.options.Disabled;
                 
             this.element[isDisabled ? 'addClass' : 'removeClass']('disabled');
             if (isDisabled) {
@@ -624,8 +623,10 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             
             this.Close();
             
-            this.SetDisabled(isDisabled, _button);
-            this.options.OnAfterSetDisabled.call(this.element[0], isDisabled, _button);
+            this._createButton();
+            
+            this.SetDisabled(isDisabled, this._monthPickerButton);
+            this.options.OnAfterSetDisabled.call(this.element[0], isDisabled);
         },
 
         _setStartYear: function () {

@@ -254,8 +254,8 @@ $('.selector').MonthPicker('option', 'ShowIcon', false );
     <h3>ShowOn</h3>
     Type: String<br />
     Since: 2.5<br />
-    Default: button or focus only
-    Allows setting the menu to open on when clicking the button and when focusing on the associated input field.
+    Default: button or focus only<br />
+    Set the menu to open on both clicking the button and focusing on the associated input field.
 </p>
 <p>
     Set the option upon init.

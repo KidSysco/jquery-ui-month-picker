@@ -182,7 +182,7 @@ Button: function(options) {
 </p>
 
 <p>
-NOTE: If you just want to use a different <a href='http://api.jqueryui.com/theming/icons/'>icon class name</a> for the default icon see the <a href='#buttonimage'>ButtonImage option</a>.
+NOTE: If you just want to use a different <a href='http://api.jqueryui.com/theming/icons/'>icon class name</a> for the default icon see the <a href='#buttonicon'>ButtonIcon option</a>.
 </p>
 
 <p>

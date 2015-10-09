@@ -331,8 +331,7 @@ $('.selector').MonthPicker('option', 'ShowOn', 'both' );
     Sets the menu's run direction as right to left.
 </p>
 <p>
-<b>NOTE:</b> This option expects that the body's (or other parent element)
-dir='rtl'.
+<b>IMPORTSNT:</b> This option expects that the html or body tag's dir='rtl'.
 </p>
 <p>
     Set the option upon init.

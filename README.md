@@ -109,6 +109,7 @@ The menu will immediately close itself, you can prevent the menu from closing us
 <a href='#onbeforemenuclose'>OnBeforeMenuClose event</a> (example included) and calling <a href='http://api.jquery.com/event.preventdefault/'>event.preventDefault()</a> for the element triggering the event.
 
 <p><b>NOTE:</b> It might be possible to prevent the menu from closing by calling <a href='https://api.jquery.com/event.stoppropagation/'>event.stopPropagation()</a> in the click event that called the Open method. 
+
 However this is <b>not supported</b> and might stop working in future releases if we change the way the plugin handles events.  To prevent the menu from hiding use the <a href='#onbeforemenuclose'>OnBeforeMenuClose event</a> (example included) and call <a href='http://api.jquery.com/event.preventdefault/'>event.preventDefault()</a> for the element triggering the event.
 
 <p> <b>$('.selector').MonthPicker('Close')</b>
@@ -284,7 +285,11 @@ $('.selector').MonthPicker('option', 'ShowIcon', false );
     Type: String<br />
     Default: ui-icon-calculator<br />
     
+<<<<<<< HEAD
     Allows setting a different primary <a href='http://api.jqueryui.com/theming/icons/'>icon class name</a> for the default icon. Feel free to use this option in your custom buttons as show in the <a href='#button'>Button option</a> examples.
+=======
+    Allows setting a different primary <a href='http://api.jqueryui.com/theming/icons/>icon class name</a> for the default icon. Feel free to use this option in your custom buttons as show in the <a href='#button'>Button option</a> examples.
+>>>>>>> origin/2.5
 </p>
 <p>
     Set the option upon init.

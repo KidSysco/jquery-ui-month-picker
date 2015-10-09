@@ -267,7 +267,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             _menu.find('.year-title').text(this._i18n('year'));
             _menu.find('.year-container-all').attr('title', this._i18n('jumpYears'));
 
-            this._showIcon();
+            //this._showIcon();
             this._createValidationMessage();
 
             this._yearContainer = $('.year', _menu);
@@ -294,6 +294,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
 
             this._setUseInputMask();
             this._setDisabledState();
+            this._updateFieldEvents();
         },
 
         /****** Misc. Utility functions ******/
@@ -500,20 +501,29 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
 
         _createButton: function() {
 	        if (!this.options.ShowIcon) return;
-	        this._monthPickerButton.remove();
 	        
+	        var _oldButton = this._monthPickerButton;
             var _btnOpt = this.options.Button, _elem = this.element;
+            
             if ($.isFunction(_btnOpt)) {
                 _btnOpt = _btnOpt.call(_elem[0], $.extend(true, {i18n: $.MonthPicker.i18n}, this.options));
             }
             
+            var _removeOldBtn = false;
             this._monthPickerButton = ( _btnOpt instanceof $ ? _btnOpt : $(_btnOpt) )
                 .each(function() {
                     if (!$.contains(document.body, this)) {
+	                    _removeOldBtn = true;
                         $(this).insertAfter(_elem);
                     }
                 })
                 .on('click' + _eventsNs, $.proxy(this.Toggle, this));
+            
+            if (this._removeOldBtn) {
+	            _oldButton.remove();
+            }
+            
+            this._removeOldBtn = _removeOldBtn;
         },
 
         _updateFieldEvents: function() {

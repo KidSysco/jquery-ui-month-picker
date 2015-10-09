@@ -104,11 +104,11 @@ NOTE: This method is <b>not</b> affected by the <a href='#monthformat'>MonthForm
 <p> <b>$('.selector').MonthPicker('Toggle')</b>
 <br />Opens the month picker menu or closes the menu if it's already open, see the <a href='#onbeforemenuclose'>OnBeforeMenuClose event</a> to prevent the menu from closing on click (or other) events. (Added in version 2.5).
 
-<p>IMPORTANT: If you are Opening or Toggling the menu in response to events like click, mousedown, mouseup, focus etc...
+<p><b>IMPORTANT:</b> If you are <b>Opening</b> or <b>Toggling</b> the menu in response to events like click, mousedown, mouseup, focus etc...
 The menu will immediately close itself, you can prevent the menu from immediately closing using the
 <a href='#onbeforemenuclose'>OnBeforeMenuClose event</a> (example included) and calling <a href='http://api.jquery.com/event.preventdefault/'>event.preventDefault()</a> for the element triggering the event.
 
-<p>NOTE: It might be possible to prevent the menu from closing by calling <a href='https://api.jquery.com/event.stoppropagation/'>event.stopPropagation()</a> however this is not supported and might stop working in future releases if we change the way the plugin handles events.  To prevent the menu from hiding use the <a href='#onbeforemenuclose'>OnBeforeMenuClose event</a> (example included) and call <a href='http://api.jquery.com/event.preventdefault/'>event.preventDefault()</a> for the element triggering the event.
+<p><b>NOTE:</b> It might be possible to prevent the menu from closing by calling <a href='https://api.jquery.com/event.stoppropagation/'>event.stopPropagation()</a> however this is not supported and might stop working in future releases if we change the way the plugin handles events.  To prevent the menu from hiding use the <a href='#onbeforemenuclose'>OnBeforeMenuClose event</a> (example included) and call <a href='http://api.jquery.com/event.preventdefault/'>event.preventDefault()</a> for the element triggering the event.
 
 <p> <b>$('.selector').MonthPicker('Close')</b>
 <br />Closes the month picker if it's already open. You can prevent the menu from closing using the <a href='#onbeforemenuclose'>OnBeforeMenuClose event</a> and calling <a href='http://api.jquery.com/event.preventdefault/'>event.preventDefault()</a>. (Added in version 2.5).
@@ -604,7 +604,7 @@ $('.selector').MonthPicker('option', 'Position', {collision: 'fit', at: 'left bo
     <pre>
 $('.selector').MonthPicker({
 	OnBeforeMenuOpen: function(event){
-		// Prevent the menu from opening when clicking if the user says no.
+		// Make sure the user is aware of the consequences, and prevent opening if they say no.
 		if ( !confirm('The field "' + this.id + '" is destructive. Are you sure you want to proceed?') ) {
 			event.preventDefault();
 		}
@@ -615,10 +615,10 @@ $('.selector').MonthPicker({
     Get or set the callback function, after init. 
 <pre>
 //getter
-var callback = $('.selector').MonthPicker('option', 'OnBeforeMenuClose');
+var callback = $('.selector').MonthPicker('option', 'OnBeforeMenuOpen');
 
 //setter
-$('.selector').MonthPicker('option', 'OnBeforeMenuClose', function(){ ... } );
+$('.selector').MonthPicker('option', 'OnBeforeMenuOpen', function(){ ... } );
 </pre>
 </p>
 
@@ -667,7 +667,7 @@ $('.selector').MonthPicker('option', 'OnAfterNextYear', function(){ ... } );
     Type: function<br />
     Default: null<br />
     Since: 2.5<br />
-    This event is triggered before the Month Picker menu will closes, and it allows you to prevent the menu from closing. this refers to the associated input field.</p>
+    This event is triggered before the Month Picker menu will close, and it allows you to prevent the menu from closing. this refers to the associated input field.</p>
 <p>
     Supply a callback function to handle the event as an init option.
     <pre>

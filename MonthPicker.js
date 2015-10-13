@@ -31,6 +31,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
         };
     var $noop = $.noop;
     var $datepicker = $.datepicker;
+    var _opendInstance = null;
     
     function _makeDefaultButton(options) {
 	    // this refers to the associated input field.
@@ -376,6 +377,11 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
                 return false;
             }
             
+            // If there is an open menu close it first.
+            if (_opendInstance) {
+                _opendInstance.Close(event);
+            }
+
             var _selectedYear = this.GetSelectedYear();
             if (_elem.data(this._enum._overrideStartYear) !== void 0) {
                 this._setPickerYear(this.options.StartYear);
@@ -410,6 +416,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
                 _elem.focus();
                 
                 this._visible = true;
+                _opendInstance = this;
             }
             
             return false;
@@ -442,6 +449,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
                 }
                 
                 this._visible = false;
+                _opendInstance = null;
             }
         },
 

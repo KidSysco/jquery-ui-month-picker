@@ -24,6 +24,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
     var _setupErr = 'MonthPicker Setup Error: ';
     var _posErr = _setupErr + 'The jQuery UI position plug-in must be loaded in order to specify a position.';
     var _badOptValErr = _setupErr + 'Unsupported % option value, supported (case sensitive) values are: ';
+    var _badPeriodStrErr = _setupErr + 'valid periods are "y" for years, "m" for months, For example, "+1y +7m" ("%").'; 
     var _animVals = {
             Animation: ['slideToggle', 'fadeToggle', 'none'],
             ShowAnim: ['fadeIn', 'slideDown', 'none'],
@@ -97,6 +98,8 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             ShowAnim: null,
             HideAnim: null,
             ShowOn: null,
+            MinMonth: null,
+            MaxMonth: null,
             Duration: 'normal',
             Button: _makeDefaultButton,
             OnAfterSetDisabled: $noop,
@@ -699,6 +702,8 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
 	                .on( 'click' + _eventsNs, {month: index+1}, _onMonthClick )
 	            	.button('option', 'label', monthName);
             });
+            
+            this._enableMonthButtons();
         },
 
         _showYearsClickHandler: function () {
@@ -708,29 +713,42 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
         },
 
         _showYears: function () {
-            var _currYear = this._getPickerYear(), _menu = this._monthPickerMenu;
-            var AMOUNT_TO_ADD = 5;
-            var selectedMonth = this.GetSelectedDate();
+            var _currYear = this._getPickerYear(),
+                _yearDifferential = -4,
+                _firstYear = (_currYear + _yearDifferential),
+                AMOUNT_TO_ADD = 5;
+            
+            var _minYear = this._toDate(this.options.MinMonth);
+	        var _maxYear = this._toDate(this.options.MaxMonth);
+		    _minYear = _minYear ? _minYear.getFullYear() : 0;
+		    _maxYear = _maxYear ? _maxYear.getFullYear() : 0;
+            
             this._prevButton
                 .attr('title', this._i18n('prev5Years'))
                 .unbind('click')
-                .bind('click', $.proxy(this._addToYears, this, -AMOUNT_TO_ADD));
+                .bind('click', $.proxy(this._addToYears, this, -AMOUNT_TO_ADD))
+                .button('option', 'disabled', (_firstYear - 1) < _minYear);
 
             this._nextButton
                 .attr('title', this._i18n('next5Years'))
                 .unbind('click')
-                .bind('click', $.proxy(this._addToYears, this, AMOUNT_TO_ADD));
+                .bind('click', $.proxy(this._addToYears, this, AMOUNT_TO_ADD))
+                .button('option', 'disabled', (_firstYear + 12) -1 > _maxYear);
 
-            $('.year-container-all', _menu).css('cursor', 'default');
+            $('.year-container-all', this._monthPickerMenu).css('cursor', 'default');
             this._buttons.off(_eventsNs);
-
-            var _yearDifferential = -4, _onClick = $.proxy(this._onYearClick, this);
-            
+	        
+	        var _onClick = $.proxy(this._onYearClick, this);
             for (var _counter = 0; _counter < 12; _counter++) {
 	            var _year = _currYear + _yearDifferential, _btn = $( this._buttons[_counter] );
 	            
                 _btn.on( 'click' + _eventsNs, { year: _year }, _onClick )
 					.button('option', 'label', _year);
+		        
+		        $(this._buttons[_counter]).button('option', 'disabled', (
+		        	(_minYear && _year < _minYear) || 
+		        	(_maxYear && _year > _maxYear)
+		        ));
 				
                 _yearDifferential++;
             }
@@ -750,6 +768,8 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             _year.text(parseInt(_year.text()) + amount, 10);
             this.element.focus();
             
+            this._enableMonthButtons();
+            
             this.options['OnAfter' + (amount > 0 ? 'Next' : 'Previous') + 'Year'].call(this.element[0]);
         },
 
@@ -760,6 +780,72 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             this.element.focus();
 
             this.options['OnAfter' + (amount > 0 ? 'Next' : 'Previous') + 'Years'].call(this.element[0]);
+        },
+        
+        _enableMonthButtons: function() {
+		   	var _curYear = this._getPickerYear();
+	        
+	        var _minMonth = this._toDate(this.options.MinMonth);
+	        var _maxMonth = this._toDate(this.options.MaxMonth);
+	        
+	        this._prevButton.button('option', 'disabled', _minMonth && _curYear == _minMonth.getFullYear());
+			this._nextButton.button('option', 'disabled', _maxMonth && _curYear == _maxMonth.getFullYear());
+	        
+	        for (var i = 0; i < 12; i++) {
+		        var _curMonth = new Date(_curYear, i);
+		        
+		        $(this._buttons[i]).button('option', 'disabled', (
+		        	(_minMonth && _curMonth < _minMonth) || 
+		        	(_maxMonth && _curMonth > _maxMonth)
+		        ));
+	        }
+		},
+        
+        _toDate: function(_val) {
+	        if (_val === null || _val instanceof Date) {
+		        return _val;
+	        } else if ($.isNumeric(_val)) {
+		        var _date = new Date;
+		        _date.setDate(0);
+		        _date.setMonth( _date.getMonth() + parseInt(_val, 10) );
+		        return _date;
+	        } 
+		    var _date = this._parseMonth(_val);
+		    if (_date) {
+			    return _date;
+		    }
+		    
+		    return this._parsePeriod(_val);
+        },
+        
+        _parsePeriod: function(_val) {
+	        // Parsing is done by replacing tokens in the value to form
+	        // a JSON object with it's keys and values reversed 
+	        // (example '+1y +2m' will turn into {"+1":"y","+2":"m"})
+	        // After that we just revers the keys and values.
+			var _json = _val.trim();
+	        _json = _json.replace(/y/i, '":"y"');
+	        _json = _json.replace(/m/i, '":"m"');
+            
+            try {
+            	var _rev = JSON.parse( '{"' + _json.replace(/ /g, ',"') + '}' ), 
+            		obj = {};
+            		
+				for (var key in _rev) {
+	            	obj[ _rev[key] ] = key;
+            	}
+            	
+		        var _date = new Date;
+		        
+		        _date.setFullYear( _date.getFullYear() + (parseInt(obj.y, 10) || 0) );
+		        _date.setMonth( _date.getMonth() + (parseInt(obj.m, 10) || 0) );
+		        _date.setDate(0);
+		        return _date;
+            } catch (e) {
+	        	alert(_badPeriodStrErr.replace(/%/, _val));
+            }
+            
+			return null;
         }
     });
     

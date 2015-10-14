@@ -268,17 +268,17 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             _menu.find('.year-title').text(this._i18n('year'));
             _menu.find('.year-container-all').attr('title', this._i18n('jumpYears'));
 
-            //this._showIcon();
             this._createValidationMessage();
 
             this._yearContainer = $('.year', _menu);
             
-            $('.previous-year button', _menu).button({ text: false });
-            $('.next-year button', _menu).button({ text: false });
+            this._prevButton = $('.previous-year button', _menu).button({ text: false });
+            this._nextButton = $('.next-year button', _menu).button({ text: false });
+            
             this._setRTL(_opts.IsRTL); //Assigns icons to the next/prev buttons.
             
-            $('.next-year button span.ui-button-icon-primary', _menu).text(this._i18n('nextLabel'));
-            $('.previous-year button span.ui-button-icon-primary', _menu).text(this._i18n('prevLabel'));
+            $('.ui-button-icon-primary', this._nextButton).text(this._i18n('nextLabel'));
+            $('.ui-button-icon-primary', this._prevButton).text(this._i18n('prevLabel'));
 
             var $table = $('.month-picker-month-table', _menu);
             for (var i = 0; i < 12; i++) {
@@ -559,15 +559,14 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
         },
         
         _setRTL: function(value) {
-            var _menu = this._monthPickerMenu;
-            $('.previous-year button', _menu)
+            this._prevButton
                 .button('option', {
                 icons: {
                     primary: 'ui-icon-circle-triangle-' + (value ? 'e' : 'w')
                 }
             });
             
-            $('.next-year button', this._monthPickerMenu)
+            this._nextButton
                 .button('option', {
                 icons: {
                     primary: 'ui-icon-circle-triangle-'+ (value ? 'w' : 'e')
@@ -678,19 +677,19 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
         },
 
         _showMonths: function () {
-            var _months = this._i18n('months'), _menu = this._monthPickerMenu;
+            var _months = this._i18n('months');
             
-            $('.previous-year button', _menu)
+            this._prevButton
                 .attr('title', this._i18n('prevYear'))
                 .unbind('click')
                 .bind('click' + _eventsNs, $.proxy(this._addToYear, this, -1));
 
-            $('.next-year button', _menu)
+            this._nextButton
                 .attr('title', this._i18n('nextYear'))
                 .unbind('click')
                 .bind('click' + _eventsNs, $.proxy(this._addToYear, this, 1));
 
-            $('.year-container-all', _menu).css('cursor', 'pointer');
+            $('.year-container-all', this._monthPickerMenu).css('cursor', 'pointer');
             
             this._buttons.off(_eventsNs);
 
@@ -712,12 +711,12 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             var _currYear = this._getPickerYear(), _menu = this._monthPickerMenu;
             var AMOUNT_TO_ADD = 5;
             var selectedMonth = this.GetSelectedDate();
-            $('.previous-year button', _menu)
+            this._prevButton
                 .attr('title', this._i18n('prev5Years'))
                 .unbind('click')
                 .bind('click', $.proxy(this._addToYears, this, -AMOUNT_TO_ADD));
 
-            $('.next-year button', _menu)
+            this._nextButton
                 .attr('title', this._i18n('next5Years'))
                 .unbind('click')
                 .bind('click', $.proxy(this._addToYears, this, AMOUNT_TO_ADD));

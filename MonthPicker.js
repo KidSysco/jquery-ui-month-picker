@@ -285,7 +285,8 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
                 var $tr = !(i % 3) ? $('<tr />').appendTo($table) : $tr;
                 $tr.append('<td><button class="button-' + (i + 1) + '" /></td>');
             }
-            $('button', $table).button();
+            
+            this._buttons = $('button', $table).button();
 
             $('.year-container-all', _menu).click($.proxy(this._showYearsClickHandler, this));
             
@@ -690,20 +691,15 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
                 .bind('click' + _eventsNs, $.proxy(this._addToYear, this, 1));
 
             $('.year-container-all', _menu).css('cursor', 'pointer');
-            $('.month-picker-month-table button', _menu).unbind(_eventsNs);
+            
+            this._buttons.off(_eventsNs);
 
-            for (var _month in _months) {
-                var _counter = parseInt(_month, 10) + 1;
-                $('.button-' + _counter, _menu)
-                    .bind('click' + _eventsNs, {
-                    _month: _counter
-                }, $.proxy(function (event) {
-                    this._chooseMonth(event.data._month);
-                    this.Close();
-                }, this));
-
-                $('.button-' + _counter, _menu).button('option', 'label', _months[_month]);
-            }
+            var me = this, _onMonthClick = $.proxy(me._onMonthClick, me);
+            $.each(_months, function(index, monthName) {
+	            $(me._buttons[index])
+	                .on( 'click' + _eventsNs, {month: index+1}, _onMonthClick )
+	            	.button('option', 'label', monthName);
+            });
         },
 
         _showYearsClickHandler: function () {
@@ -713,8 +709,9 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
         },
 
         _showYears: function () {
-            var _year = this._getPickerYear(), _menu = this._monthPickerMenu;
+            var _currYear = this._getPickerYear(), _menu = this._monthPickerMenu;
             var AMOUNT_TO_ADD = 5;
+            var selectedMonth = this.GetSelectedDate();
             $('.previous-year button', _menu)
                 .attr('title', this._i18n('prev5Years'))
                 .unbind('click')
@@ -726,21 +723,27 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
                 .bind('click', $.proxy(this._addToYears, this, AMOUNT_TO_ADD));
 
             $('.year-container-all', _menu).css('cursor', 'default');
-            $('.month-picker-month-table button', _menu).unbind(_eventsNs);
+            this._buttons.off(_eventsNs);
 
-            var _yearDifferential = -4;
-            for (var _counter = 1; _counter <= 12; _counter++) {
-                $('.button-' + _counter, _menu)
-                    .bind('click' + _eventsNs, {
-                    _yearDiff: _yearDifferential
-                }, $.proxy(function (event) {
-                    this._chooseYear(_year + event.data._yearDiff);
-                }, this));
-
-                $('.button-' + _counter, _menu).button('option', 'label', _year + _yearDifferential);
-
+            var _yearDifferential = -4, _onClick = $.proxy(this._onYearClick, this);
+            
+            for (var _counter = 0; _counter < 12; _counter++) {
+	            var _year = _currYear + _yearDifferential, _btn = $( this._buttons[_counter] );
+	            
+                _btn.on( 'click' + _eventsNs, { year: _year }, _onClick )
+					.button('option', 'label', _year);
+				
                 _yearDifferential++;
             }
+        },
+        
+        _onMonthClick: function(event) {
+	        this._chooseMonth(event.data.month);
+	        this.Close();	        
+        },
+        
+        _onYearClick: function(event) {
+	        this._chooseYear(event.data.year);
         },
         
         _addToYear: function(amount) {

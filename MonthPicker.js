@@ -539,8 +539,8 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
         },
         
         _setRTL: function(value) {
-	        _applyArrowButton(this._prevButton, !value);
-	        _applyArrowButton(this._nextButton, value);
+            _applyArrowButton(this._prevButton, !value);
+            _applyArrowButton(this._nextButton, value);
         },
         
         _keyDown: function() {
@@ -677,9 +677,9 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
                 AMOUNT_TO_ADD = 5;
             
             var _minDate = this._MinMonth;
-	        var _maxDate = this._MaxMonth;
-		    _minYear = _minDate ? _minDate.getFullYear() : 0;
-		    _maxYear = _maxDate ? _maxDate.getFullYear() : 0;
+            var _maxDate = this._MaxMonth;
+            _minYear = _minDate ? _minDate.getFullYear() : 0;
+            _maxYear = _maxDate ? _maxDate.getFullYear() : 0;
             
             this._prevButton
                 .attr('title', this._i18n('prev5Years'))
@@ -698,16 +698,16 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
 	        
 	        var _onClick = $.proxy(this._onYearClick, this);
             for (var _counter = 0; _counter < 12; _counter++) {
-	            var _year = _currYear + _yearDifferential, _btn = $( this._buttons[_counter] );
+                var _year = _currYear + _yearDifferential, _btn = $( this._buttons[_counter] );
 	            
                 _btn.on( 'click' + _eventsNs, { year: _year }, _onClick )
-					.button('option', 'label', _year);
+                    .button('option', 'label', _year);
 		        
-		        $(this._buttons[_counter]).button('option', 'disabled', (
-		        	(_minYear && _year < _minYear) || 
-		        	(_maxYear && _year > _maxYear)
-		        ));
-				
+                $(this._buttons[_counter]).button('option', 'disabled', (
+                    (_minYear && _year < _minYear) || 
+                    (_maxYear && _year > _maxYear)
+                ));
+
                 _yearDifferential++;
             }
         },
@@ -761,58 +761,58 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             this._nextButton.button('option', 'disabled', _maxDate && _curYear == _maxDate.getFullYear());
 	        
 	        for (var i = 0; i < 12; i++) {
-		        // Disable the button if the month is not between the 
-		        // min and max interval.
-		        $(this._buttons[i]).button('option', 'disabled', (
-		        	(_minDate && new Date(_curYear, i, 1) < _minDate) || 
-		        	(_maxDate && new Date(_curYear, i, 0) > _maxDate)
-		        ));
-	        }
-		},
+	            // Disable the button if the month is not between the 
+	            // min and max interval.
+	            $(this._buttons[i]).button('option', 'disabled', (
+                    (_minDate && new Date(_curYear, i, 1) < _minDate) || 
+                    (_maxDate && new Date(_curYear, i, 0) > _maxDate)
+                ));
+            }
+        },
         
         _toDate: function(_val) {
-	        console.log(this.uuid);
 	        if (_val === null || _val instanceof Date) {
-		        return _val;
+                return _val;
 	        } else if ($.isNumeric(_val)) {
-		        var _date = new Date;
-		        _date.setDate( 0 );
-		        _date.setMonth( _date.getMonth() + parseInt(_val, 10) );
-		        return _date;
-	        } 
-		    var _date = this._parseMonth(_val);
-		    if (_date) {
-			    return _date;
-		    }
-		    
-		    return this._parsePeriod(_val);
+                var _date = new Date;
+                _date.setDate( 0 );
+                _date.setMonth( _date.getMonth() + parseInt(_val, 10) );
+                return _date;
+	        }
+	         
+            var _date = this._parseMonth(_val);
+            if (_date) {
+                return _date;
+            }
+
+            return this._parsePeriod(_val);
         },
         
         _parsePeriod: function(_val, _initDate) {
-	        // Parsing is done by replacing tokens in the value to form
-	        // a JSON object with it's keys and values reversed 
-	        // (example '+1y +2m' will turn into {"+1":"y","+2":"m"})
-	        // After that we just revers the keys and values.
-			var _json = _val.trim();
-	        _json = _json.replace(/y/i, '":"y"');
-	        _json = _json.replace(/m/i, '":"m"');
-            
+            // Parsing is done by replacing tokens in the value to form
+            // a JSON object with it's keys and values reversed 
+            // (example '+1y +2m' will turn into {"+1":"y","+2":"m"})
+            // After that we just revers the keys and values.
+            var _json = _val.trim();
+            _json = _json.replace(/y/i, '":"y"');
+            _json = _json.replace(/m/i, '":"m"');
+
             try {
-            	var _rev = JSON.parse( '{"' + _json.replace(/ /g, ',"') + '}' ), 
-            		obj = {};
+                var _rev = JSON.parse( '{"' + _json.replace(/ /g, ',"') + '}' ), 
+                    obj = {};
             		
-				for (var key in _rev) {
-	            	obj[ _rev[key] ] = key;
-            	}
+                for (var key in _rev) {
+                    obj[ _rev[key] ] = key;
+                }
             	
-		        var _date = new Date;
-		        
-		        _date.setFullYear( _date.getFullYear() + (parseInt(obj.y, 10) || 0) );
-		        _date.setMonth( _date.getMonth() + (parseInt(obj.m, 10) || 0) );
-		        _date.setDate( 0 );
-		        return _date;
+                var _date = new Date;
+
+                _date.setFullYear( _date.getFullYear() + (parseInt(obj.y, 10) || 0) );
+                _date.setMonth( _date.getMonth() + (parseInt(obj.m, 10) || 0) );
+                _date.setDate( 0 );
+                return _date;
             } catch (e) {
-	        	return false;
+                return false;
             }
         }
     });

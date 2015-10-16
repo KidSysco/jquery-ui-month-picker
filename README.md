@@ -995,7 +995,7 @@ $('.selector').MonthPicker('option', 'OnAfterChooseYears', function(){ ... } );
 <h2>Plugin version</h2>
 The version can be determined using:
 <pre>
-$.KidSysco.MonthPicker.VERSION
+$.MonthPicker.VERSION
 </pre>
 If the value is undefined you are using an old version (2.3 and under).
 </p>

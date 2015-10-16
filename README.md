@@ -165,7 +165,7 @@ $('.selector').MonthPicker('option', 'Disabled', true );
 <ul>
 	<li><b>Date:</b> A <a href='https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Date'>Date</a> object containing the minimum month.</li>
 	<li><b>Number:</b> A number of months from today. For example 2 represents two months from today and -1 represents the last month.</li>
-	<li><b>String:</b> A string in the format defined by the <a href='#monthformat'>MonthFormat option</a>, or a relative month.<br> Relative months must contain value and period pairs; valid periods are "m" for months, and "y" for years. For example, "+1y +3m" represents one year and three months from today.</li>
+	<li><b>String:</b> A string in the format defined by the <a href='#monthformat'>MonthFormat option</a>, or a relative month.<p> Relative months must contain value and period pairs; valid periods are "m" for months, and "y" for years. For example, "+1y +3m" represents one year and three months from today.</p></li>
 </ul>
 </p>
 
@@ -196,7 +196,7 @@ $('.selector').MonthPicker('option', 'MinMonth', '+1y +3m');
 <ul>
 	<li><b>Date:</b> A <a href='https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Date'>Date</a> object containing the maximum month.</li>
 	<li><b>Number:</b> A number of months from today. For example 2 represents two months from today and -1 represents the last month.</li>
-	<li><b>String:</b> A string in the format defined by the <a href='#monthformat'>MonthFormat option</a> option, or a relative month. <br> Relative months must contain value and period pairs; valid periods are "m" for months, and "y" for years. For example, "+1y +3m" represents one year and three months from today.</li>
+	<li><b>String:</b> A string in the format defined by the <a href='#monthformat'>MonthFormat option</a> option, or a relative month. <p> Relative months must contain value and period pairs; valid periods are "m" for months, and "y" for years. For example, "+1y +3m" represents one year and three months from today.</p></li>
 </ul>
 </p>
 
@@ -767,7 +767,10 @@ $('.selector').MonthPicker({
 	OnBeforeMenuClose: function(event){
 		// Prevent the menu from closing when clicking on 
 		// the external button or one of it's child nodes.
-		if ( $.contains($('#extarnal_button', event.target)) ) {
+		//
+		// Note: The first argument of $.contains() must be a DOM element, 
+		// not a jQuery object or plain JavaScript object.
+		if ( $.contains($('#extarnal_button')[0], event.target) ) {
 			event.preventDefault();
 		}
 	}

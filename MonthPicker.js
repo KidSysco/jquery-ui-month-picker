@@ -212,7 +212,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             }
         },
 
-        _init: function () {
+        _create: function () {
             if (!jQuery.ui || !jQuery.ui.button || !jQuery.ui.datepicker) {
                 alert(_setupErr + 'The jQuery UI button and datepicker plug-ins must be loaded before MonthPicker is called.');
                 return false;

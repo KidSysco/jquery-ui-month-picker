@@ -30,7 +30,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             ShowAnim: ['fadeIn', 'slideDown', 'none'],
             HideAnim: ['fadeOut', 'slideUp', 'none']
     };
-	var _setOptionHooks = {
+    var _setOptionHooks = {
         ValidationErrorMessage: '_createValidationMessage',
         Disabled: '_setDisabledState', 
         ShowIcon: '_showIcon', 
@@ -40,7 +40,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
         StartYear: '_setPickerYear',
         MinMonth: '_setMinMonth',
         MaxMonth: '_setMaxMonth'
-	};
+    };
     var $noop = $.noop;
     var $datepicker = $.datepicker;
     var _openedInstance = null;

@@ -157,6 +157,7 @@ $('.selector').MonthPicker('option', 'Disabled', true );
     <h3>MinMonth</h3>
     Type: Date or Number or String<br />
     Default: null<br />
+    Since: 2.6<br />
     The minimum selectable month. When set to null, there is no minimum.
 </p>
 
@@ -188,6 +189,7 @@ $('.selector').MonthPicker('option', 'MinMonth', '+1y +3m');
     <h3>MaxMonth</h3>
     Type: Date or Number or String<br />
     Default: null<br />
+    Since: 2.6<br />
     The maximum selectable month. When set to null, there is no maximum.
 </p>
 

@@ -32,7 +32,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
         };
     var $noop = $.noop;
     var $datepicker = $.datepicker;
-    var _opendInstance = null;
+    var _openedInstance = null;
     
     function _makeDefaultButton(options) {
 	    // this refers to the associated input field.
@@ -382,8 +382,8 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             }
             
             // If there is an open menu close it first.
-            if (_opendInstance) {
-                _opendInstance.Close(event);
+            if (_openedInstance) {
+                _openedInstance.Close(event);
             }
 
             var _selectedYear = this.GetSelectedYear();
@@ -420,7 +420,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
                 _elem.focus();
                 
                 this._visible = true;
-                _opendInstance = this;
+                _openedInstance = this;
             }
             
             return false;
@@ -453,7 +453,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
                 }
                 
                 this._visible = false;
-                _opendInstance = null;
+                _openedInstance = null;
             }
         },
 
@@ -783,21 +783,24 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
         },
         
         _enableMonthButtons: function() {
-		   	var _curYear = this._getPickerYear();
-	        
-	        var _minMonth = this._toDate(this.options.MinMonth);
-	        var _maxMonth = this._toDate(this.options.MaxMonth);
-	        
-	        this._prevButton.button('option', 'disabled', _minMonth && _curYear == _minMonth.getFullYear());
-			this._nextButton.button('option', 'disabled', _maxMonth && _curYear == _maxMonth.getFullYear());
-	        
-	        for (var i = 0; i < 12; i++) {
-		        var _curMonth = new Date(_curYear, i);
+	        var _minMonth = this.options.MinMonth, _maxMonth = this.options.MaxMonth;
+	        if (_minMonth !== null || _maxMonth !== null) {
+		        var _curYear = this._getPickerYear();
 		        
-		        $(this._buttons[i]).button('option', 'disabled', (
-		        	(_minMonth && _curMonth < _minMonth) || 
-		        	(_maxMonth && _curMonth > _maxMonth)
-		        ));
+		        var _minDate = this._toDate(_minMonth);
+		        var _maxDate = this._toDate(_maxMonth);
+		        
+                this._prevButton.button('option', 'disabled', _minDate && _curYear == _minDate.getFullYear());
+                this._nextButton.button('option', 'disabled', _maxDate && _curYear == _maxDate.getFullYear());
+		        
+		        for (var i = 0; i < 12; i++) {
+			        // Disable the button if the month is not between the 
+			        // min and max interval.
+			        $(this._buttons[i]).button('option', 'disabled', (
+			        	(_minDate && new Date(_curYear, i, 1) < _minDate) || 
+			        	(_maxDate && new Date(_curYear, i, 0) > _maxDate)
+			        ));
+		        }
 	        }
 		},
         
@@ -806,7 +809,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
 		        return _val;
 	        } else if ($.isNumeric(_val)) {
 		        var _date = new Date;
-		        _date.setDate(0);
+		        _date.setDate( 0 );
 		        _date.setMonth( _date.getMonth() + parseInt(_val, 10) );
 		        return _date;
 	        } 
@@ -818,7 +821,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
 		    return this._parsePeriod(_val);
         },
         
-        _parsePeriod: function(_val) {
+        _parsePeriod: function(_val, _initDate) {
 	        // Parsing is done by replacing tokens in the value to form
 	        // a JSON object with it's keys and values reversed 
 	        // (example '+1y +2m' will turn into {"+1":"y","+2":"m"})
@@ -839,7 +842,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
 		        
 		        _date.setFullYear( _date.getFullYear() + (parseInt(obj.y, 10) || 0) );
 		        _date.setMonth( _date.getMonth() + (parseInt(obj.m, 10) || 0) );
-		        _date.setDate(0);
+		        _date.setDate( 0 );
 		        return _date;
             } catch (e) {
 	        	alert(_badPeriodStrErr.replace(/%/, _val));

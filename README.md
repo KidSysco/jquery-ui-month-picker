@@ -1,4 +1,4 @@
-<h1>The jQuery UI Month Picker Version 2.5</h1>
+<h1>The jQuery UI Month Picker Version 2.6</h1>
 <p>The jQuery UI Month Picker Plugin is designed to allow user input for only a month and year when only that input is 
 required. Clicking on the year, allows the user to jump ahead or back 5 years at a time. Clicking anywhere on the 
 page, except on the month picker menu itself, will cause the month picker to hide. The Month Picker has lots of options 
@@ -150,6 +150,68 @@ var disabled = $('.selector').MonthPicker('option', 'Disabled');
 
 //setter
 $('.selector').MonthPicker('option', 'Disabled', true );
+</pre>
+</p>
+
+<p>
+    <h3>MinMonth</h3>
+    Type: Date or Number or String<br />
+    Default: null<br />
+    The minimum selectable month. When set to null, there is no minimum.
+</p>
+
+<p>
+<b>Multiple types supported:</b>
+<ul>
+	<li><b>Date:</b> A <a href='https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Date'>Date</a> object containing the minimum month.</li>
+	<li><b>Number:</b> A number of months from today. For example 2 represents two months from today and -1 represents the last month.</li>
+	<li><b>String:</b> A string in the format defined by the <a href='#monthformat'>MonthFormat option</a>, or a relative month. Relative months must contain value and period pairs; valid periods are "m" for months, and "y" for years. For example, "+1y +3m" represents one year and three months from today.</li>
+</ul>
+</p>
+
+<p>
+    Disables past months upon init.
+    <pre>$('.selector').MonthPicker({ MinMonth: 0 });</pre>
+    
+    Get or set the option, after init. 
+<pre>
+//getter
+var minMonth = $('.selector').MonthPicker('option', 'MinMonth');
+
+// Set's the minimum selectable month to one year and three months
+// from today.
+$('.selector').MonthPicker('option', 'MinMonth', '+1y +3m');
+</pre>
+</p>
+
+<p>
+    <h3>MaxMonth</h3>
+    Type: Date or Number or String<br />
+    Default: null<br />
+    The maximum selectable month. When set to null, there is no maximum.
+</p>
+
+<p>
+<b>Multiple types supported:</b>
+<ul>
+	<li><b>Date:</b> A <a href='https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Date'>Date</a> object containing the minimum month.</li>
+	<li><b>Number:</b> A number of months from today. For example 2 represents two months from today and -1 represents the last month.</li>
+	<li><b>String:</b> A string in the format defined by the <a href='#monthformat'>MonthFormat option</a> option, or a relative month. Relative months must contain value and period pairs; valid periods are "m" for months, and "y" for years. For example, "+1y +3m" represents one year and three months from today.</li>
+</ul>
+</p>
+
+<p>
+    Disables future months upon init.
+    <pre>$('.selector').MonthPicker({ MaxMonth: 0 });</pre>
+    
+    Get or set the option, after init. 
+<pre>
+//getter
+var minMonth = $('.selector').MonthPicker('option', 'MaxMonth');
+
+// Set's the maximum selectable month to one year and three months
+// before today.
+$('.selector').MonthPicker('option', 'MaxMonth', '+1y +3m');
 </pre>
 </p>
 

@@ -780,8 +780,8 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
                 return _val;
             } else if ($.isNumeric(_val)) {
                 var _date = new Date;
-                _date.setDate( 0 );
                 _date.setMonth( _date.getMonth() + parseInt(_val, 10) );
+                _date.setDate( 0 );
                 return _date;
             }
 	         

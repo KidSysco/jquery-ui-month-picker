@@ -771,14 +771,19 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
         },
         
         _toDate: function(_val) {
-	        if (_val === null || _val instanceof Date) {
+	        if (_val === null) {
                 return _val;
-	        } else if ($.isNumeric(_val)) {
+            } else if (_val instanceof Date) {
+                _val = new Date(_val.getTime());
+                _val.setDate( 0 );
+
+                return _val;
+            } else if ($.isNumeric(_val)) {
                 var _date = new Date;
                 _date.setDate( 0 );
                 _date.setMonth( _date.getMonth() + parseInt(_val, 10) );
                 return _date;
-	        }
+            }
 	         
             var _date = this._parseMonth(_val);
             if (_date) {

@@ -271,7 +271,7 @@ $('.selector').MonthPicker({
     Create a button out of an image.
 <pre>
 $('.selector').MonthPicker({ 
-    Button: '&lt;img src="images/calendar.gif" title="Select date" />';
+    Button: '&lt;img src="images/calendar.gif" title="Select date" />'
 });
 </pre>
 

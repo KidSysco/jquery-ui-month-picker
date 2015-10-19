@@ -359,22 +359,22 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
                 return false;
             }
             
-            var _elem = this.element, _opts = this.options;
-            
-            // Allow the user to prevent opening the menu.
-            event = event || new $.Event();
-            if (_opts.OnBeforeMenuOpen.call(_elem[0], event) === false || event.isDefaultPrevented()) {
-                return false;
-            }
-            
-            // If there is an open menu close it first.
-            if (_openedInstance) {
-                _openedInstance.Close(event);
-            }
-
-            this._ajustYear(_opts);
-            
             if (!this._visible) {
+	            var _elem = this.element, _opts = this.options;
+            
+	            // Allow the user to prevent opening the menu.
+	            event = event || new $.Event();
+	            if (_opts.OnBeforeMenuOpen.call(_elem[0], event) === false || event.isDefaultPrevented()) {
+	                return false;
+	            }
+	
+	            this._ajustYear(_opts);
+            
+	            // If there is an open menu close it first.
+	            if (_openedInstance) {
+	                _openedInstance.Close(event);
+	            }
+            
                 var _menu = this._monthPickerMenu;
                 this._showMonths();
                 

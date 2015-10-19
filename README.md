@@ -1,4 +1,4 @@
-<h1>The jQuery UI Month Picker Version 2.5</h1>
+<h1>The jQuery UI Month Picker Version 2.6</h1>
 <p>The jQuery UI Month Picker Plugin is designed to allow user input for only a month and year when only that input is 
 required. Clicking on the year, allows the user to jump ahead or back 5 years at a time. Clicking anywhere on the 
 page, except on the month picker menu itself, will cause the month picker to hide. The Month Picker has lots of options 
@@ -154,6 +154,70 @@ $('.selector').MonthPicker('option', 'Disabled', true );
 </p>
 
 <p>
+    <h3>MinMonth</h3>
+    Type: Date or Number or String<br />
+    Default: null<br />
+    Since: 2.6<br />
+    The minimum selectable month. When set to null, there is no minimum.
+</p>
+
+<p>
+<b>Multiple types supported:</b>
+<ul>
+	<li><b>Date:</b> A <a href='https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Date'>Date</a> object containing the minimum month.</li>
+	<li><b>Number:</b> A number of months from today. For example 2 represents two months from today and -1 represents the last month.</li>
+	<li><b>String:</b> A string in the format defined by the <a href='#monthformat'>MonthFormat option</a>, or a relative month.<p> Relative months must contain value and period pairs; valid periods are "m" for months, and "y" for years. For example, "+1y +3m" represents one year and three months from today.</p></li>
+</ul>
+</p>
+
+<p>
+    Disables past months upon init.
+    <pre>$('.selector').MonthPicker({ MinMonth: 0 });</pre>
+    
+    Get or set the option, after init. 
+<pre>
+//getter
+var minMonth = $('.selector').MonthPicker('option', 'MinMonth');
+
+// Set's the minimum selectable month to one year and three months
+// from today.
+$('.selector').MonthPicker('option', 'MinMonth', '+1y +3m');
+</pre>
+</p>
+
+<p>
+    <h3>MaxMonth</h3>
+    Type: Date or Number or String<br />
+    Default: null<br />
+    Since: 2.6<br />
+    The maximum selectable month. When set to null, there is no maximum.
+</p>
+
+<p>
+<b>Multiple types supported:</b>
+<ul>
+	<li><b>Date:</b> A <a href='https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Date'>Date</a> object containing the maximum month.</li>
+	<li><b>Number:</b> A number of months from today. For example 2 represents two months from today and -1 represents the last month.</li>
+	<li><b>String:</b> A string in the format defined by the <a href='#monthformat'>MonthFormat option</a> option, or a relative month. <p> Relative months must contain value and period pairs; valid periods are "m" for months, and "y" for years. For example, "+1y +3m" represents one year and three months from today.</p></li>
+</ul>
+</p>
+
+<p>
+    Disables future months upon init.
+    <pre>$('.selector').MonthPicker({ MaxMonth: 0 });</pre>
+    
+    Get or set the option, after init. 
+<pre>
+//getter
+var minMonth = $('.selector').MonthPicker('option', 'MaxMonth');
+
+// Set's the maximum selectable month to one year and three months
+// before today.
+$('.selector').MonthPicker('option', 'MaxMonth', '+1y +3m');
+</pre>
+</p>
+
+<p>
     <h3>Button</h3>
     Types: 
     <ul>
@@ -207,7 +271,7 @@ $('.selector').MonthPicker({
     Create a button out of an image.
 <pre>
 $('.selector').MonthPicker({ 
-    Button: '&lt;img src="images/calendar.gif" title="Select date" />';
+    Button: '&lt;img src="images/calendar.gif" title="Select date" />'
 });
 </pre>
 
@@ -705,7 +769,10 @@ $('.selector').MonthPicker({
 	OnBeforeMenuClose: function(event){
 		// Prevent the menu from closing when clicking on 
 		// the external button or one of it's child nodes.
-		if ( $.contains($('#extarnal_button', event.target)) ) {
+		//
+		// Note: The first argument of $.contains() must be a DOM element, 
+		// not a jQuery object or plain JavaScript object.
+		if ( $.contains($('#extarnal_button')[0], event.target) ) {
 			event.preventDefault();
 		}
 	}
@@ -930,7 +997,7 @@ $('.selector').MonthPicker('option', 'OnAfterChooseYears', function(){ ... } );
 <h2>Plugin version</h2>
 The version can be determined using:
 <pre>
-$.KidSysco.MonthPicker.VERSION
+$.MonthPicker.VERSION
 </pre>
 If the value is undefined you are using an old version (2.3 and under).
 </p>

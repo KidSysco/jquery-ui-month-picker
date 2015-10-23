@@ -10,10 +10,15 @@ module.exports = function (grunt) {
           'MonthPicker.min.js': 'MonthPicker.js'
         }
       }
-    }
+    },
+    qunit: {
+    	all: ['test/test.html']
+  	}
   });
 
   grunt.loadNpmTasks('grunt-contrib-uglify');
+  grunt.loadNpmTasks('grunt-contrib-qunit');
 
-  grunt.registerTask('default', ['uglify']);
+  grunt.registerTask('default', ['qunit', 'uglify']);
+  grunt.registerTask('test', ['qunit']);
 };

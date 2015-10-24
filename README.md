@@ -4,7 +4,7 @@ required. Clicking on the year, allows the user to jump ahead or back 5 years at
 page, except on the month picker menu itself, will cause the month picker to hide. The Month Picker has lots of options 
 for date validation, setting the start year, using an icon button, input masking, internationalization and localization and more.</p>
  
--See a demo with unit tests running on jsFiddle at...
+-See a demo on jsFiddle at...
 -http://jsfiddle.net/kidsysco/JeZap/ 
 
 <h2>Prerequisites</h2>

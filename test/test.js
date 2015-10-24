@@ -296,6 +296,17 @@ test('Start Year Option Tests', function () {
     });
 //}
 
+QUnit.test('Only one open menu', function( assert ) {
+	$([FirstField, SecondField]).MonthPicker({
+		Animation: 'none' // Disable animation to make sure opening and closing the menu is synchronous.
+	});
+	
+	$(FirstField).MonthPicker('Open');
+	$(SecondField).MonthPicker('Open');
+	
+	assert.equal($('.month-picker').filter(':visible').length, 1, 'There is only one menu opened.' );
+});
+
 QUnit.test('MonthFormat Option Tests', function( assert ) {
 	// Create a month picker with a funky month format.
 	$(FormatField).val('10--->  {2010}').MonthPicker({

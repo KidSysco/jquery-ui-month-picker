@@ -9,16 +9,32 @@
 		
 		<script src="../bower_components/jquery/jquery.js"></script> <!-- Test against 1.9.1 -->
         <script src="../bower_components/jquery-ui/ui/jquery-ui.js"></script> <!-- Test against 1.9.2 -->
+        <script src="../bower_components/qunit/qunit/qunit.js"></script>
+        <script>			
+			if (typeof $ === 'undefined' || !$.ui || typeof QUnit === 'undefnied') {
+				var message = 
+					"Welcome to the jQuery UI Month Picker project.\n" + 
+		            "\n" + 
+	                "jQuery UI and QUnit are required for testing.\n" +
+	                "Please download node.js, 'cd /jquery-ui-month-picker' and run 'npm install'.\n" + 
+	                "\n" + 
+	                "Tests can be ran from the command line using the 'grunt test' command.";
+						
+				if (alert) {
+					alert(message);
+				}
+			
+				throw message;
+			}
+		</script>
         <script src="jquery.maskedinput.min.js"></script>
         <script src="../MonthPicker.js"></script>
-        
-        <script src="../bower_components/qunit/qunit/qunit.js"></script>
-        <script src="test.js"></script>
-        <script>
-	        $(function() {
+		<script>
+			$(function() {
 		       $(apiVersion).html("Version " + $.MonthPicker.VERSION);
 	        });
-	    </script>
+		</script>
+        <script src="test.js"></script>
     </head>
 <body>
 <div>

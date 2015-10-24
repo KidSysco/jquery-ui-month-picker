@@ -1,7 +1,14 @@
-
 /******* ***************** ********/
 /******* Unit Testing Code ********/
 /******* ***************** ********/
+/*
+ * Welcome to the jQuery UI Month Picker project.
+ *
+ * jQuery UI and QUnit are required for testing.
+ * Please download node.js, 'cd /jquery-ui-month-picker' and run 'npm install'.
+ *
+ * Tests can be ran from the command line using the 'grunt test' command.
+ */
 
 var _today = new Date();
 
@@ -558,5 +565,3 @@ QUnit.test('Disable button', function( assert ) {
 	$(NoButtonField).MonthPicker('ClearAllCallbacks');
 	$(NoButtonField).MonthPicker('Close');
 });
-
-/* End Month Picker Code */

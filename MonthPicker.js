@@ -189,6 +189,12 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
                         alert(_posErr);
                         return;
                     }
+                case 'MonthFormat':
+                	var date = this.GetSelectedDate();
+                	if (date) {
+                		this.element.val( this.FormatMonth(date, value) );
+                	}
+                	break;
             }
             
             // Make sure the user passed in a valid Animation, ShowAnim and HideAnim options values.

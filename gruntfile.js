@@ -17,7 +17,7 @@ module.exports = function (grunt) {
       
       demo: {
 	    files: {
-	      'demo/Demo.min.js': ['test/jquery-1.9.1.js', 'test/jquery-ui.js', 'test/jquery.maskedinput.min.js', 'MonthPicker.js']
+	      'demo/Demo.min.js': ['test/jquery.maskedinput.min.js', 'MonthPicker.js']
 	    }
       }
     },
@@ -25,7 +25,7 @@ module.exports = function (grunt) {
     cssmin: {
 	  demo: {
 	     files: {
-		   'demo/Demo.css': ['test/jquery-ui.css', 'css/MonthPicker.css', 'test/test.css']
+		   'demo/Demo.min.css': ['css/MonthPicker.css', 'test/test.css']
 	     }
 	  }
   	}

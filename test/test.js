@@ -65,7 +65,6 @@ test('Icon Option Tests', function () {
      var _picker = $('#Html5').MonthPicker({
             ShowIcon: false,
          	StartYear: 2027,
-            MonthFormat: 'yy-mm',
             OnAfterMenuOpen: function () {
                 start();
                 equal(_pickerMenu.css('display'), 'block', '#Html5 responded to a text input click event and showed the menu.');
@@ -82,8 +81,7 @@ test('Icon Option Tests', function () {
                 ok($('#MonthPicker_Html5').length === 0, "#Html5 has been destroyed.");
                 $('#Html5').MonthPicker({
                     ShowIcon: false,
-                    StartYear: 2027,
-            		MonthFormat: 'yy-mm'
+                    StartYear: 2027
                 });
             }
         });
@@ -312,12 +310,18 @@ QUnit.test('MonthFormat Option Tests', function( assert ) {
 	assert.equal(selectedDate.getMonth() + 1, 10, 'The selected month is October');
 	
 	// Change the format after init to sonething more appropriate.
-	$(FormatField).val('January 2012').MonthPicker('option', 'MonthFormat', 'MM yy');
+	$(FormatField).MonthPicker('option', 'MonthFormat', 'MM yy');
+	assert.equal($(FormatField).val(), 'October 2010', 'the text was updated to reflect the new format');
 	
 	// Make sure the plugin parsed the month according to the new format.
 	selectedDate = $(FormatField).MonthPicker('GetSelectedDate');
-	assert.equal(selectedDate.getFullYear(), 2012, 'The selected year is 2012');
-	assert.equal(selectedDate.getMonth() + 1, 1, 'The selected month is January');
+	assert.equal(selectedDate.getFullYear(), 2010, 'The selected year is still 2010');
+	assert.equal(selectedDate.getMonth() + 1, 10, 'The selected month is still October');
+	
+	$(FormatField).val('January 2012');
+	selectedDate = $(FormatField).MonthPicker('GetSelectedDate');
+	assert.equal(selectedDate.getFullYear(), 2012, 'The selected year changed to 2012');
+	assert.equal(selectedDate.getMonth() + 1, 1, 'The selected month changed to January');
 	
 	// Open the menu and choose April 2012.
 	$(FormatField).MonthPicker('Open');

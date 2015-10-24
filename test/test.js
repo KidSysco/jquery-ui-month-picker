@@ -530,11 +530,21 @@ QUnit.test('Disable button', function( assert ) {
 	// Don't leave the menu open (not really necessary).
 	$(NoButtonField).MonthPicker('Enable');
 	
+	// Fails the test if the menu was closed after clicking the input field again.
+	$(NoButtonField).MonthPicker({
+		OnBeforeMenuClose: function() {
+			assert.notOk(true, "The menu shouldn't closed after clicking the input field again.");
+		}
+	});
+	
 	// Make sure that clicking the input field still opens the menu.
 	$(NoButtonField).trigger('click');	
 	assert.ok($(MonthPicker_NoButtonField).is(':visible'), 'Clicking the input field still openes the correct menu.');
 	
+	$(NoButtonField).trigger('click');
+	
 	// Don't leave the menu open (not really necessary).
+	$(NoButtonField).MonthPicker('ClearAllCallbacks');
 	$(NoButtonField).MonthPicker('Close');
 });
 

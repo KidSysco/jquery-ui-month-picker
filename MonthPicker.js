@@ -371,11 +371,6 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
         },
         
         Open: function (event) {
-	        	            // If there is an open menu close it first.
-	            if (_openedInstance) {
-	                _openedInstance.Close(event);
-	            }
-	            
             if (!this.options.Disabled && !this._visible) {
 	            var _elem = this.element, _opts = this.options;
             
@@ -384,20 +379,25 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
 	            if (_opts.OnBeforeMenuOpen.call(_elem[0], event) === false || event.isDefaultPrevented()) {
 	                return false;
 	            }
-	
+	            
 				this._visible = true;
 	            this._ajustYear(_opts);
-            
-				_openedInstance = this;
-                var _menu = this._monthPickerMenu;
-                this._showMonths();
+
+	            // If there is an open menu close it first.
+	            if (_openedInstance) {
+	                _openedInstance.Close(event);
+	            }
+
+	            _openedInstance = this;
+	            var _menu = this._monthPickerMenu;
+	            this._showMonths();
                 
-                $(document).on('click' + _eventsNs + this.uuid, $.proxy(this.Close, this))
+	            $(document).on('click' + _eventsNs + this.uuid, $.proxy(this.Close, this))
                            .on('keydown' + _eventsNs + this.uuid, $.proxy(this._keyDown, this));
                 
-                // Trun off validation so that clicking one of the months
-                // won't blur the input field and trogger vlaidation
-                // befroe the month was chosen (click event was triggered).
+	            // Trun off validation so that clicking one of the months
+	            // won't blur the input field and trogger vlaidation
+	            // befroe the month was chosen (click event was triggered).
                 // It is turned back on when Hide() is called.
                 _elem.off('blur' + _eventsNs).focus();
                 

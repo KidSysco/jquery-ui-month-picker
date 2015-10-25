@@ -411,7 +411,6 @@ QUnit.test('Img tag tests', function( assert ) {
     $(ImgButtonField).MonthPicker('Disable');
     
     assert.ok( $(ImgButtonField).is(':disabled'), 'The input field was disabled.' );
-    assert.ok( $(ImgButton).is(':disabled'), 'The button was disabled.' );
     assert.ok( $(MonthPicker_ImgButtonField).is(':hidden'), 'The menu was closed.' );
     
     assert.equal( $(ImgButton).attr('src'), 'calendar-disabled.gif', 'The button has the disabled image.' );

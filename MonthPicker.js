@@ -404,11 +404,14 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
                 var _anim = _opts.ShowAnim || _opts.Animation,
                     _noAnim = _anim === 'none';
                 
-                _menu[ _noAnim ? 'show' : _anim ]({
+                // jQuery UI overrides jQuery.show and dosen't 
+                // call the start callback.
+                // see: http://api.jqueryui.com/show/
+                _menu[ _noAnim ? 'fadeIn' : _anim ]({
                    duration: _noAnim ? 0 : this._duration(),
                    start: $.proxy(this._position, this, _menu),
                    complete: $.proxy(_opts.OnAfterMenuOpen, _elem[0])
-                });                
+                }); 
             }
             
             return false;

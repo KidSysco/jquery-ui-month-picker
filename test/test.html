@@ -1,17 +1,20 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>jQuery UI MonthPicker test page</title>
-		<link rel="stylesheet" type="text/css" href="../bower_components/jquery-ui/themes/smoothness/jquery-ui.css">
-		<link rel="stylesheet" type="text/css" href="../css/MonthPicker.css" />
-		<link rel="stylesheet" type="text/css" href="test.css" />
-		<link rel="stylesheet" href="../bower_components/qunit/qunit/qunit.css" />
-		
-		<script src="../bower_components/jquery/jquery.js"></script> <!-- Test against 1.9.1 -->
-        <script src="../bower_components/jquery-ui/ui/jquery-ui.js"></script> <!-- Test against 1.9.2 -->
-        <script src="../bower_components/qunit/qunit/qunit.js"></script>
-        <script>			
-			if (typeof $ === 'undefined' || !$.ui || typeof QUnit === 'undefnied') {
+
+<head>
+    <title>jQuery UI MonthPicker test page</title>
+    <link rel="stylesheet" type="text/css" href="../bower_components/jquery-ui/themes/smoothness/jquery-ui.css">
+    <link rel="stylesheet" type="text/css" href="../css/MonthPicker.css" />
+    <link rel="stylesheet" type="text/css" href="test.css" />
+    <link rel="stylesheet" href="../bower_components/qunit/qunit/qunit.css" />
+
+    <script src="../bower_components/jquery/jquery.js"></script>
+    <!-- Test against 1.9.1 -->
+    <script src="../bower_components/jquery-ui/ui/jquery-ui.js"></script>
+    <!-- Test against 1.9.2 -->
+    <script src="../bower_components/qunit/qunit/qunit.js"></script>
+    <script>
+        if (typeof $ === 'undefined' || !$.ui || typeof QUnit === 'undefnied') {
 				var message = 
 					"Welcome to the jQuery UI Month Picker project.\n" + 
 		            "\n" + 
@@ -26,34 +29,31 @@
 			
 				throw message;
 			}
-		</script>
-        <script src="jquery.maskedinput.min.js"></script>
-        <script src="../MonthPicker.js"></script>
-		<script>
-			$(function() {
+    </script>
+    <script src="jquery.maskedinput.min.js"></script>
+    <script src="../MonthPicker.js"></script>
+    <script>
+        $(function() {
 		       $(apiVersion).html("Version " + $.MonthPicker.VERSION);
 	        });
-		</script>
-        <script src="test.js"></script>
-    </head>
+    </script>
+    <script src="test.js"></script>
+</head>
+
 <body>
-<div>
- <h2 id='apiVersion'>Version @VERSION</h2>
+    <div>
+        <h2 id='apiVersion'>Version @VERSION</h2>
 
-<div id="qUnitOutput" style="margin-bottom: 25px;">
-     <h1 id="qunit-header">
-            qUnit Testing Output</h1>
+        <div class="demo"> <b>.position() Integration Demonstration</b>
 
-     <h2 id="qunit-banner">
-        </h2>
-
-    <div id="qunit-testrunner-toolbar"></div>
-     <h2 id="qunit-userAgent">
-        </h2>
-
-    <ol id="qunit-tests"></ol>
-    <div id="qunit-fixture">test markup</div>
-</div>
+            <br />This demonstrates the Month Picker integration with the optional .position() plugin. The right aligned input
+            helps to show how the menu will not allow the edges of the window to hide it's appearance. This test should remain
+            first in the list so that no automated scrolling is needed.
+            <p class="text-right">
+                <br />Choose a month:
+                <input id="PositionDemo" type="text" value="02/2012" />
+            </p>
+        </div>
 
         <p class="demo"> <b>Button Demonstration</b>
 
@@ -74,20 +74,20 @@
             <button id='SelectorButton'>First open button</button>
             <br>
             <button id='OtherSelectorButton'>Second open button</button>
-            <br>
-            No button:
+            <br> No button:
             <input id="NoButtonField" />
         </p>
-        
-        <p class="demo"> <b>Month format test</b>
-	        Choose a Month: <input id="FormatField" />
+
+        <p class="demo"> <b>Month format test</b> Choose a Month:
+            <input id="FormatField" />
         </p>
-        
-        <p class="demo"> <b>Only one picker open test</b>
-	        First picker: <input id="FirstField" /><br />
-	        Second picker: <input id="SecondField" />
+
+        <p class="demo"> <b>Only one picker open test</b> First picker:
+            <input id="FirstField" />
+            <br /> Second picker:
+            <input id="SecondField" />
         </p>
-        
+
         <p class="demo"> <b>MinMonth and MaxMonth Demonstration</b>
 
             <br />This demonstrates how you can limit the user to choosing months within a given interval.
@@ -106,21 +106,25 @@
         </p>
         <p class="demo"> <b>Start Year Demonstration</b>
 
-            <br />This demonstrates how the plugin will default to the year specified in the text box. Changing the year in the text box will result in a new default year for the chooser and if no date is selected then the default year is the current year.
+            <br />This demonstrates how the plugin will default to the year specified in the text box. Changing the year in the
+            text box will result in a new default year for the chooser and if no date is selected then the default year is
+            the current year.
             <br />
             <br />Choose a month:
             <input id="StartYearDemo" type="text" value="01/2025" />
         </p>
         <p class="demo"> <b>Override Start Year Demonstration</b>
 
-            <br />This demonstrates how the MonthPicker can be configured to override the start year default behavior. This MonthPicker will start on 2023 no matter which date is currently selected, even if no date is specified.
+            <br />This demonstrates how the MonthPicker can be configured to override the start year default behavior. This MonthPicker
+            will start on 2023 no matter which date is currently selected, even if no date is specified.
             <br />
             <br />Choose a month:
             <input id="OverrideStartYear" type="text" />
         </p>
         <p class="demo"> <b>Get Month/Year & Validation API Demonstration</b>
 
-            <br />This demonstrates API usage for the GetSelectedMonthYear(), GetSelectedYear() and GetSelectedMonth() function calls which will also perform date validation. Clear() will clear the text field and any validation messages.
+            <br />This demonstrates API usage for the GetSelectedMonthYear(), GetSelectedYear() and GetSelectedMonth() function
+            calls which will also perform date validation. Clear() will clear the text field and any validation messages.
             <br />
             <br />Choose a month:
             <input id="GetYearDemo" class="GetYearDemo" type="text" value="02/2012" />
@@ -143,7 +147,8 @@
         </p>
         <p class="demo"> <b>Digital Bush Integration Demonstration</b>
 
-            <br />This demonstrates how the MonthPicker plugin integrates with the <a href="http://digitalbush.com/" target="_new">Digital Bush Plugin for Input Masking</a> as well as the html 5 placeholder attribute to simulate watermarking. Try to type an invalid date and try the Get Month/Year button to fire off validation.
+            <br />This demonstrates how the MonthPicker plugin integrates with the <a href="http://digitalbush.com/" target="_new">Digital Bush Plugin for Input Masking</a>            as well as the html 5 placeholder attribute to simulate watermarking. Try to type an invalid date and try the
+            Get Month/Year button to fire off validation.
             <br />
             <br />Type in a month/year:
             <br />
@@ -157,7 +162,7 @@
             <button type="button" onclick="$('.digital-bush').MonthPicker('Clear');">Clear All</button>
             <button type="button" onclick="alert($('#DigitalBushBoth').MonthPicker('GetSelectedMonthYear'));">Get Month/Year</button>
         </p>
-        
+
         <p class="demo"> <b>jQuery UI Dialog Integration Demonstration</b>
 
             <br />This demonstrates the Month Picker running inside of the jQuery UI Modal Dialog.
@@ -165,28 +170,39 @@
             <br />
             <button type="button" id="LaunchDialog" onclick="$('#Modal').dialog('open');">Launch Dialog</button>
         </p>
-        
-        <div class="demo-position"> <b>.position() Integration Demonstration</b>
 
-            <br />This demonstrates the Month Picker integration with the optional .position() plugin.
-        The right aligned input helps to show how the menu will not allow the edges of the window to hide it's appearance. The menu will position itself so that it is always visible. The same effect can be seen on every other month picker on this page by scrolling down low enough so that the menu shows above the input instead of below.
-            <p class="text-right">
-            <br />Choose a month:
-            <input id="PositionDemo" type="text" value="02/2012" />
-            </p>
-        </div>
         <p class="demo"> <b>HTML 5 Month Input Type Support</b>
 
-            <br />This demonstrates how the MonthPicker will work with the HTML 5 Month Input Type. View this section using Chrome to see Google's latest implementation in comparison.
+            <br />This demonstrates how the MonthPicker will work with the HTML 5 Month Input Type. View this section using Chrome
+            to see Google's latest implementation in comparison.
             <br />
+            <br /> Jquery UI Month Picker:
+            <input id="Html5" type="month" class="" />
             <br />
-            Jquery UI Month Picker: <input id="Html5" type="month" class="" /> <br /> <br />
-            Chrome Month Picker: <input id="ChromeMonthPicker" type="month" class="" /> 
+            <br /> Chrome Month Picker:
+            <input id="ChromeMonthPicker" type="month" class="" />
         </p>
-</div>
+    </div>
 
-<div id="Modal">Test:
-    <input id="DialogDemo" type="text" />
-</div>
+    <div id="Modal">Test:
+        <input id="DialogDemo" type="text" />
+    </div>
+
+    <div id="qUnitOutput" style="margin-bottom: 25px;">
+        <h1 id="qunit-header">
+            qUnit Testing Output</h1>
+
+        <h2 id="qunit-banner">
+        </h2>
+
+        <div id="qunit-testrunner-toolbar"></div>
+        <h2 id="qunit-userAgent">
+        </h2>
+
+        <ol id="qunit-tests"></ol>
+        <div id="qunit-fixture">test markup</div>
+    </div>
+
 </body>
+
 </html>

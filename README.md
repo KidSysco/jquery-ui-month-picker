@@ -986,20 +986,28 @@ $('.selector').MonthPicker('option', 'OnAfterChooseYear', function(){ ... } );
     <pre>$('.selector').MonthPicker({ OnAfterChooseYears: function(){ ... } });</pre>
     
     Get or set the callback function, after init. 
-<pre>
-//getter
-var disabled = $('.selector').MonthPicker('option', 'OnAfterChooseYears');
-
-//setter
-$('.selector').MonthPicker('option', 'OnAfterChooseYears', function(){ ... } );
-</pre>
+    <pre>
+    //getter
+    var disabled = $('.selector').MonthPicker('option', 'OnAfterChooseYears');
+    
+    //setter
+    $('.selector').MonthPicker('option', 'OnAfterChooseYears', function(){ ... } );
+    </pre>
+</p>
 
 <h2>Plugin version</h2>
 The version can be determined using:
 <pre>
 $.MonthPicker.VERSION
 </pre>
+<p>
 If the value is undefined you are using an old version (2.3 and under).
 </p>
+
+<h2>Month Picker Development Kit</h2>
+<p>This repo includes references for <a ref="https://nodejs.org/en/">Node.js</a>, <a href="https://www.npmjs.com/">NPM</a>, <a href="http://gruntjs.com/">Grunt</a> and <a href="http://bower.io/">Bower</a> to facilitate further development and testing in the jQuery UI Month Picker project.</p>
+<p>npm install<br /> This command will install all required dependencies including all resources needed from Bower.</p>
+<p>grunt<br /> This command will re-compile minified versions of the .js and .css codes before running both through the QUnit tests tests in a headless <a href="http://phantomjs.org/">PhantomJS</a> instance.</p>
+<p>grunt test<br /> This command will simply re-run all QUnit tests in a headless <a href="http://phantomjs.org/">PhantomJS</a> instance.</p>
 
 

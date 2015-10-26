@@ -1,0 +1,24 @@
+{
+  "name": "jquery-ui-month-picker",
+  "version": "2.6.1",
+  "homepage": "https://github.com/KidSysco/jquery-ui-month-picker",
+  "authors": [
+    "Ryan Segura <kidsysco@gmail.com>",
+    "Benjamin Albert <benjamin_a5@yahoo.com>"
+  ],
+  "description": "jQuery UI Month Picker plugin",
+  "main": "MonthPicker.js",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "1.9.1",
+    "jquery-ui": "1.9.2",
+    "qunit": "1.19.0"
+  }
+}

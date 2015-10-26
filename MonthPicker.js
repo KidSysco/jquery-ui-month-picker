@@ -1,7 +1,7 @@
 /*
 https://github.com/KidSysco/jquery-ui-month-picker/
 
-Version 2.6
+Version 2.6.1
 
 This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
@@ -41,6 +41,16 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
         MinMonth: '_setMinMonth',
         MaxMonth: '_setMaxMonth'
     };
+    
+    // This test must be run before any rererence is made to jQuery.
+    // In case the user didn't load jQuery or jQuery UI the plugin
+    // will fail before it get's to this test + there is no reason
+    // to perform this test for every MonthPicker instance being created.
+    if (!$ || !$.ui || !$.ui.button || !$.ui.datepicker) {
+        alert(_setupErr + 'The jQuery UI button and datepicker plug-ins must be loaded before MonthPicker is called.');
+        return false;
+    }
+    
     var $noop = $.noop;
     var $datepicker = $.datepicker;
     var _openedInstance = null;
@@ -159,7 +169,12 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             $(document).off('click' + _eventsNs + this.uuid);
 
             this._monthPickerMenu.remove();
-            this._monthPickerButton.remove();
+            
+            var _button = this._monthPickerButton.off('click' + _eventsNs);
+            if (this._removeOldBtn) {
+	            _button.remove();
+            }
+            
             this._validationMessage.remove();
         },
 
@@ -174,6 +189,12 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
                         alert(_posErr);
                         return;
                     }
+                case 'MonthFormat':
+                	var date = this.GetSelectedDate();
+                	if (date) {
+                		this.element.val( this.FormatMonth(date, value) );
+                	}
+                	break;
             }
             
             // Make sure the user passed in a valid Animation, ShowAnim and HideAnim options values.
@@ -188,14 +209,9 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             this._super(key, value);
             
             _setOptionHooks[key] ? this[ _setOptionHooks[key] ](value) : 0;
-         },
+        },
 
         _create: function () {
-            if (!jQuery.ui || !jQuery.ui.button || !jQuery.ui.datepicker) {
-                alert(_setupErr + 'The jQuery UI button and datepicker plug-ins must be loaded before MonthPicker is called.');
-                return false;
-            }
-
             var _el = this.element, _opts = this.options;
             // According to http://www.w3.org/TR/html-markup/input.html#input
             // An input element with no type attribute specified represents the same thing as an
@@ -213,7 +229,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
                 return false;
             }
 
-            if (!jQuery.mask && _opts.UseInputMask) {
+            if (!$.mask && _opts.UseInputMask) {
                 alert(_setupErr + 'The UseInputMask option is set but the Digital Bush Input Mask jQuery Plugin is not loaded. Get the plugin from http://digitalbush.com/');
                 return false;
             }
@@ -355,11 +371,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
         },
         
         Open: function (event) {
-            if (this.options.Disabled) {
-                return false;
-            }
-            
-            if (!this._visible) {
+            if (!this.options.Disabled && !this._visible) {
 	            var _elem = this.element, _opts = this.options;
             
 	            // Allow the user to prevent opening the menu.
@@ -367,39 +379,39 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
 	            if (_opts.OnBeforeMenuOpen.call(_elem[0], event) === false || event.isDefaultPrevented()) {
 	                return false;
 	            }
-	
+	            
+				this._visible = true;
 	            this._ajustYear(_opts);
-            
+
 	            // If there is an open menu close it first.
 	            if (_openedInstance) {
 	                _openedInstance.Close(event);
 	            }
-            
-                var _menu = this._monthPickerMenu;
-                this._showMonths();
+
+	            _openedInstance = this;
+	            var _menu = this._monthPickerMenu;
+	            this._showMonths();
                 
-                $(document).on('click' + _eventsNs + this.uuid, $.proxy(this.Close, this))
+	            $(document).on('click' + _eventsNs + this.uuid, $.proxy(this.Close, this))
                            .on('keydown' + _eventsNs + this.uuid, $.proxy(this._keyDown, this));
                 
-                // Trun off validation so that clicking one of the months
-                // won't blur the input field and trogger vlaidation
-                // befroe the month was chosen (click event was triggered).
+	            // Trun off validation so that clicking one of the months
+	            // won't blur the input field and trogger vlaidation
+	            // befroe the month was chosen (click event was triggered).
                 // It is turned back on when Hide() is called.
-                _elem.off('blur' + _eventsNs);
+                _elem.off('blur' + _eventsNs).focus();
                 
                 var _anim = _opts.ShowAnim || _opts.Animation,
                     _noAnim = _anim === 'none';
                 
-                _menu[ _noAnim ? 'show' : _anim ]({
+                // jQuery UI overrides jQuery.show and dosen't 
+                // call the start callback.
+                // see: http://api.jqueryui.com/show/
+                _menu[ _noAnim ? 'fadeIn' : _anim ]({
                    duration: _noAnim ? 0 : this._duration(),
                    start: $.proxy(this._position, this, _menu),
                    complete: $.proxy(_opts.OnAfterMenuOpen, _elem[0])
-                });
-                
-                _elem.focus();
-                
-                this._visible = true;
-                _openedInstance = this;
+                }); 
             }
             
             return false;
@@ -416,6 +428,8 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
                     return;
                 }
                 
+                this._visible = false;
+                _openedInstance = null;
                 $(document).off('keydown' + _eventsNs + this.uuid)
                            .off('click' + _eventsNs + this.uuid);
                 
@@ -430,9 +444,6 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
                 } else {
                     _menu[ _anim ](this._duration(), _callback);                
                 }
-                
-                this._visible = false;
-                _openedInstance = null;
             }
         },
 
@@ -493,7 +504,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
         _createButton: function() {
 	        if (!this.options.ShowIcon) return;
 	        
-	        var _oldButton = this._monthPickerButton;
+	        var _oldButton = this._monthPickerButton.off(_eventsNs);
             var _btnOpt = this.options.Button, _elem = this.element;
             
             if ($.isFunction(_btnOpt)) {
@@ -823,5 +834,5 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
     });
     
     // Added in version 2.4.
-    $.MonthPicker.VERSION = '2.6';
+    $.MonthPicker.VERSION = '2.6.1';
 }(jQuery, window, document));

@@ -577,9 +577,7 @@ QUnit.test('Month buttons are disabled', function (assert) {
 	
 	// Try to click the disabled buttons.
 	var buttons = menu.find('.month-picker-month-table button');
-	for (var i = 1; i <= 9; i++) {
-		$(buttons[i-1]).trigger('click');
-	}
+    $(buttons.slice(0, 8)).trigger('click');
 	
 	// make sure that the date didn't change as a 
 	// result of clicking the disabled button.
@@ -608,12 +606,13 @@ QUnit.test('Month buttons are disabled', function (assert) {
 	menu.find('.previous-year>button').trigger('click');
 	
 	var pickerYear = parseInt(menu.find('.year').text(), 10);
-	assert.equal(pickerYear, 2015, 'clicking previous year teice keept the year at 2015');
+	assert.equal(pickerYear, 2015, 'clicking previous year tweice keept the year at 2015');
 	
-	// make sure the dates before the minimum date are not still not selectable.
-	for (var i = 1; i <= 9; i++) {
-		$(buttons[i-1]).trigger('click');
-	}
+	// Make sure that month buttons before the minimum month
+    // are still disabled after navigating back to 2015
+    // by clicking the buttons and checking that the 
+    // selected date didn't change.
+    $(buttons.slice(0, 8)).trigger('click');
 	
 	var selectedMonth = $(field).MonthPicker('GetSelectedDate');
 	assert.equal( selectedMonth.getFullYear(), 2016, "Clciking the buttons didn't change the selected year");
@@ -621,12 +620,40 @@ QUnit.test('Month buttons are disabled', function (assert) {
 	assert.equal( field.val(), '01/2016', "Clciking the buttons didn't change the fields value" );
 	
 	// Make sure clicking October (the minumum month) works as expected.
-	menu.find('.button-10').trigger('click');
+	$(buttons[9]).trigger('click');
 	
 	var selectedMonth = $(field).MonthPicker('GetSelectedDate');
 	assert.equal( selectedMonth.getFullYear(), 2015, 'Clciking the minimum month chose the correct year');
 	assert.equal( selectedMonth.getMonth() + 1, 10, 'Clciking the minimum month chose the correct month');
 	assert.equal( field.val(), '10/2015', 'Clciking the minimum month set the field value to 10/2015' );
-	
+
+    // Destroy the plugin so we can use the field over again
+    // in another Min/MaxMonth test.
 	field.MonthPicker('destroy');
+});
+
+QUnit.test('Year buttons are disabled', function (assert) {
+    var field = $(RistrictMonthField).val('12/2015').MonthPicker({
+        Animation: 'none', // Disable animation to make sure opening and closing the menu is synchronous.
+        
+        MinMonth: '10/2015'
+    });
+    
+    field.MonthPicker('Open');
+
+    var menu = $(MonthPicker_RistrictMonthField);
+
+    // Click the year title to show the years.
+    menu.find('.year-title').trigger('click');
+
+    // Make sure we are in years view.
+    var buttons = menu.find('.month-picker-month-table button');
+    var firstVisibleYear = parseInt($(buttons[0]).text(), 10);
+    assert.ok(firstVisibleYear, 'The menu is showing the year table');
+
+    // Make sure the years before the minimum year are disabled.
+    var lastDisabledIndex = (2015 - firstVisibleYear);
+    var disabledButttons = buttons.slice(0, lastDisabledIndex);
+    var hasEnabledBttons = $( disabledButttons ).is(':not(.ui-button-disabled)');
+    assert.ok(!hasEnabledBttons, 'All years before the minumum year are disabled');
 });

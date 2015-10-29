@@ -579,9 +579,9 @@ QUnit.test('Month buttons are disabled', function (assert) {
 	var buttons = menu.find('.month-picker-month-table button');
     $(buttons.slice(0, 8)).trigger('click');
 	
-	// make sure that the date didn't change as a 
+	// Make sure that the date didn't change as a 
 	// result of clicking the disabled button.
-	var selectedMonth = $(field).MonthPicker('GetSelectedDate');
+	var selectedMonth = field.MonthPicker('GetSelectedDate');
 	assert.equal( selectedMonth.getFullYear(), 2015, 'The selected year is still 2015');
 	assert.equal( selectedMonth.getMonth() + 1, 12, 'The selected month is still December');
 	assert.equal( field.val(), '12/2015', 'The input field still has the value 12/2015' );
@@ -596,7 +596,7 @@ QUnit.test('Month buttons are disabled', function (assert) {
 	
 	// Make sure clicking the first button selected January 2016.
 	menu.find('.button-1').trigger('click');
-	var selectedMonth = $(field).MonthPicker('GetSelectedDate');
+	var selectedMonth = field.MonthPicker('GetSelectedDate');
 	assert.equal( selectedMonth.getFullYear(), 2016, 'The selected year is still 2016');
 	assert.equal( selectedMonth.getMonth() + 1, 1, 'The selected month is still January');
 	assert.equal( field.val(), '01/2016', 'The input field has the value 01/2016' );
@@ -608,21 +608,25 @@ QUnit.test('Month buttons are disabled', function (assert) {
 	var pickerYear = parseInt(menu.find('.year').text(), 10);
 	assert.equal(pickerYear, 2015, 'clicking previous year tweice keept the year at 2015');
 	
-	// Make sure that month buttons before the minimum month
+	// Make sure that month buttons before October (the minimum month)
     // are still disabled after navigating back to 2015
     // by clicking the buttons and checking that the 
     // selected date didn't change.
     $(buttons.slice(0, 8)).trigger('click');
 	
-	var selectedMonth = $(field).MonthPicker('GetSelectedDate');
+	var selectedMonth = field.MonthPicker('GetSelectedDate');
 	assert.equal( selectedMonth.getFullYear(), 2016, "Clciking the buttons didn't change the selected year");
 	assert.equal( selectedMonth.getMonth() + 1, 1, "Clciking the buttons didn't change the selected month");
 	assert.equal( field.val(), '01/2016', "Clciking the buttons didn't change the fields value" );
 	
+    // Make sure the buttons after October (the minumum month) are enabled.
+    var buttonsDisabled = $( buttons.slice(9) ).is('.ui-button-disabled');
+    assert.notOk(buttonsDisabled, 'All buttons after the minumum month are enabled');
+
 	// Make sure clicking October (the minumum month) works as expected.
 	$(buttons[9]).trigger('click');
 	
-	var selectedMonth = $(field).MonthPicker('GetSelectedDate');
+	var selectedMonth = field.MonthPicker('GetSelectedDate');
 	assert.equal( selectedMonth.getFullYear(), 2015, 'Clciking the minimum month chose the correct year');
 	assert.equal( selectedMonth.getMonth() + 1, 10, 'Clciking the minimum month chose the correct month');
 	assert.equal( field.val(), '10/2015', 'Clciking the minimum month set the field value to 10/2015' );
@@ -633,10 +637,10 @@ QUnit.test('Month buttons are disabled', function (assert) {
 });
 
 QUnit.test('Year buttons are disabled', function (assert) {
-    var field = $(RistrictMonthField).val('12/2015').MonthPicker({
+    var field = $(RistrictMonthField).val('02/2015').MonthPicker({
         Animation: 'none', // Disable animation to make sure opening and closing the menu is synchronous.
         
-        MinMonth: '10/2015'
+        MaxMonth: '10/2015'
     });
     
     field.MonthPicker('Open');
@@ -651,9 +655,110 @@ QUnit.test('Year buttons are disabled', function (assert) {
     var firstVisibleYear = parseInt($(buttons[0]).text(), 10);
     assert.ok(firstVisibleYear, 'The menu is showing the year table');
 
-    // Make sure the years before the minimum year are disabled.
-    var lastDisabledIndex = (2015 - firstVisibleYear);
-    var disabledButttons = buttons.slice(0, lastDisabledIndex);
-    var hasEnabledBttons = $( disabledButttons ).is(':not(.ui-button-disabled)');
-    assert.ok(!hasEnabledBttons, 'All years before the minumum year are disabled');
+    // Make sure the years after the maximum year are disabled.
+    var firstDisabledIndex = (2015 - firstVisibleYear) + 1;
+    var disabledButttons = buttons.slice(firstDisabledIndex);
+    var hasEnabledBttons = $( disabledButttons )
+        .trigger('click')
+        .is(':not(.ui-button-disabled)');
+
+    assert.ok(!hasEnabledBttons, 'All year buttons after the maximum year are disabled');
+
+    // Make sure that clicking the disabled buttons didn't select
+    // a year.
+    var firstVisibleYear = parseInt($(buttons[0]).text(), 10);
+    assert.ok(firstVisibleYear, "Clciking the disabled buttons didn't take us to month view");
+
+    // Make sure the next years button is disabled.
+    var nextYearsButton = menu.find('.next-year>button');
+    var isDisabled = nextYearsButton
+        .trigger('click')
+        .is('.ui-button-disabled');
+
+    assert.ok(isDisabled, 'The next year button is disabled');
+    var newFirstYrar = parseInt($(buttons[0]).text(), 10);
+    assert.equal(newFirstYrar, firstVisibleYear, "Clicking next year didn't change the year");
+
+    var previousYearsButton = menu.find('.previous-year>button');
+    // Keep going back until there are no disabled buttons.
+    // We count to 10 to avoid an infinite loop in case there's
+    // a bug where we are going back in time but the the buttons stay disabled.
+    for (var i = 1; i <= 10; i++) {
+        // Make sure we can click the previous years button.
+        previousYearsButton.trigger('click');
+
+        newFirstYrar = parseInt($(buttons[0]).text(), 10);
+        var wentBack = firstVisibleYear > newFirstYrar;
+        assert.ok(wentBack, 'The plugin responsed to clicking previous years');
+        if (!wentBack) {
+            // Avoid failing on the same problem multiple times.
+            return;
+        }
+
+        firstVisibleYear = newFirstYrar;
+
+        // We still have diabled button, make sure they are the right ones.
+        firstDisabledIndex = Math.min( (2015 - firstVisibleYear) + 1, 12 );
+        disabledButttons = buttons.slice(firstDisabledIndex);
+        hasEnabledBttons = $( disabledButttons )
+            .is(':not(.ui-button-disabled)');
+
+        assert.ok(!hasEnabledBttons, 'All year buttons after the maximum year are still disabled');
+
+        // Check if we still have diabled button.
+        if (!buttons.is('.ui-button-disabled')) {
+            // We don't have disabled buttons, make sure both next and previous 
+            // years buttons are enabled.
+            assert.ok(!previousYearsButton.is('.ui-button-disabled'), 'previous year button is enabled');
+            assert.ok(!nextYearsButton.is('.ui-button-disabled'), 'next year button is enabled');
+            break;
+        }
+    }
+
+    // Make sure we didn't click back 10 times and we 
+    // still have disabled buttons.
+    assert.ok(!buttons.is('.ui-button-disabled'), 'All year buttons are enabled after clicking previous years ' + i + ' times');
+
+    // Make sure we can click enabled months.
+    var firstVisibleYear = parseInt($(buttons[0]).text(), 10);
+    $(buttons[0]).trigger('click');
+
+    assert.equal($(buttons[0]).text(), $.MonthPicker.i18n.months[0], 'Clicking the ' + firstVisibleYear + ' year button showed the months');
+
+    // Make sure none of the buttons are disabled in the month view.
+    var hasDidabledButtons = menu.find('button').is('.ui-button-disabled');
+    assert.ok(!hasDidabledButtons, 'All buttons are enabled');
+
+    // Click the year title to show the years menu.
+    menu.find('.year-title').trigger('click');
+
+    // Keeps clicking next years until we reach the disabled years.
+    for (var i = 1; !buttons.is('.ui-button-disabled') && i <= 10; i++) {
+        nextYearsButton.trigger('click');
+    }
+
+    // Make sure were on the last page.
+    assert.ok(buttons.is('.ui-button-disabled'), 'Clciking next took us to the last page');
+    assert.ok(nextYearsButton.is('.ui-button-disabled'), 'The next years button is disabled');
+    assert.ok(!previousYearsButton.is('.ui-button-disabled'), 'The previous years button is enabled');
+
+    firstVisibleYear = parseInt($(buttons[0]).text(), 10);
+    nextYearsButton.trigger('click');
+    newFirstYrar = parseInt($(buttons[0]).text(), 10);
+    assert.equal(newFirstYrar, firstVisibleYear, 'Clicking the next years button keept us on the same page');
+
+    // Click on 2015 and make sure we have disabled button.
+    var firstVisibleYear = parseInt($(buttons[0]).text(), 10);
+    $(buttons[(2015 - firstVisibleYear)]).trigger('click');
+
+    assert.ok(buttons.is('.ui-button-disabled'), 'Clciking the maximum year shows disabled month buttons');
+    $(buttons[(2015 - firstVisibleYear)]).trigger('click');
+
+    // Click October and make sure were in month view.
+    $(buttons[9]).trigger('click');
+    assert.equal(field.val(), '10/2015', 'Clicking October (the maximum month) sets the expected value');
+
+    // Destroy the plugin so we can use the field over again
+    // in another Min/MaxMonth test.
+    field.MonthPicker('destroy');
 });

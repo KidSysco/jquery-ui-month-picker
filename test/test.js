@@ -762,3 +762,76 @@ QUnit.test('Year buttons are disabled', function (assert) {
     // in another Min/MaxMonth test.
     field.MonthPicker('destroy');
 });
+
+// Here we make sure that if the user types in a year
+// that is outside the restricted range the menu will
+// open in the closest year that is within range, for example:
+// 
+// If the MinMonth is: 10/2015 and the user types in 11/2020
+// the menu will open and show the year 2015.
+QUnit.test('Menu opens within range', function (assert) {
+    var field = $(RistrictMonthField).MonthPicker({
+        Animation: 'none', // Disable animation to make sure opening and closing the menu is synchronous.
+        
+        MinMonth: new Date(2013, 10 - 1),
+        MaxMonth: new Date(2016, 11 - 1)
+    });
+    
+    var menu = $(MonthPicker_RistrictMonthField);
+    
+    // Make sure the menu opens in the year 2013 even if the user 
+    // types in 02/2010.
+    field.val('02/2010');
+    field.MonthPicker('Open');
+    
+    assert.equal(menu.find('.year').text(), 2013, 'The menu opend at the minimum year (2013) and not 2010' );
+    
+    field.MonthPicker('Close');
+    
+    // Make sure the menu opens in the year 2016 even if the user 
+    // types in 02/2020.
+    field.val('12/2020');
+    field.MonthPicker('Open');
+    
+    assert.equal(menu.find('.year').text(), 2016, 'The menu opend at the maximum year (2016) and not 2020' );
+    
+    field.MonthPicker('Close');
+    
+    // Make sure that the menu will open at the year 2018
+    // If we change the MaxMonth option.
+    field.MonthPicker('option', 'MaxMonth', '12/2018');
+    field.MonthPicker('Open');
+    
+    assert.equal(menu.find('.year').text(), 2018, 'The menu opend at the year 2018 after changing the MaxMonth option' );
+    
+    field.MonthPicker('Close');
+    
+    // Make sure the menu opens at the the selected year if the MaxMonth 
+    // is greater than the selected month.
+    field.MonthPicker('option', 'MaxMonth', '12/2021');
+    field.MonthPicker('Open');
+    
+    assert.equal(menu.find('.year').text(), 2020, 'The menu opend at the the selected year 2020 after' );
+    
+    field.MonthPicker('Close');
+    
+    // Make sure the menu opens at the new minimum year if we change the MinMonth option.
+    field.MonthPicker('option', 'MinMonth', '12/2010');
+    field.val('02/2009');
+    field.MonthPicker('Open');
+    
+    assert.equal(menu.find('.year').text(), 2010, 'The menu opend at the year 2010 after chagnig the MinMonth option' );
+    
+    field.MonthPicker('Close');
+    
+    // Make sure the menu opens at the selected year the MinMonth option
+    // to soemthing smaller than the selected month.
+    field.MonthPicker('option', 'MinMonth', new Date(2008, 04));
+    field.MonthPicker('Open');
+    
+    assert.equal(menu.find('.year').text(), 2009, 'The menu opend at the selected year after changing the MinMonth option again' );
+    
+    // Destroy the plugin so we can use the field over again
+    // in another Min/MaxMonth test.
+    field.MonthPicker('destroy');
+});

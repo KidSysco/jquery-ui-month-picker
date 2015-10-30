@@ -574,10 +574,15 @@ QUnit.test('Month buttons are disabled', function (assert) {
 	field.MonthPicker('Open');
 	
 	var menu = $(MonthPicker_RistrictMonthField);
+	var previousYearButton = menu.find('.previous-year>button');
+	var nextYearButton = menu.find('.next-year>button');
+	
 	
 	// Try to click the disabled buttons.
 	var buttons = menu.find('.month-picker-month-table button');
     $(buttons.slice(0, 8)).trigger('click');
+	
+	assert.ok(previousYearButton.is('.ui-button-disabled'), 'The previous year button is disabled');
 	
 	// Make sure that the date didn't change as a 
 	// result of clicking the disabled button.
@@ -587,7 +592,7 @@ QUnit.test('Month buttons are disabled', function (assert) {
 	assert.equal( field.val(), '12/2015', 'The input field still has the value 12/2015' );
 	
 	// Make sure we can still go to the next year.
-	menu.find('.next-year>button').trigger('click');
+	nextYearButton.trigger('click');
 	var pickerYear = parseInt(menu.find('.year').text(), 10);
 	assert.equal(pickerYear, 2016, 'Clicking next year changed the year to 2016');
 	
@@ -602,8 +607,8 @@ QUnit.test('Month buttons are disabled', function (assert) {
 	assert.equal( field.val(), '01/2016', 'The input field has the value 01/2016' );
 	
 	// Make sure we can only go back to 2015 a.k.a the minimum year.
-	menu.find('.previous-year>button').trigger('click');
-	menu.find('.previous-year>button').trigger('click');
+	previousYearButton.trigger('click');
+	previousYearButton.trigger('click');
 	
 	var pickerYear = parseInt(menu.find('.year').text(), 10);
 	assert.equal(pickerYear, 2015, 'clicking previous year tweice keept the year at 2015');
@@ -773,7 +778,7 @@ QUnit.test('Menu opens within range', function (assert) {
     var field = $(RistrictMonthField).MonthPicker({
         Animation: 'none', // Disable animation to make sure opening and closing the menu is synchronous.
         
-        MinMonth: new Date(2013, 10 - 1),
+        MinMonth: new Date(2013, 0),
         MaxMonth: new Date(2016, 11 - 1)
     });
     

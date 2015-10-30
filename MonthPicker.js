@@ -16,6 +16,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
 */
 ;
 (function ($, window, document) {
+	'use strict';
     var _speeds = $.fx.speeds;
     var _eventsNs = '.MonthPicker';
     var _disabledClass = 'month-picker-disabled';
@@ -41,6 +42,14 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
         MinMonth: '_setMinMonth',
         MaxMonth: '_setMaxMonth'
     };
+    
+    function _toMonth(date) {
+	    return date.getMonth() + (date.getFullYear() * 12);
+    }
+    
+    function _toYear(month) {
+	    return Math.floor(month / 12);
+    }
     
     // This test must be run before any rererence is made to jQuery.
     // In case the user didn't load jQuery or jQuery UI the plugin
@@ -689,8 +698,8 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             
             var _minDate = this._MinMonth;
             var _maxDate = this._MaxMonth;
-            _minYear = _minDate ? _minDate.getFullYear() : 0;
-            _maxYear = _maxDate ? _maxDate.getFullYear() : 0;
+            var _minYear = _minDate ? _toYear(_minDate) : 0;
+            var _maxYear = _maxDate ? _toYear(_maxDate) : 0;
             
             this._prevButton
                 .attr('title', this._i18n('prev5Years'))
@@ -754,10 +763,10 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
         _ajustYear: function(_opts) {
 	        var _year = _opts.StartYear || this.GetSelectedYear() || new Date().getFullYear();
             if (this._MinMonth !== null) {
-            	_year = Math.max(this._MinMonth.getFullYear(), _year);
+            	_year = Math.max(_toYear(this._MinMonth), _year);
             }
             if (this._MaxMonth !== null) {
-            	_year = Math.min(this._MaxMonth.getFullYear(), _year);
+            	_year = Math.min(_toYear(this._MaxMonth), _year);
             }
             
             this._setPickerYear( _year );  
@@ -768,15 +777,16 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
 	        
 	        var _minDate = this._MinMonth, _maxDate = this._MaxMonth;
 	        
-            this._prevButton.button('option', 'disabled', _minDate && _curYear == _minDate.getFullYear());
-            this._nextButton.button('option', 'disabled', _maxDate && _curYear == _maxDate.getFullYear());
+            this._prevButton.button('option', 'disabled', _minDate && _curYear == _toYear(_minDate));
+            this._nextButton.button('option', 'disabled', _maxDate && _curYear == _toYear(_maxDate));
 	        
 	        for (var i = 0; i < 12; i++) {
 	            // Disable the button if the month is not between the 
 	            // min and max interval.
+	            var _currMonth = ((_curYear * 12) + i);
 	            $(this._buttons[i]).button('option', 'disabled', (
-                    (_minDate && new Date(_curYear, i, 1) < _minDate) || 
-                    (_maxDate && new Date(_curYear, i, 0) > _maxDate)
+                    (_minDate && _currMonth < _minDate) || 
+                    (_maxDate && _currMonth > _maxDate)
                 ));
             }
         },
@@ -785,20 +795,14 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
 	        if (_val === null) {
                 return _val;
             } else if (_val instanceof Date) {
-                _val = new Date(_val.getTime());
-                _val.setDate( 0 );
-
-                return _val;
+                return _toMonth(_val);
             } else if ($.isNumeric(_val)) {
-                var _date = new Date;
-                _date.setMonth( _date.getMonth() + parseInt(_val, 10) );
-                _date.setDate( 0 );
-                return _date;
+				return _toMonth(new Date) + parseInt(_val, 10);
             }
-	         
+            
             var _date = this._parseMonth(_val);
             if (_date) {
-                return _date;
+                return _toMonth(_date);
             }
 
             return this._parsePeriod(_val);
@@ -814,19 +818,15 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             _json = _json.replace(/m/i, '":"m"');
 
             try {
-                var _rev = JSON.parse( '{"' + _json.replace(/ /g, ',"') + '}' ), 
-                    obj = {};
+                var _rev = JSON.parse( '{"' + _json.replace(/ /g, ',"') + '}' ), obj = {};
             		
                 for (var key in _rev) {
                     obj[ _rev[key] ] = key;
                 }
             	
-                var _date = new Date;
-
-                _date.setFullYear( _date.getFullYear() + (parseInt(obj.y, 10) || 0) );
-                _date.setMonth( _date.getMonth() + (parseInt(obj.m, 10) || 0) );
-                _date.setDate( 0 );
-                return _date;
+            	var _month = _toMonth(new Date);
+            	_month += (parseInt(obj.m, 10) || 0);
+            	return _month + (parseInt(obj.y, 10) || 0) * 12;
             } catch (e) {
                 return false;
             }

@@ -840,3 +840,58 @@ QUnit.test('Menu opens within range', function (assert) {
     // in another Min/MaxMonth test.
     field.MonthPicker('destroy');
 });
+
+QUnit.test('Number of months from today', function (assert) {
+    var field = $(RistrictMonthField).MonthPicker({
+        Animation: 'none', // Disable animation to make sure opening and closing the menu is synchronous.
+        
+        MinMonth: 0, 
+        MaxMonth: 16
+    });
+    
+    // Make sure the menu will open on the current month.
+    field.val($.datepicker.formatDate('mm/yy', new Date));
+    
+    field.MonthPicker('Open');
+    
+    var menu = $(MonthPicker_RistrictMonthField);
+
+    // Make sure we are in years view.
+    var buttons = menu.find('.month-picker-month-table button');
+    var nextYearButton = menu.find('.next-year>button');
+    var previousYearButton = menu.find('.previous-year>button');
+    var enabledMonths = 0;
+    
+    // Make sure that 16 buttons + 1 for today are disabled.
+    // 
+    // Keep clicking next until the next year button is disabled
+    // We count to 10 to avoid an infinite loop in case there's
+    // a bug where the next button is not disabled.
+    var hasNext = nextYearButton.is(':not(.ui-button-disabled)');
+    for (var i = 0; hasNext && i < 10; i++) {
+        hasNext = nextYearButton.is(':not(.ui-button-disabled)');
+        enabledMonths += buttons.not('.ui-button-disabled').length;
+        nextYearButton.trigger('click');
+    }
+    assert.equal(enabledMonths, 17, 'Today + 16 month buttons are enabled');
+    
+    field.MonthPicker('Close');
+    field.MonthPicker({MinMonth: -20, MaxMonth: 0});
+	
+	// Make sure that 20 buttons + 1 for today are disabled.
+	field.MonthPicker('Open');
+	enabledMonths = 0;
+	
+	hasNext = previousYearButton.is(':not(.ui-button-disabled)');
+    
+    for (var i = 0; hasNext && i < 10; i++) {
+        hasNext = previousYearButton.is(':not(.ui-button-disabled)');
+        enabledMonths += buttons.not('.ui-button-disabled').length;
+        previousYearButton.trigger('click');
+    }
+    assert.equal(enabledMonths, 21, 'Today + 20 month buttons are enabled');
+    
+    // Destroy the plugin so we can use the field over again
+    // in another Min/MaxMonth test.
+    field.MonthPicker('destroy');
+});

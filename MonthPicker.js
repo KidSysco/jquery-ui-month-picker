@@ -1,7 +1,7 @@
 /*
 https://github.com/KidSysco/jquery-ui-month-picker/
 
-Version 2.6.1
+Version 2.6.2
 
 This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
@@ -834,5 +834,5 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
     });
     
     // Added in version 2.4.
-    $.MonthPicker.VERSION = '2.6.1';
+    $.MonthPicker.VERSION = '2.6.2';
 }(jQuery, window, document));

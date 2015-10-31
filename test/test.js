@@ -361,6 +361,28 @@ QUnit.test('Right to left', function (assert) {
     field.MonthPicker('Close');
 });
 
+QUnit.test('Toggle method', function (assert) {
+	var field = $(ToggleField).MonthPicker({
+		Animation: 'none', // Disable animation to make sure opening and closing the menu is synchronous.
+	});
+	
+	field.MonthPicker('Toggle');
+    
+    var menu = $(MonthPicker_ToggleField);
+	
+	assert.ok(menu.is(':visible'), 'The menu was opened');
+	
+	field.MonthPicker('Toggle');
+	
+	assert.ok(!menu.is(':visible'), 'The menu was closed');
+	
+	field.MonthPicker('Toggle');
+	
+	assert.ok(menu.is(':visible'), 'The menu was again');
+	
+	field.MonthPicker('Close');    
+});
+
 QUnit.module("Button option");
 
 QUnit.test('Plain HTML Button test', function (assert) {

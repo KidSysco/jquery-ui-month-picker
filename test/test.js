@@ -270,16 +270,6 @@ QUnit.test('API Tests', function (assert) {
     assert.equal(_picker.prop('disabled'), true, '#EnableDisableDemo was disabled using the Disable() API call.');
     _picker.MonthPicker('Enable');
     assert.equal(_picker.prop('disabled'), false, '#EnableDisableDemo was enabled using the Disable() API call.');
-
-    _picker = $('#DialogDemo').MonthPicker();
-    
-    $('#Modal').dialog({
-        autoOpen: false,
-        title: 'MonthPicker Dialog Test',
-        modal: true
-    });
-    
-    assert.ok($('#MonthPicker_DialogDemo').length === 1, '#DialogDemo initialized, manually test the MonthPicker behavior in the dialog.');
 });
 
 QUnit.test('Digital Bush Tests', function (assert) {
@@ -585,6 +575,29 @@ QUnit.test('Disable button', function (assert) {
     // Don't leave the menu open (not really necessary).
     $(NoButtonField).MonthPicker('ClearAllCallbacks');
     $(NoButtonField).MonthPicker('Close');
+});
+
+QUnit.test('ShowOn both', function (assert) {
+	var field = $(ShowOnBothField).MonthPicker({
+		Animation: 'none', // Disable animation to make sure opening and closing the menu is synchronous.
+		Button: '<button id="ShowOnBtn">...</button>',
+		ShowOn: 'both'
+	});
+	
+	field.trigger('click');
+	
+	var menu = $(MonthPicker_ShowOnBothField);
+	
+	assert.ok(menu.is(':visible'), 'The menu was opened by clicking on the input field');
+	
+	field.MonthPicker('Close');
+	
+	assert.ok(!menu.is(':visible'), 'The menu was closed');
+	
+	$(ShowOnBtn).trigger('click');
+	assert.ok(menu.is(':visible'), 'The menu was opened by clicking on the button');
+	
+	field.MonthPicker('Close');
 });
 
 QUnit.module("Min/MaxMonth");

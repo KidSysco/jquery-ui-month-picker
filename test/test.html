@@ -55,9 +55,7 @@
             </p>
         </div>
 
-        <p class="demo"> <b>Button Demonstration</b>
-
-            <br />This demonstrates the plugin's default behaviour.
+        <p class="demo"> <b>Button test</b>
             <br />
             <br />Choose a Month:
             <input id="IconDemo" type="text" />
@@ -76,6 +74,9 @@
             <button id='OtherSelectorButton'>Second open button</button>
             <br> No button:
             <input id="NoButtonField" />
+            <br>
+			<br> ShowOn both:
+            <input id="ShowOnBothField" />
         </p>
 
         <p class="demo"> <b>Month format test</b> Choose a Month:
@@ -171,14 +172,6 @@
             <button type="button" onclick="alert($('#DigitalBushBoth').MonthPicker('GetSelectedMonthYear'));">Get Month/Year</button>
         </p>
 
-        <p class="demo"> <b>jQuery UI Dialog Integration Demonstration</b>
-
-            <br />This demonstrates the Month Picker running inside of the jQuery UI Modal Dialog.
-            <br />
-            <br />
-            <button type="button" id="LaunchDialog" onclick="$('#Modal').dialog('open');">Launch Dialog</button>
-        </p>
-
         <p class="demo"> <b>HTML 5 Month Input Type Support</b>
 
             <br />This demonstrates how the MonthPicker will work with the HTML 5 Month Input Type. View this section using Chrome
@@ -190,10 +183,6 @@
             <br /> Chrome Month Picker:
             <input id="ChromeMonthPicker" type="month" class="" />
         </p>
-    </div>
-
-    <div id="Modal">Test:
-        <input id="DialogDemo" type="text" />
     </div>
 
     <div id="qUnitOutput" style="margin-bottom: 25px;">

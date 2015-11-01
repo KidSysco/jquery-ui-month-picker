@@ -336,6 +336,148 @@ QUnit.test('MonthFormat Option Tests', function (assert) {
     assert.equal($(FormatField).val(), 'April 2012', 'The text field has the value April 2012');
 });
 
+// Makes sure that all events are triggered as expected.
+// Perhaps we should consider removing some of these events.
+QUnit.test('Events and context', function (assert) { // A.k.a duplicate code test.
+	// Good luck figuring out which callback is causing the 
+	// problem if this test fails.
+	assert.expect(27);
+	
+	var field = $(EventsField).MonthPicker({
+		Animation: 'none', // Disable animation to make sure opening and closing the menu is synchronous.
+		ShowOn: 'both'
+	});
+	
+	var menu = $(MonthPicker_EventsField);
+	var OnBeforeMenuOpenTriggred = false;
+	// This event should be triggered twice, the first time it is prevented
+	// and the sceond time it goes through.
+	field.MonthPicker('option', 'OnBeforeMenuOpen', function(event) {
+		OnBeforeMenuOpenTriggred = true;
+		assert.equal( this, EventsField, 'OnBeforeMenuOpen was called in the right context' );
+		
+		// Prevent opening if the event was triggered on the input field.
+		if (event.target === EventsField) {
+			event.preventDefault();
+		}
+	});
+	
+	// Make sure the open event triggered by clicking the field was prevented.
+	field.trigger('click');
+	assert.ok(OnBeforeMenuOpenTriggred, 'The OnBeforeMenuOpen event was triggered');
+	assert.notOk( menu.is(':visible'), 'The open event was prevented when clicking on the field' );
+	
+	var OnAfterMenuOpenTriggred = false;
+	field.MonthPicker('option', 'OnAfterMenuOpen', function() {
+		OnAfterMenuOpenTriggred = true;
+		assert.equal( this, EventsField, 'OnAfterMenuOpen was called in the right context' );
+	});
+	
+	// Make sure calling the open method doesn't get prevented.
+	field.MonthPicker('Open');
+	assert.ok(OnAfterMenuOpenTriggred, 'The OnAfterMenuOpen event was triggered');
+	assert.ok( menu.is(':visible'), 'The menu was opend by calling the Open method' );
+	
+	// Start duplicate code
+	var OnAfterNextYearTriggered = false;
+	field.MonthPicker('option', 'OnAfterNextYear', function() {
+		OnAfterNextYearTriggered = true;
+		
+		assert.equal( this, EventsField, 'OnAfterNextYear was called in the right context' );
+	});
+	
+	var nextYearButton = menu.find('.next-year>button');
+    nextYearButton.trigger('click');
+    assert.ok(OnAfterNextYearTriggered, 'Clicking the next button triggered OnAfterNextYear');
+    
+    var OnAfterPreviousYearTriggerd = false;
+	field.MonthPicker('option', 'OnAfterPreviousYear', function() {
+		OnAfterPreviousYearTriggerd = true;
+		
+		assert.equal( this, EventsField, 'OnAfterPreviousYear was called in the right context' );
+	});
+	
+	var previousYearButton = menu.find('.previous-year>button');
+	previousYearButton.trigger('click');
+	assert.ok(OnAfterPreviousYearTriggerd, 'Clciking rhe previous button triggered OnAfterPreviousYear');
+	
+	var OnAfterChooseYearsTriggerd = false;
+	field.MonthPicker('option', 'OnAfterChooseYears', function() {
+		OnAfterChooseYearsTriggerd = true;
+		assert.equal( this, EventsField, 'OnAfterChooseYears was called in the right context' );
+	});
+	
+	var showYearsButton = menu.find('.year-container-all');
+	showYearsButton.trigger('click');
+	
+	assert.ok(OnAfterChooseYearsTriggerd, 'Clicking the show years button triggered OnAfterChooseYears');
+	
+	var OnAfterNextYearsTriggered = false;
+	field.MonthPicker('option', 'OnAfterNextYears', function() {
+		OnAfterNextYearsTriggered = true;
+		assert.equal( this, EventsField, 'OnAfterNextYears was called in the right context' );
+	});
+	
+	nextYearButton.trigger('click');
+	assert.ok(OnAfterChooseYearsTriggerd, 'Clicking the next button triggered the OnAfterNextYears event');
+	
+	var OnAfterPreviousYearsTriggered = false;
+	field.MonthPicker('option', 'OnAfterPreviousYears', function() {
+		OnAfterPreviousYearsTriggered = true;
+		assert.equal( this, EventsField, 'OnAfterPreviousYears was called in the right context' );
+	});
+	
+	previousYearButton.trigger('click');
+	assert.ok(OnAfterPreviousYearsTriggered, 'Clicking the prev button triggered the OnAfterPreviousYears event');
+	
+	var OnAfterChooseYearTriggered = false;
+	field.MonthPicker('option', 'OnAfterChooseYear', function() {
+		OnAfterChooseYearTriggered = true;
+		assert.equal( this, EventsField, 'OnAfterChooseYear was called in the right context' );
+	});
+	
+	menu.find('.button-1').trigger('click');
+	assert.ok(OnAfterChooseYearTriggered, 'Clicking a year triggered OnAfterChooseYear');
+	
+	var OnAfterChooseMonthTriggered = false;
+	field.MonthPicker('option', 'OnAfterChooseMonth', function() {
+		OnAfterChooseMonthTriggered = true;
+		assert.equal( this, EventsField, 'OnAfterChooseMonth was called in the right context' );
+	});
+	// End duplicate code
+	
+	// This event should be triggered twice, the first time it is prevented
+	// and the sceond time it goes through.
+	field.MonthPicker('option', 'OnBeforeMenuClose', function(event) {
+		assert.equal( this, EventsField, 'OnBeforeMenuClose was called in the right context' );
+		
+		var target = event.target, btn1 = menu.find('.button-1')[0];
+		if (event.target === btn1) {
+			event.preventDefault();
+		}
+	});
+	
+	// Click January which should triger the OnAfterChooseMonth event
+	// but the OnBeforeMenuClose will be prevented.
+	menu.find('.button-1').trigger('click');
+	assert.ok(OnAfterChooseMonthTriggered, 'Clicking January triggered OnAfterChooseMonth');
+	assert.ok( menu.is(':visible'), 'The close event was canceled' );
+	field.MonthPicker('option', 'OnAfterChooseMonth', $.noop);
+	
+	var OnAfterMenuCloseTriggered = false;
+	field.MonthPicker('option', 'OnAfterMenuClose', function(event) {
+		OnAfterMenuCloseTriggered = true;
+		assert.equal( this, EventsField, 'OnAfterMenuClose was called in the right context' );	
+	});
+	
+	// Clicking May should not be prevented.
+	menu.find('.button-5').trigger('click');
+	assert.ok( !menu.is(':visible'), 'Clicking May closed the menu' );
+	assert.ok(OnAfterMenuCloseTriggered, 'Clicking May triggered the OnAfterMenuClose event');
+	
+	field.MonthPicker('ClearAllCallbacks');
+});
+
 QUnit.test('Right to left', function (assert) {
     var field = $(RTLField).MonthPicker({
         Animation: 'none', // Disable animation to make sure opening and closing the menu is synchronous.

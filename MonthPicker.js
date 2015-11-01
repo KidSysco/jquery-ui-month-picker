@@ -303,7 +303,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             var me = this, Month = 'Month';
             $.each(['Min', 'Max'], function(i, type) {
                 me["_set" + type + Month] = function(val) {
-                    if ((me['_' + type + Month] = this._toDate(val)) === false) {
+                    if ((me['_' + type + Month] = this._toMonth(val)) === false) {
                         alert(_badMinMaxVal.replace(/%/, type).replace(/_/, val));
                     }
                 };
@@ -375,8 +375,8 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             this._validationMessage.hide();
         },
         
-        Toggle: function () {
-            return this._visible ? this.Close() : this.Open();
+        Toggle: function (event) {
+            return this._visible ? this.Close(event) : this.Open(event);
         },
         
         Open: function (event) {
@@ -734,7 +734,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
         
         _onMonthClick: function(event) {
 	        this._chooseMonth(event.data.month);
-	        this.Close();	        
+	        this.Close(event);
         },
         
         _onYearClick: function(event) {
@@ -791,7 +791,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             }
         },
         
-        _toDate: function(_val) {
+        _toMonth: function(_val) {
 	        if (_val === null) {
                 return _val;
             } else if (_val instanceof Date) {

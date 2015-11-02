@@ -1046,6 +1046,33 @@ QUnit.test('Menu opens within range', function (assert) {
     field.MonthPicker('destroy');
 });
 
+QUnit.test('Today is highlighted', function (assert) {
+	var field = $(highlightedField).MonthPicker({
+		Animation: 'none' // Disable animation to make sure opening and closing the menu is synchronous.
+	});
+	
+	field.MonthPicker('Open');
+	var menu = $(MonthPicker_highlightedField);
+	
+	var buttons = menu.find('.month-picker-month-table button');
+	
+	var todaysButton = $(buttons[new Date().getMonth()]);
+	var nextYearButton = menu.find('.next-year>button');
+	var previousYearButton = menu.find('.previous-year>button');
+	
+	assert.ok(todaysButton.is('.ui-state-highlight'), "Today's month is highlighted");
+	
+	nextYearButton.trigger('click');
+	
+	assert.notOk(todaysButton.is('.ui-state-highlight'), 'Going to the next year removed highlighing');
+	
+	previousYearButton.trigger('click');
+	
+	assert.ok(todaysButton.is('.ui-state-highlight'), 'Returning to this year returnd the highlighing');
+	
+	field.MonthPicker('Destroy');
+});
+
 QUnit.test('Number of months from today', function (assert) {
     var field = $(RistrictMonthField).MonthPicker({
         Animation: 'none', // Disable animation to make sure opening and closing the menu is synchronous.
@@ -1065,6 +1092,7 @@ QUnit.test('Number of months from today', function (assert) {
     var buttons = menu.find('.month-picker-month-table button');
     var nextYearButton = menu.find('.next-year>button');
     var previousYearButton = menu.find('.previous-year>button');
+    
     var enabledMonths = 0;
     
     // Make sure that 16 buttons + 1 for today are disabled.

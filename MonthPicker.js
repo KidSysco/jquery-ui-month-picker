@@ -1,7 +1,7 @@
 /*
 https://github.com/KidSysco/jquery-ui-month-picker/
 
-Version 2.6.2
+Version 2.7
 
 This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
@@ -20,6 +20,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
     var _speeds = $.fx.speeds;
     var _eventsNs = '.MonthPicker';
     var _disabledClass = 'month-picker-disabled';
+    var _todayClass = 'ui-state-highlight';
     var _defaultPos = { my: 'left top+1', at: 'left bottom' };
     var _RTL_defaultPos = { my: 'right top+1', at: 'right bottom' };
     var _setupErr = 'MonthPicker Setup Error: ';
@@ -451,7 +452,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
                 if (_anim === 'none') {
                     _menu.hide(0, _callback);
                 } else {
-                    _menu[ _anim ](this._duration(), _callback);                
+                    _menu[ _anim ](this._duration(), _callback);
                 }
             }
         },
@@ -652,6 +653,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
 
         _chooseYear: function (year) {
             this._setPickerYear(year);
+            this._buttons.removeClass(_todayClass);
             this._showMonths();
 
             this.options.OnAfterChooseYear.call(this.element[0]);
@@ -685,6 +687,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
         },
 
         _showYearsClickHandler: function () {
+	        this._buttons.removeClass(_todayClass);
             this._showYears();
 
             this.options.OnAfterChooseYears.call(this.element[0]);
@@ -694,7 +697,8 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             var _currYear = this._getPickerYear(),
                 _yearDifferential = -4,
                 _firstYear = (_currYear + _yearDifferential),
-                AMOUNT_TO_ADD = 5;
+                AMOUNT_TO_ADD = 5,
+                _thisYear = new Date().getFullYear();
             
             var _minDate = this._MinMonth;
             var _maxDate = this._MaxMonth;
@@ -726,8 +730,9 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
                 $(this._buttons[_counter]).button('option', 'disabled', (
                     (_minYear && _year < _minYear) || 
                     (_maxYear && _year > _maxYear)
-                ));
-
+                ))
+                .toggleClass(_todayClass, _year === _thisYear);
+                
                 _yearDifferential++;
             }
         },
@@ -773,7 +778,11 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
         },
         
         _enableMonthButtons: function() {
-	        var _curYear = this._getPickerYear();
+	        var _curYear = this._getPickerYear(), _today = new Date();
+	        
+	        // Highlights today's month.
+	        var _btn = this._buttons[ _today.getMonth() ];
+	        $(_btn).toggleClass('ui-state-highlight', _curYear === _today.getFullYear());
 	        
 	        var _minDate = this._MinMonth, _maxDate = this._MaxMonth;
 	        
@@ -834,5 +843,5 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
     });
     
     // Added in version 2.4.
-    $.MonthPicker.VERSION = '2.6.2';
+    $.MonthPicker.VERSION = '2.7';
 }(jQuery, window, document));

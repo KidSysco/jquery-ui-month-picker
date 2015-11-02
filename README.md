@@ -1,4 +1,4 @@
-<h1>The jQuery UI Month Picker Version 2.6.1</h1>
+<h1>The jQuery UI Month Picker Version 2.6.2</h1>
 <p>The jQuery UI Month Picker Plugin is designed to allow user input for only a month and year when only that input is 
 required. Clicking on the year, allows the user to jump ahead or back 5 years at a time. Clicking anywhere on the 
 page, except on the month picker menu itself, will cause the month picker to hide. The Month Picker has lots of options 
@@ -141,7 +141,7 @@ However this is <b>not supported</b> and might stop working in future releases i
 </p>
 <p>
     Set the option upon init.
-    <pre>$('.selector').MonthPicker({ ShowIcon: true });</pre>
+    <pre>$('.selector').MonthPicker({ Disabled: true });</pre>
     
     Get or set the option, after init. 
 <pre>
@@ -276,8 +276,8 @@ $('.selector').MonthPicker({
 </pre>
 
     Create a button with different images for enabled and disabled state.
-<pre>
-$('.selector').MonthPicker({ 
+<pre id='disabledimgbtn'>
+$('.selector').MonthPicker({
     Button: function(opts) {
 	    var src = 'images/calendar_' + (opts.Disabled ? 'disabled' : 'enabled') + '.gif';
 	    return '&lt;img src="' + src + '" title="Select date" />';
@@ -987,11 +987,11 @@ $('.selector').MonthPicker('option', 'OnAfterChooseYear', function(){ ... } );
     
     Get or set the callback function, after init. 
     <pre>
-    //getter
-    var disabled = $('.selector').MonthPicker('option', 'OnAfterChooseYears');
-    
-    //setter
-    $('.selector').MonthPicker('option', 'OnAfterChooseYears', function(){ ... } );
+//getter
+var disabled = $('.selector').MonthPicker('option', 'OnAfterChooseYears');
+
+//setter
+$('.selector').MonthPicker('option', 'OnAfterChooseYears', function(){ ... } );
     </pre>
 </p>
 

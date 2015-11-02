@@ -270,16 +270,6 @@ QUnit.test('API Tests', function (assert) {
     assert.equal(_picker.prop('disabled'), true, '#EnableDisableDemo was disabled using the Disable() API call.');
     _picker.MonthPicker('Enable');
     assert.equal(_picker.prop('disabled'), false, '#EnableDisableDemo was enabled using the Disable() API call.');
-
-    _picker = $('#DialogDemo').MonthPicker();
-    
-    $('#Modal').dialog({
-        autoOpen: false,
-        title: 'MonthPicker Dialog Test',
-        modal: true
-    });
-    
-    assert.ok($('#MonthPicker_DialogDemo').length === 1, '#DialogDemo initialized, manually test the MonthPicker behavior in the dialog.');
 });
 
 QUnit.test('Digital Bush Tests', function (assert) {
@@ -344,6 +334,195 @@ QUnit.test('MonthFormat Option Tests', function (assert) {
 	
     // Make sure set the right text in the input field.
     assert.equal($(FormatField).val(), 'April 2012', 'The text field has the value April 2012');
+});
+
+// Makes sure that all events are triggered as expected.
+// Perhaps we should consider removing some of these events.
+QUnit.test('Events and context', function (assert) { // A.k.a duplicate code test.
+	// Good luck figuring out which callback is causing the 
+	// problem if this test fails.
+	assert.expect(27);
+	
+	var field = $(EventsField).MonthPicker({
+		Animation: 'none', // Disable animation to make sure opening and closing the menu is synchronous.
+		ShowOn: 'both'
+	});
+	
+	var menu = $(MonthPicker_EventsField);
+	var OnBeforeMenuOpenTriggred = false;
+	// This event should be triggered twice, the first time it is prevented
+	// and the sceond time it goes through.
+	field.MonthPicker('option', 'OnBeforeMenuOpen', function(event) {
+		OnBeforeMenuOpenTriggred = true;
+		assert.equal( this, EventsField, 'OnBeforeMenuOpen was called in the right context' );
+		
+		// Prevent opening if the event was triggered on the input field.
+		if (event.target === EventsField) {
+			event.preventDefault();
+		}
+	});
+	
+	// Make sure the open event triggered by clicking the field was prevented.
+	field.trigger('click');
+	assert.ok(OnBeforeMenuOpenTriggred, 'The OnBeforeMenuOpen event was triggered');
+	assert.notOk( menu.is(':visible'), 'The open event was prevented when clicking on the field' );
+	
+	var OnAfterMenuOpenTriggred = false;
+	field.MonthPicker('option', 'OnAfterMenuOpen', function() {
+		OnAfterMenuOpenTriggred = true;
+		assert.equal( this, EventsField, 'OnAfterMenuOpen was called in the right context' );
+	});
+	
+	// Make sure calling the open method doesn't get prevented.
+	field.MonthPicker('Open');
+	assert.ok(OnAfterMenuOpenTriggred, 'The OnAfterMenuOpen event was triggered');
+	assert.ok( menu.is(':visible'), 'The menu was opend by calling the Open method' );
+	
+	// Start duplicate code
+	var OnAfterNextYearTriggered = false;
+	field.MonthPicker('option', 'OnAfterNextYear', function() {
+		OnAfterNextYearTriggered = true;
+		
+		assert.equal( this, EventsField, 'OnAfterNextYear was called in the right context' );
+	});
+	
+	var nextYearButton = menu.find('.next-year>button');
+    nextYearButton.trigger('click');
+    assert.ok(OnAfterNextYearTriggered, 'Clicking the next button triggered OnAfterNextYear');
+    
+    var OnAfterPreviousYearTriggerd = false;
+	field.MonthPicker('option', 'OnAfterPreviousYear', function() {
+		OnAfterPreviousYearTriggerd = true;
+		
+		assert.equal( this, EventsField, 'OnAfterPreviousYear was called in the right context' );
+	});
+	
+	var previousYearButton = menu.find('.previous-year>button');
+	previousYearButton.trigger('click');
+	assert.ok(OnAfterPreviousYearTriggerd, 'Clciking rhe previous button triggered OnAfterPreviousYear');
+	
+	var OnAfterChooseYearsTriggerd = false;
+	field.MonthPicker('option', 'OnAfterChooseYears', function() {
+		OnAfterChooseYearsTriggerd = true;
+		assert.equal( this, EventsField, 'OnAfterChooseYears was called in the right context' );
+	});
+	
+	var showYearsButton = menu.find('.year-container-all');
+	showYearsButton.trigger('click');
+	
+	assert.ok(OnAfterChooseYearsTriggerd, 'Clicking the show years button triggered OnAfterChooseYears');
+	
+	var OnAfterNextYearsTriggered = false;
+	field.MonthPicker('option', 'OnAfterNextYears', function() {
+		OnAfterNextYearsTriggered = true;
+		assert.equal( this, EventsField, 'OnAfterNextYears was called in the right context' );
+	});
+	
+	nextYearButton.trigger('click');
+	assert.ok(OnAfterChooseYearsTriggerd, 'Clicking the next button triggered the OnAfterNextYears event');
+	
+	var OnAfterPreviousYearsTriggered = false;
+	field.MonthPicker('option', 'OnAfterPreviousYears', function() {
+		OnAfterPreviousYearsTriggered = true;
+		assert.equal( this, EventsField, 'OnAfterPreviousYears was called in the right context' );
+	});
+	
+	previousYearButton.trigger('click');
+	assert.ok(OnAfterPreviousYearsTriggered, 'Clicking the prev button triggered the OnAfterPreviousYears event');
+	
+	var OnAfterChooseYearTriggered = false;
+	field.MonthPicker('option', 'OnAfterChooseYear', function() {
+		OnAfterChooseYearTriggered = true;
+		assert.equal( this, EventsField, 'OnAfterChooseYear was called in the right context' );
+	});
+	
+	menu.find('.button-1').trigger('click');
+	assert.ok(OnAfterChooseYearTriggered, 'Clicking a year triggered OnAfterChooseYear');
+	
+	var OnAfterChooseMonthTriggered = false;
+	field.MonthPicker('option', 'OnAfterChooseMonth', function() {
+		OnAfterChooseMonthTriggered = true;
+		assert.equal( this, EventsField, 'OnAfterChooseMonth was called in the right context' );
+	});
+	// End duplicate code
+	
+	// This event should be triggered twice, the first time it is prevented
+	// and the sceond time it goes through.
+	field.MonthPicker('option', 'OnBeforeMenuClose', function(event) {
+		assert.equal( this, EventsField, 'OnBeforeMenuClose was called in the right context' );
+		
+		var target = event.target, btn1 = menu.find('.button-1')[0];
+		if (event.target === btn1) {
+			event.preventDefault();
+		}
+	});
+	
+	// Click January which should triger the OnAfterChooseMonth event
+	// but the OnBeforeMenuClose will be prevented.
+	menu.find('.button-1').trigger('click');
+	assert.ok(OnAfterChooseMonthTriggered, 'Clicking January triggered OnAfterChooseMonth');
+	assert.ok( menu.is(':visible'), 'The close event was canceled' );
+	field.MonthPicker('option', 'OnAfterChooseMonth', $.noop);
+	
+	var OnAfterMenuCloseTriggered = false;
+	field.MonthPicker('option', 'OnAfterMenuClose', function(event) {
+		OnAfterMenuCloseTriggered = true;
+		assert.equal( this, EventsField, 'OnAfterMenuClose was called in the right context' );	
+	});
+	
+	// Clicking May should not be prevented.
+	menu.find('.button-5').trigger('click');
+	assert.ok( !menu.is(':visible'), 'Clicking May closed the menu' );
+	assert.ok(OnAfterMenuCloseTriggered, 'Clicking May triggered the OnAfterMenuClose event');
+	
+	field.MonthPicker('ClearAllCallbacks');
+});
+
+QUnit.test('Right to left', function (assert) {
+    var field = $(RTLField).MonthPicker({
+        Animation: 'none', // Disable animation to make sure opening and closing the menu is synchronous.
+        Position: {collision: 'none'}, // Ensure the menu opens to the right.
+        IsRTL: true
+    });
+    
+    field.MonthPicker('Open');
+    
+    var menu = $(MonthPicker_RTLField);
+    
+    var nextYearButton = menu.find('.next-year>button');
+    var previousYearButton = menu.find('.previous-year>button');
+    
+    // Make sure the buttons are pointing in the right (opposite) direction.
+    assert.ok(previousYearButton.find('span.ui-icon-circle-triangle-e').length, 'Previous button is pointed east');
+    assert.ok(nextYearButton.find('span.ui-icon-circle-triangle-w').length, 'Next button is pointed west');
+    
+    // Make sure the menu opens to the right of the field.
+    var opendToTheRight = (field.position().left - menu.position().left) > 100;
+    assert.ok(opendToTheRight, 'The menu opened to the right of rhe field');
+    
+    field.MonthPicker('Close');
+});
+
+QUnit.test('Toggle method', function (assert) {
+	var field = $(ToggleField).MonthPicker({
+		Animation: 'none', // Disable animation to make sure opening and closing the menu is synchronous.
+	});
+	
+	field.MonthPicker('Toggle');
+    
+    var menu = $(MonthPicker_ToggleField);
+	
+	assert.ok(menu.is(':visible'), 'The menu was opened');
+	
+	field.MonthPicker('Toggle');
+	
+	assert.ok(!menu.is(':visible'), 'The menu was closed');
+	
+	field.MonthPicker('Toggle');
+	
+	assert.ok(menu.is(':visible'), 'The menu was again');
+	
+	field.MonthPicker('Close');    
 });
 
 QUnit.module("Button option");
@@ -560,4 +739,448 @@ QUnit.test('Disable button', function (assert) {
     // Don't leave the menu open (not really necessary).
     $(NoButtonField).MonthPicker('ClearAllCallbacks');
     $(NoButtonField).MonthPicker('Close');
+});
+
+QUnit.test('ShowOn both', function (assert) {
+	var field = $(ShowOnBothField).MonthPicker({
+		Animation: 'none', // Disable animation to make sure opening and closing the menu is synchronous.
+		Button: '<button id="ShowOnBtn">...</button>',
+		ShowOn: 'both'
+	});
+	
+	field.trigger('click');
+	
+	var menu = $(MonthPicker_ShowOnBothField);
+	
+	assert.ok(menu.is(':visible'), 'The menu was opened by clicking on the input field');
+	
+	field.MonthPicker('Close');
+	
+	assert.ok(!menu.is(':visible'), 'The menu was closed');
+	
+	$(ShowOnBtn).trigger('click');
+	assert.ok(menu.is(':visible'), 'The menu was opened by clicking on the button');
+	
+	field.MonthPicker('Close');
+});
+
+QUnit.module("Min/MaxMonth");
+
+QUnit.test('Month buttons are disabled', function (assert) {
+	var field = $(RistrictMonthField).val('12/2015').MonthPicker({
+		Animation: 'none', // Disable animation to make sure opening and closing the menu is synchronous.
+		
+		MinMonth: '10/2015'
+	});
+	
+	field.MonthPicker('Open');
+	
+	var menu = $(MonthPicker_RistrictMonthField);
+	var previousYearButton = menu.find('.previous-year>button');
+	var nextYearButton = menu.find('.next-year>button');
+	
+	
+	// Try to click the disabled buttons.
+	var buttons = menu.find('.month-picker-month-table button');
+    $(buttons.slice(0, 8)).trigger('click');
+	
+	assert.ok(previousYearButton.is('.ui-button-disabled'), 'The previous year button is disabled');
+	
+	// Make sure that the date didn't change as a 
+	// result of clicking the disabled button.
+	var selectedMonth = field.MonthPicker('GetSelectedDate');
+	assert.equal( selectedMonth.getFullYear(), 2015, 'The selected year is still 2015');
+	assert.equal( selectedMonth.getMonth() + 1, 12, 'The selected month is still December');
+	assert.equal( field.val(), '12/2015', 'The input field still has the value 12/2015' );
+	
+	// Make sure we can still go to the next year.
+	nextYearButton.trigger('click');
+	var pickerYear = parseInt(menu.find('.year').text(), 10);
+	assert.equal(pickerYear, 2016, 'Clicking next year changed the year to 2016');
+	
+	// Make none of the buttons are disabled.
+	assert.ok( !menu.find('button').is('.ui-button-disabled'), 'None of the buttons are disabled');
+	
+	// Make sure clicking the first button selected January 2016.
+	menu.find('.button-1').trigger('click');
+	var selectedMonth = field.MonthPicker('GetSelectedDate');
+	assert.equal( selectedMonth.getFullYear(), 2016, 'The selected year is still 2016');
+	assert.equal( selectedMonth.getMonth() + 1, 1, 'The selected month is still January');
+	assert.equal( field.val(), '01/2016', 'The input field has the value 01/2016' );
+	
+	// Make sure we can only go back to 2015 a.k.a the minimum year.
+	previousYearButton.trigger('click');
+	previousYearButton.trigger('click');
+	
+	var pickerYear = parseInt(menu.find('.year').text(), 10);
+	assert.equal(pickerYear, 2015, 'clicking previous year tweice keept the year at 2015');
+	
+	// Make sure that month buttons before October (the minimum month)
+    // are still disabled after navigating back to 2015
+    // by clicking the buttons and checking that the 
+    // selected date didn't change.
+    $(buttons.slice(0, 8)).trigger('click');
+	
+	var selectedMonth = field.MonthPicker('GetSelectedDate');
+	assert.equal( selectedMonth.getFullYear(), 2016, "Clciking the buttons didn't change the selected year");
+	assert.equal( selectedMonth.getMonth() + 1, 1, "Clciking the buttons didn't change the selected month");
+	assert.equal( field.val(), '01/2016', "Clciking the buttons didn't change the fields value" );
+	
+    // Make sure the buttons after October (the minumum month) are enabled.
+    var buttonsDisabled = $( buttons.slice(9) ).is('.ui-button-disabled');
+    assert.notOk(buttonsDisabled, 'All buttons after the minumum month are enabled');
+
+	// Make sure clicking October (the minumum month) works as expected.
+	$(buttons[9]).trigger('click');
+	
+	var selectedMonth = field.MonthPicker('GetSelectedDate');
+	assert.equal( selectedMonth.getFullYear(), 2015, 'Clciking the minimum month chose the correct year');
+	assert.equal( selectedMonth.getMonth() + 1, 10, 'Clciking the minimum month chose the correct month');
+	assert.equal( field.val(), '10/2015', 'Clciking the minimum month set the field value to 10/2015' );
+
+    // Destroy the plugin so we can use the field over again
+    // in another Min/MaxMonth test.
+	field.MonthPicker('destroy');
+});
+
+QUnit.test('Year buttons are disabled', function (assert) {
+    var field = $(RistrictMonthField).val('02/2015').MonthPicker({
+        Animation: 'none', // Disable animation to make sure opening and closing the menu is synchronous.
+        
+        MaxMonth: '10/2015'
+    });
+    
+    field.MonthPicker('Open');
+
+    var menu = $(MonthPicker_RistrictMonthField);
+
+    // Click the year title to show the years.
+    menu.find('.year-title').trigger('click');
+
+    // Make sure we are in years view.
+    var buttons = menu.find('.month-picker-month-table button');
+    var firstVisibleYear = parseInt($(buttons[0]).text(), 10);
+    assert.ok(firstVisibleYear, 'The menu is showing the year table');
+
+    // Make sure the years after the maximum year are disabled.
+    var firstDisabledIndex = (2015 - firstVisibleYear) + 1;
+    var disabledButttons = buttons.slice(firstDisabledIndex);
+    var hasEnabledBttons = $( disabledButttons )
+        .trigger('click')
+        .is(':not(.ui-button-disabled)');
+
+    assert.ok(!hasEnabledBttons, 'All year buttons after the maximum year are disabled');
+
+    // Make sure that clicking the disabled buttons didn't select
+    // a year.
+    var firstVisibleYear = parseInt($(buttons[0]).text(), 10);
+    assert.ok(firstVisibleYear, "Clciking the disabled buttons didn't take us to month view");
+
+    // Make sure the next years button is disabled.
+    var nextYearsButton = menu.find('.next-year>button');
+    var isDisabled = nextYearsButton
+        .trigger('click')
+        .is('.ui-button-disabled');
+
+    assert.ok(isDisabled, 'The next year button is disabled');
+    var newFirstYrar = parseInt($(buttons[0]).text(), 10);
+    assert.equal(newFirstYrar, firstVisibleYear, "Clicking next year didn't change the year");
+
+    var previousYearsButton = menu.find('.previous-year>button');
+    // Keep going back until there are no disabled buttons.
+    // We count to 10 to avoid an infinite loop in case there's
+    // a bug where we are going back in time but the the buttons stay disabled.
+    for (var i = 1; i <= 10; i++) {
+        // Make sure we can click the previous years button.
+        previousYearsButton.trigger('click');
+
+        newFirstYrar = parseInt($(buttons[0]).text(), 10);
+        var wentBack = firstVisibleYear > newFirstYrar;
+        assert.ok(wentBack, 'The plugin responsed to clicking previous years');
+        if (!wentBack) {
+            // Avoid failing on the same problem multiple times.
+            return;
+        }
+
+        firstVisibleYear = newFirstYrar;
+
+        // We still have diabled button, make sure they are the right ones.
+        firstDisabledIndex = Math.min( (2015 - firstVisibleYear) + 1, 12 );
+        disabledButttons = buttons.slice(firstDisabledIndex);
+        hasEnabledBttons = $( disabledButttons )
+            .is(':not(.ui-button-disabled)');
+
+        assert.ok(!hasEnabledBttons, 'All year buttons after the maximum year are still disabled');
+
+        // Check if we still have diabled button.
+        if (!buttons.is('.ui-button-disabled')) {
+            // We don't have disabled buttons, make sure both next and previous 
+            // years buttons are enabled.
+            assert.ok(!previousYearsButton.is('.ui-button-disabled'), 'previous year button is enabled');
+            assert.ok(!nextYearsButton.is('.ui-button-disabled'), 'next year button is enabled');
+            break;
+        }
+    }
+
+    // Make sure we didn't click back 10 times and we 
+    // still have disabled buttons.
+    assert.ok(!buttons.is('.ui-button-disabled'), 'All year buttons are enabled after clicking previous years ' + i + ' times');
+
+    // Make sure we can click enabled months.
+    var firstVisibleYear = parseInt($(buttons[0]).text(), 10);
+    $(buttons[0]).trigger('click');
+
+    assert.equal($(buttons[0]).text(), $.MonthPicker.i18n.months[0], 'Clicking the ' + firstVisibleYear + ' year button showed the months');
+
+    // Make sure none of the buttons are disabled in the month view.
+    var hasDidabledButtons = menu.find('button').is('.ui-button-disabled');
+    assert.ok(!hasDidabledButtons, 'All buttons are enabled');
+
+    // Click the year title to show the years menu.
+    menu.find('.year-title').trigger('click');
+
+    // Keeps clicking next years until we reach the disabled years.
+    for (var i = 1; !buttons.is('.ui-button-disabled') && i <= 10; i++) {
+        nextYearsButton.trigger('click');
+    }
+
+    // Make sure were on the last page.
+    assert.ok(buttons.is('.ui-button-disabled'), 'Clciking next took us to the last page');
+    assert.ok(nextYearsButton.is('.ui-button-disabled'), 'The next years button is disabled');
+    assert.ok(!previousYearsButton.is('.ui-button-disabled'), 'The previous years button is enabled');
+
+    firstVisibleYear = parseInt($(buttons[0]).text(), 10);
+    nextYearsButton.trigger('click');
+    newFirstYrar = parseInt($(buttons[0]).text(), 10);
+    assert.equal(newFirstYrar, firstVisibleYear, 'Clicking the next years button keept us on the same page');
+
+    // Click on 2015 and make sure we have disabled button.
+    var firstVisibleYear = parseInt($(buttons[0]).text(), 10);
+    $(buttons[(2015 - firstVisibleYear)]).trigger('click');
+
+    assert.ok(buttons.is('.ui-button-disabled'), 'Clciking the maximum year shows disabled month buttons');
+    $(buttons[(2015 - firstVisibleYear)]).trigger('click');
+
+    // Click October and make sure were in month view.
+    $(buttons[9]).trigger('click');
+    assert.equal(field.val(), '10/2015', 'Clicking October (the maximum month) sets the expected value');
+
+    // Destroy the plugin so we can use the field over again
+    // in another Min/MaxMonth test.
+    field.MonthPicker('destroy');
+});
+
+// Here we make sure that if the user types in a year
+// that is outside the restricted range the menu will
+// open in the closest year that is within range, for example:
+// 
+// If the MinMonth is: 10/2015 and the user types in 11/2020
+// the menu will open and show the year 2015.
+//
+// This test purposely juggles between types to ensure
+// that passing in different types before and after init works
+// as expected. 
+QUnit.test('Menu opens within range', function (assert) {
+    var field = $(RistrictMonthField).MonthPicker({
+        Animation: 'none', // Disable animation to make sure opening and closing the menu is synchronous.
+        
+        MinMonth: '01/2013',
+        MaxMonth: new Date(2016, 11 - 1)
+    });
+    
+    var menu = $(MonthPicker_RistrictMonthField);
+    
+    // Make sure the menu opens in the year 2013 even if the user 
+    // types in 02/2010.
+    field.val('02/2010');
+    field.MonthPicker('Open');
+    
+    assert.equal(menu.find('.year').text(), 2013, 'The menu opend at the minimum year (2013) and not 2010' );
+    
+    field.MonthPicker('Close');
+    
+    // Make sure the menu opens in the year 2016 even if the user 
+    // types in 02/2020.
+    field.val('12/2020');
+    field.MonthPicker('Open');
+    
+    assert.equal(menu.find('.year').text(), 2016, 'The menu opend at the maximum year (2016) and not 2020' );
+    
+    field.MonthPicker('Close');
+    
+    // Make sure that the menu will open at the year 2018
+    // If we change the MaxMonth option.
+    field.MonthPicker('option', 'MaxMonth', '12/2018');
+    field.MonthPicker('Open');
+    
+    assert.equal(menu.find('.year').text(), 2018, 'The menu opend at the year 2018 after changing the MaxMonth option' );
+    
+    field.MonthPicker('Close');
+    
+    // Make sure the menu opens at the the selected year if the MaxMonth 
+    // is greater than the selected month.
+    field.MonthPicker('option', 'MaxMonth', new Date(2021, 12 - 1));
+    field.MonthPicker('Open');
+    
+    assert.equal(menu.find('.year').text(), 2020, 'The menu opend at the the selected year 2020 after' );
+    
+    field.MonthPicker('Close');
+    
+    field.MonthPicker('option', 'MinMonth', new Date(2010, 12 - 1));
+    field.val('02/2009');
+    field.MonthPicker('Open');
+    
+    assert.equal(menu.find('.year').text(), 2010, 'The menu opend at the year 2010 after chagnig the MinMonth option' );
+    
+    field.MonthPicker('Close');
+    
+    // Make sure the menu opens at the selected year the MinMonth option
+    // to soemthing smaller than the selected month.
+    field.MonthPicker('option', 'MinMonth', new Date(2008, 04));
+    field.MonthPicker('Open');
+    
+    assert.equal(menu.find('.year').text(), 2009, 'The menu opend at the selected year after changing the MinMonth option again' );
+    
+    // Destroy the plugin so we can use the field over again
+    // in another Min/MaxMonth test.
+    field.MonthPicker('destroy');
+});
+
+QUnit.test('Number of months from today', function (assert) {
+    var field = $(RistrictMonthField).MonthPicker({
+        Animation: 'none', // Disable animation to make sure opening and closing the menu is synchronous.
+        
+        MinMonth: 0, 
+        MaxMonth: 16
+    });
+    
+    // Make sure the menu will open on the current month.
+    field.val($.datepicker.formatDate('mm/yy', new Date));
+    
+    field.MonthPicker('Open');
+    
+    var menu = $(MonthPicker_RistrictMonthField);
+
+    // Make sure we are in years view.
+    var buttons = menu.find('.month-picker-month-table button');
+    var nextYearButton = menu.find('.next-year>button');
+    var previousYearButton = menu.find('.previous-year>button');
+    var enabledMonths = 0;
+    
+    // Make sure that 16 buttons + 1 for today are disabled.
+    // 
+    // Keep clicking next until the next year button is disabled
+    // We count to 10 to avoid an infinite loop in case there's
+    // a bug where the next button is not disabled.
+    var hasNext = nextYearButton.is(':not(.ui-button-disabled)');
+    for (var i = 0; hasNext && i < 10; i++) {
+        hasNext = nextYearButton.is(':not(.ui-button-disabled)');
+        enabledMonths += buttons.not('.ui-button-disabled').length;
+        nextYearButton.trigger('click');
+    }
+    assert.equal(enabledMonths, 17, 'Today + 16 month buttons are enabled');
+    
+    field.MonthPicker('Close');
+    
+	// Make sure that 20 buttons + 1 for today are disabled.
+    field.MonthPicker({MinMonth: -20, MaxMonth: 0});
+	field.MonthPicker('Open');
+	enabledMonths = 0;
+	
+	hasNext = previousYearButton.is(':not(.ui-button-disabled)');
+    
+    for (var i = 0; hasNext && i < 10; i++) {
+        hasNext = previousYearButton.is(':not(.ui-button-disabled)');
+        enabledMonths += buttons.not('.ui-button-disabled').length;
+        previousYearButton.trigger('click');
+    }
+    assert.equal(enabledMonths, 21, 'Today + 20 month buttons are enabled');
+    
+    // Destroy the plugin so we can use the field over again
+    // in another Min/MaxMonth test.
+    field.MonthPicker('destroy');
+});
+
+QUnit.test('Relative month periods', function (assert) {
+    var field = $(RistrictMonthField).MonthPicker({
+        Animation: 'none', // Disable animation to make sure opening and closing the menu is synchronous.
+        
+        MinMonth: '+1Y -12m', // a.k.a 0 months (this month).
+        MaxMonth: '6M +1y' // a.k.a 18 months.
+    });
+    
+    // Make sure the menu will open on the current month.
+    field.val($.datepicker.formatDate('mm/yy', new Date));
+    
+    field.MonthPicker('Open');
+    
+    var menu = $(MonthPicker_RistrictMonthField);
+
+    // Make sure we are in years view.
+    var buttons = menu.find('.month-picker-month-table button');
+    var nextYearButton = menu.find('.next-year>button');
+    var previousYearButton = menu.find('.previous-year>button');
+    var enabledMonths = 0;
+    
+    // Make sure that 18 buttons + 1 for today are disabled.
+    // 
+    // Keep clicking next until the next year button is disabled
+    // We count to 10 to avoid an infinite loop in case there's
+    // a bug where the next button is not disabled.
+    var hasNext = nextYearButton.is(':not(.ui-button-disabled)');
+    for (var i = 0; hasNext && i < 10; i++) {
+        hasNext = nextYearButton.is(':not(.ui-button-disabled)');
+        enabledMonths += buttons.not('.ui-button-disabled').length;
+        nextYearButton.trigger('click');
+    }
+    assert.equal(enabledMonths, 19, 'Today + 18 month buttons are enabled');
+    
+    field.MonthPicker('Close');
+    
+	// Make sure that 24 buttons + 1 for today are disabled.
+    field.MonthPicker({MinMonth: '-2y', MaxMonth: '0M'});
+	field.MonthPicker('Open');
+	enabledMonths = 0;
+	
+	hasNext = previousYearButton.is(':not(.ui-button-disabled)');
+    
+    for (var i = 0; hasNext && i < 10; i++) {
+        hasNext = previousYearButton.is(':not(.ui-button-disabled)');
+        enabledMonths += buttons.not('.ui-button-disabled').length;
+        previousYearButton.trigger('click');
+    }
+    assert.equal(enabledMonths, 25, 'Today + 24 month buttons are enabled');
+    
+    // Destroy the plugin so we can use the field over again
+    // in another Min/MaxMonth test.
+    field.MonthPicker('destroy');
+});
+
+QUnit.test('JavaScript Date objects', function (assert) {
+	var field = $(RistrictMonthField).MonthPicker({
+        Animation: 'none', // Disable animation to make sure opening and closing the menu is synchronous.
+        
+        MinMonth: new Date(2015, 2 - 1),
+        MaxMonth: new Date(2015, 11 - 1)
+    });
+    
+    field.val('05/2015');
+    
+    var menu = $(MonthPicker_RistrictMonthField);
+    var buttons = menu.find('.month-picker-month-table button');
+    
+    field.MonthPicker('Open');
+    assert.equal(buttons.not('.ui-button-disabled').length, 10, '10 month buttons are enabled');
+    
+    field.MonthPicker('Close');
+    field.MonthPicker('option', 'MinMonth', new Date(2016, 1 - 1));
+    field.MonthPicker('option', 'MaxMonth', new Date(2016, 6 - 1));
+    
+    field.MonthPicker('Open');
+    assert.equal(menu.find('.year').text(), 2016, 'The menu opend at the expected year 2015');
+    assert.equal(buttons.not('.ui-button-disabled').length, 6, '12 month buttons are enabled');
+    
+    // Destroy the plugin so we can use the field over again
+    // in another Min/MaxMonth test.
+    field.MonthPicker('destroy');
 });

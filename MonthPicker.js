@@ -20,7 +20,9 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
     var _speeds = $.fx.speeds;
     var _eventsNs = '.MonthPicker';
     var _disabledClass = 'month-picker-disabled';
+    //var _setActiveEvents = "mousenter" + _eventsNs + " mouseout" + _eventsNs;
     var _todayClass = 'ui-state-highlight';
+    var _selectedClass = 'ui-state-active';
     var _defaultPos = { my: 'left top+1', at: 'left bottom' };
     var _RTL_defaultPos = { my: 'right top+1', at: 'right bottom' };
     var _setupErr = 'MonthPicker Setup Error: ';
@@ -50,6 +52,15 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
     
     function _toYear(month) {
 	    return Math.floor(month / 12);
+    }
+    
+    function _stayActive() {
+	    $(this).addClass(_selectedClass);
+    }
+    
+    function _setActive( el, state ) {
+		return el[ state ? 'on' : 'off' ]('mousenter mouseout',  _stayActive )
+		      .toggleClass(_selectedClass, state);
     }
     
     // This test must be run before any rererence is made to jQuery.
@@ -161,6 +172,8 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
         _monthPickerButton: $(),
         
         _validationMessage: $(),
+        
+        _selectedBtn: $(),
 
         /******* jQuery UI Widget Factory Overrides ********/
 
@@ -647,6 +660,8 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
         _chooseMonth: function (month) {
             var date = new Date(this._getPickerYear(), month-1);
             this.element.val(this._formatMonth( date )).blur();
+            _setActive( this._selectedBtn, false );
+            this._selectedBtn = _setActive( $(this._buttons[month-1]), true );
             
             this.options.OnAfterChooseMonth.call(this.element[0]);
         },
@@ -719,7 +734,10 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
 
             $('.year-container-all', this._monthPickerMenu).css('cursor', 'default');
             this._buttons.off(_eventsNs);
-	        
+
+            _setActive( this._selectedBtn, false );
+		    
+	        var _sel = this.GetSelectedDate();	        
 	        var _onClick = $.proxy(this._onYearClick, this);
             for (var _counter = 0; _counter < 12; _counter++) {
                 var _year = _currYear + _yearDifferential, _btn = $( this._buttons[_counter] );
@@ -727,11 +745,15 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
                 _btn.on( 'click' + _eventsNs, { year: _year }, _onClick )
                     .button('option', 'label', _year);
 		        
-                $(this._buttons[_counter]).button('option', 'disabled', (
+                var _btn = $(this._buttons[_counter]).button('option', 'disabled', (
                     (_minYear && _year < _minYear) || 
                     (_maxYear && _year > _maxYear)
                 ))
                 .toggleClass(_todayClass, _year === _thisYear);
+                
+		        if (_sel && _sel.getFullYear() === _year) {
+			        this._selectedBtn = _setActive( _btn , true );
+		        }
                 
                 _yearDifferential++;
             }
@@ -782,7 +804,15 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
 	        
 	        // Highlights today's month.
 	        var _btn = this._buttons[ _today.getMonth() ];
-	        $(_btn).toggleClass('ui-state-highlight', _curYear === _today.getFullYear());
+	        $(_btn).toggleClass(_todayClass, _curYear === _today.getFullYear());
+			
+			// Heighlight the selected month.
+			_setActive( this._selectedBtn, false );
+		    
+	        var _sel = this.GetSelectedDate();
+	        if (_sel && _sel.getFullYear() === _curYear) {
+		        this._selectedBtn = _setActive( $(this._buttons[_sel.getMonth()]) , true );
+	        }
 	        
 	        var _minDate = this._MinMonth, _maxDate = this._MaxMonth;
 	        

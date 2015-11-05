@@ -1046,10 +1046,12 @@ QUnit.test('Menu opens within range', function (assert) {
     field.MonthPicker('destroy');
 });
 
-QUnit.test('Today is highlighted', function (assert) {
+QUnit.test('Today and selected months are highlighted', function (assert) {
 	var field = $(highlightedField).MonthPicker({
 		Animation: 'none' // Disable animation to make sure opening and closing the menu is synchronous.
 	});
+	
+	field.val('05/' + _today.getFullYear());
 	
 	field.MonthPicker('Open');
 	var menu = $(MonthPicker_highlightedField);
@@ -1062,13 +1064,24 @@ QUnit.test('Today is highlighted', function (assert) {
 	
 	assert.ok(todaysButton.is('.ui-state-highlight'), "Today's month is highlighted");
 	
+	var selectedButton = buttons.filter('.ui-state-active');
+	assert.equal( selectedButton.length, 1, 'There is one selected button');
+	assert.equal( selectedButton[0], buttons[4], 'The selected month is highlighted');
+	
 	nextYearButton.trigger('click');
 	
 	assert.notOk(todaysButton.is('.ui-state-highlight'), 'Going to the next year removed highlighing');
 	
+	var selectedButton = buttons.filter('.ui-state-active');
+	assert.equal( selectedButton.length, 0, 'Going to the next year removed the selected highlighing');
+	
 	previousYearButton.trigger('click');
 	
 	assert.ok(todaysButton.is('.ui-state-highlight'), 'Returning to this year returnd the highlighing');
+	
+	var selectedButton = buttons.filter('.ui-state-active');
+	assert.equal( selectedButton.length, 1, 'There is one selected button');
+	assert.equal( selectedButton[0], buttons[4], 'The selected month is highlighted');
 	
 	field.MonthPicker('Destroy');
 });

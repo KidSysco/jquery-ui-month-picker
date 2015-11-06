@@ -1110,7 +1110,18 @@ QUnit.test('Today and selected months are highlighted', function (assert) {
 	assert.equal( selectedButton.length, 1, 'There is one selected button');
 	assert.equal( selectedButton[0], buttons[4], 'The selected month is highlighted');
 	
-	field.MonthPicker('Destroy');
+	field.MonthPicker('Close');
+	field.MonthPicker({MinMonth: 1});
+	
+	field.MonthPicker('Open');
+	
+	var selectedButton = buttons.filter('.ui-state-highlight');
+	assert.equal( selectedButton.length, 0, "Today is not heighlighted because it's before the min month");
+	
+		var selectedButton = buttons.filter('.ui-state-active');
+	assert.equal( selectedButton.length, 0, 'The selected mont is also not heighlighted');
+	
+	//field.MonthPicker('Destroy');
 });
 
 QUnit.test('Number of months from today', function (assert) {

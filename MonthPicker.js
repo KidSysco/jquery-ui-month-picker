@@ -15,7 +15,7 @@ License along with this library; if not, visit
 http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
 */
 ;
-(function ($, window, document) {
+(function ($, window, document, Date) {
 	'use strict';
     var _speeds = $.fx.speeds;
     var _eventsNs = '.MonthPicker';
@@ -53,6 +53,12 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
 	    return Math.floor(month / 12);
     }
     
+    function _bwtween(month, minMonth, maxMonth) {
+	    return
+		    (!minMonth || month > minMonth) && 
+			(!maxMonth || month < maxMonth)
+    }
+       
     function _stayActive() {
 	    $(this).addClass(_selectedClass);
     }
@@ -60,6 +66,47 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
     function _setActive( el, state ) {
 		return el[ state ? 'on' : 'off' ]('mousenter mouseout',  _stayActive )
 		      .toggleClass(_selectedClass, state);
+    }
+    
+    function _encodeMonth(_inst, _val) {
+        if (_val === null) {
+            return _val;
+        } else if (_val instanceof Date) {
+            return _toMonth(_val);
+        } else if ($.isNumeric(_val)) {
+			return _toMonth(new Date) + parseInt(_val, 10);
+        }
+        
+        var _date = _inst._parseMonth(_val);
+        if (_date) {
+            return _toMonth(_date);
+        }
+
+        return _parsePeriod(_val);
+    }
+        
+    function _parsePeriod(_val, _initDate) {
+        // Parsing is done by replacing tokens in the value to form
+        // a JSON object with it's keys and values reversed 
+        // (example '+1y +2m' will turn into {"+1":"y","+2":"m"})
+        // After that we just revers the keys and values.
+        var _json = _val.trim();
+        _json = _json.replace(/y/i, '":"y"');
+        _json = _json.replace(/m/i, '":"m"');
+
+        try {
+            var _rev = JSON.parse( '{"' + _json.replace(/ /g, ',"') + '}' ), obj = {};
+        		
+            for (var key in _rev) {
+                obj[ _rev[key] ] = key;
+            }
+        	
+        	var _month = _toMonth(new Date);
+        	_month += (parseInt(obj.m, 10) || 0);
+        	return _month + (parseInt(obj.y, 10) || 0) * 12;
+        } catch (e) {
+            return false;
+        }
     }
     
     // This test must be run before any rererence is made to jQuery.
@@ -152,8 +199,8 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             MaxMonth: null,
             Duration: 'normal',
             Button: _makeDefaultButton,
-            OnAfterSetDisabled: $noop,
             ButtonIcon: 'ui-icon-calculator',
+            OnAfterSetDisabled: $noop,
             OnBeforeMenuOpen: $noop,
             OnAfterMenuOpen: $noop,
             OnBeforeMenuClose: $noop, 
@@ -316,7 +363,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             var me = this, Month = 'Month';
             $.each(['Min', 'Max'], function(i, type) {
                 me["_set" + type + Month] = function(val) {
-                    if ((me['_' + type + Month] = this._toMonth(val)) === false) {
+                    if ((me['_' + type + Month] = _encodeMonth(me, val)) === false) {
                         alert(_badMinMaxVal.replace(/%/, type).replace(/_/, val));
                     }
                 };
@@ -356,7 +403,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             var _date = this.GetSelectedDate();
             
             if (this.options.ValidationErrorMessage !== null && !this.options.Disabled) {
-                this._validationMessage[ _date ? 'hide' : 'show' ]();
+                this._validationMessage.toggle(!_date);
             }
             
             return _date;
@@ -493,21 +540,21 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
         
         /****** Private functions ******/
 
-        _parseMonth: function(str) {
+        _parseMonth: function (str) {
             return this.ParseMonth(str || this.element.val(), this.options.MonthFormat);
         },
         
-        _formatMonth: function(date) {
+        _formatMonth: function (date) {
             return this.FormatMonth(date || this._parseMonth(), this.options.MonthFormat);
         },
 
         _showIcon: function () {
             var _button = this._monthPickerButton;
-                
+            
             if (!_button.length) {
 	            this._createButton();
             } else {
-                _button[this.options.ShowIcon ? 'show' : 'hide']();
+	            _button.toggle(!!this.options.ShowIcon);
             }
             
             this._updateFieldEvents();
@@ -559,7 +606,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             this._removeOldBtn = _removeOldBtn;
         },
 
-        _updateFieldEvents: function() {
+        _updateFieldEvents: function () {
 	        this.element.off('click' + _eventsNs);
             if (this.options.ShowOn === 'both' || !this._monthPickerButton.length) {
 				this.element.on('click' + _eventsNs, $.proxy(this.Open, this));
@@ -706,7 +753,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
 	            	.button('option', 'label', monthName);
             });
             
-            this._enableMonthButtons();
+            this._decorateButtons();
         },
 
         _showYearsClickHandler: function () {
@@ -781,7 +828,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             _year.text(parseInt(_year.text()) + amount, 10);
             this.element.focus();
             
-            this._enableMonthButtons();
+            this._decorateButtons();
             
             this.options['OnAfter' + (amount > 0 ? 'Next' : 'Previous') + 'Year'].call(this.element[0]);
         },
@@ -807,22 +854,31 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             this._setPickerYear( _year );  
         },
         
-        _enableMonthButtons: function() {
+        _decorateButtons: function() {
 	        var _curYear = this._getPickerYear(), _today = new Date();
 	        
-	        // Highlights today's month.
-	        var _btn = this._buttons[ _today.getMonth() ];
-	        $(_btn).toggleClass(_todayClass, _curYear === _today.getFullYear());
-			
-			// Heighlight the selected month.
+	        var _minDate = this._MinMonth, _maxDate = this._MaxMonth;
+	        
+	        // Heighlight the selected month.
 			_setActive( this._selectedBtn, false );
-		    
 	        var _sel = this.GetSelectedDate();
+	        var _selMonth = _sel ? _toMonth(_sel) : null;
+	        var _withinBounds = 
+		    	(!_minDate || _selMonth > _minDate) && 
+		    	(!_maxDate || _selMonth < _maxDate);
+		    	
 	        if (_sel && _sel.getFullYear() === _curYear) {
-		        this._selectedBtn = _setActive( $(this._buttons[_sel.getMonth()]) , true );
+		        this._selectedBtn = _setActive( $(this._buttons[_sel.getMonth()]) , _withinBounds );
 	        }
 	        
-	        var _minDate = this._MinMonth, _maxDate = this._MaxMonth;
+			// Highlights today's month.
+			var _todayMonth = _toMonth(_today);
+		    var _btn = this._buttons[ _today.getMonth() ];
+		    var _withinBounds = 
+		    	(!_minDate || _todayMonth > _minDate) && 
+		    	(!_maxDate || _todayMonth < _maxDate);
+		    	
+		    $(_btn).toggleClass(_todayClass, _withinBounds && _curYear === _today.getFullYear());
 	        
             this._prevButton.button('option', 'disabled', _minDate && _curYear == _toYear(_minDate));
             this._nextButton.button('option', 'disabled', _maxDate && _curYear == _toYear(_maxDate));
@@ -836,50 +892,9 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
                     (_maxDate && _currMonth > _maxDate)
                 ));
             }
-        },
-        
-        _toMonth: function(_val) {
-	        if (_val === null) {
-                return _val;
-            } else if (_val instanceof Date) {
-                return _toMonth(_val);
-            } else if ($.isNumeric(_val)) {
-				return _toMonth(new Date) + parseInt(_val, 10);
-            }
-            
-            var _date = this._parseMonth(_val);
-            if (_date) {
-                return _toMonth(_date);
-            }
-
-            return this._parsePeriod(_val);
-        },
-        
-        _parsePeriod: function(_val, _initDate) {
-            // Parsing is done by replacing tokens in the value to form
-            // a JSON object with it's keys and values reversed 
-            // (example '+1y +2m' will turn into {"+1":"y","+2":"m"})
-            // After that we just revers the keys and values.
-            var _json = _val.trim();
-            _json = _json.replace(/y/i, '":"y"');
-            _json = _json.replace(/m/i, '":"m"');
-
-            try {
-                var _rev = JSON.parse( '{"' + _json.replace(/ /g, ',"') + '}' ), obj = {};
-            		
-                for (var key in _rev) {
-                    obj[ _rev[key] ] = key;
-                }
-            	
-            	var _month = _toMonth(new Date);
-            	_month += (parseInt(obj.m, 10) || 0);
-            	return _month + (parseInt(obj.y, 10) || 0) * 12;
-            } catch (e) {
-                return false;
-            }
         }
     });
     
     // Added in version 2.4.
     $.MonthPicker.VERSION = '2.7';
-}(jQuery, window, document));
+}(jQuery, window, document, Date));

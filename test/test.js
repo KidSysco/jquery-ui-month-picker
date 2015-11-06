@@ -268,8 +268,13 @@ QUnit.test('API Tests', function (assert) {
     assert.equal(_picker.prop('disabled'), false, '#EnableDisableDemo was enabled by changing the Disabled option.');
     _picker.MonthPicker('Disable');
     assert.equal(_picker.prop('disabled'), true, '#EnableDisableDemo was disabled using the Disable() API call.');
+    
+    assert.ok(_picker.is('.month-picker-disabled'), 'The input field has the month-picker-disabled class');
+    
     _picker.MonthPicker('Enable');
     assert.equal(_picker.prop('disabled'), false, '#EnableDisableDemo was enabled using the Disable() API call.');
+    
+    assert.notOk(_picker.is('.month-picker-disabled'), 'The month-picker-disabled class was removed from the input field');
 });
 
 QUnit.test('Digital Bush Tests', function (assert) {
@@ -341,7 +346,7 @@ QUnit.test('MonthFormat Option Tests', function (assert) {
 QUnit.test('Events and context', function (assert) { // A.k.a duplicate code test.
 	// Good luck figuring out which callback is causing the 
 	// problem if this test fails.
-	assert.expect(27);
+	assert.expect(30);
 	
 	var field = $(EventsField).MonthPicker({
 		Animation: 'none', // Disable animation to make sure opening and closing the menu is synchronous.
@@ -475,6 +480,21 @@ QUnit.test('Events and context', function (assert) { // A.k.a duplicate code tes
 	assert.ok( !menu.is(':visible'), 'Clicking May closed the menu' );
 	assert.ok(OnAfterMenuCloseTriggered, 'Clicking May triggered the OnAfterMenuClose event');
 	
+	
+	field.MonthPicker('option', 'OnAfterSetDisabled', function(disabled) {
+		assert.equal( this, EventsField, 'OnAfterSetDisabled was called in the right context' );	
+		
+		assert.ok(disabled, 'Disabling the field passed true as the first argument to the OnAfterSetDisabled callback');
+	});
+	
+	field.MonthPicker('Disable');
+	
+	field.MonthPicker('option', 'OnAfterSetDisabled', function(disabled) {
+		assert.notOk(disabled, 'Enabling the field passed false as the first argument to the OnAfterSetDisabled callback');
+	});
+	
+	field.MonthPicker('Enable');
+	
 	field.MonthPicker('ClearAllCallbacks');
 });
 
@@ -557,6 +577,12 @@ QUnit.test('Plain HTML Button test', function (assert) {
     // Make sure clicking the button doesn't open the menu.
     $(PlainButton).trigger('click');
     assert.ok($(MonthPicker_PlainButtonField).is(':hidden'), "Clicking the button didn't open the menu.");
+    
+    $(PlainButtonField).MonthPicker({ 
+	    Button: '<input id="InputBtn" type="button" value="Click me" />'
+	});
+	
+	assert.ok($(InputBtn).is(':disabled'), 'The new button is disabled');
 });
 
 QUnit.test('Img tag tests', function (assert) {
@@ -586,6 +612,7 @@ QUnit.test('Img tag tests', function (assert) {
     // and make sure the button is also disabled.
     $(ImgButtonField).MonthPicker('Disable');
 
+	assert.strictEqual($('.ImgButton').prop('disabled'), undefined, "The plugin didn't try to disable the img button");
     assert.ok($(ImgButtonField).is(':disabled'), 'The input field was disabled.');
     assert.ok($(MonthPicker_ImgButtonField).is(':hidden'), 'The menu was closed.');
 

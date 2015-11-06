@@ -20,7 +20,6 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
     var _speeds = $.fx.speeds;
     var _eventsNs = '.MonthPicker';
     var _disabledClass = 'month-picker-disabled';
-    //var _setActiveEvents = "mousenter" + _eventsNs + " mouseout" + _eventsNs;
     var _todayClass = 'ui-state-highlight';
     var _selectedClass = 'ui-state-active';
     var _defaultPos = { my: 'left top+1', at: 'left bottom' };
@@ -38,7 +37,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
         ValidationErrorMessage: '_createValidationMessage',
         Disabled: '_setDisabledState', 
         ShowIcon: '_showIcon', 
-        Button: '_createButton', 
+        Button: '_updateButton',
         ShowOn: '_updateFieldEvents',
         IsRTL: '_setRTL',
         StartYear: '_setPickerYear',
@@ -469,16 +468,6 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
                 }
             }
         },
-
-        // The API user can override this method to 
-        // change the way buttons are disabled.
-        SetDisabled: function (state, button) {
-            try {
-                button.button('option', 'disabled', state);
-            } catch (e) {
-                button.prop('disabled', state);
-            }
-        },
         
         /**
          * Methods the user can override to use a third party library
@@ -524,7 +513,26 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             this._updateFieldEvents();
         },
 
-        _createButton: function() {
+        _updateButton: function () {
+            var isDisabled = this.options.Disabled;
+			
+            this._createButton();
+            
+            // If the button is a jQuery UI button, 
+            // plain HTML button or an input we support disable it,
+            // otherwise the user must handle the diabled state
+            // by creating an appropriate button by passing
+            // a function. See Button option: Img tag tests for
+            // more details.
+            var _button = this._monthPickerButton;
+            try {
+                _button.button('option', 'disabled', isDisabled);
+            } catch (e) {
+                _button.filter('button, input').prop('disabled', isDisabled);
+            }
+        },
+
+        _createButton: function () {
 	        if (!this.options.ShowIcon) return;
 	        
 	        var _oldButton = this._monthPickerButton.off(_eventsNs);
@@ -633,20 +641,20 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
         },
 
         _setDisabledState: function () {
-            var isDisabled = this.options.Disabled;
+            var isDisabled = this.options.Disabled, _elem = this.element;
             
-            this.element[0].disabled = isDisabled;
-            this.element[isDisabled ? 'addClass' : 'removeClass']('disabled');
+            // Disable the associated input field.
+            _elem[0].disabled = isDisabled;
+            _elem.toggleClass(_disabledClass, isDisabled);
+            
             if (isDisabled) {
                 this._validationMessage.hide();
             }
             
             this.Close();
-            
-            this._createButton();
-            
-            this.SetDisabled(isDisabled, this._monthPickerButton);
-            this.options.OnAfterSetDisabled.call(this.element[0], isDisabled);
+            this._updateButton();
+
+            this.options.OnAfterSetDisabled.call(_elem[0], isDisabled);
         },
         
         _getPickerYear: function () {

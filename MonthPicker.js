@@ -53,12 +53,6 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
 	    return Math.floor(month / 12);
     }
     
-    function _bwtween(month, minMonth, maxMonth) {
-	    return
-		    (!minMonth || month > minMonth) && 
-			(!maxMonth || month < maxMonth)
-    }
-       
     function _stayActive() {
 	    $(this).addClass(_selectedClass);
     }
@@ -66,6 +60,10 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
     function _setActive( el, state ) {
 		return el[ state ? 'on' : 'off' ]('mousenter mouseout',  _stayActive )
 		      .toggleClass(_selectedClass, state);
+    }
+    
+    function _between(month, from, until) {
+	    return (!from || month >= from) && (!until || month <= until);
     }
     
     function _encodeMonth(_inst, _val) {
@@ -792,21 +790,23 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
 
             _setActive( this._selectedBtn, false );
 		    
-	        var _sel = this.GetSelectedDate();	        
+	        var _selYear = this.GetSelectedYear();
 	        var _onClick = $.proxy(this._onYearClick, this);
+	        var _todayWithinBounds = _between(_thisYear, _minYear, _maxYear);	        	
+	        var _selWithinBounds = _between(_selYear, _minYear, _maxYear);
+	        
             for (var _counter = 0; _counter < 12; _counter++) {
-                var _year = _currYear + _yearDifferential, _btn = $( this._buttons[_counter] );
-	            
-                _btn.on( 'click' + _eventsNs, { year: _year }, _onClick )
-                    .button('option', 'label', _year);
+                var _year = _currYear + _yearDifferential;
 		        
-                var _btn = $(this._buttons[_counter]).button('option', 'disabled', (
-                    (_minYear && _year < _minYear) || 
-                    (_maxYear && _year > _maxYear)
-                ))
-                .toggleClass(_todayClass, _year === _thisYear);
-                
-		        if (_sel && _sel.getFullYear() === _year) {
+                var _btn = $( this._buttons[_counter] ).button({
+						disabled: !_between(_year, _minYear, _maxYear),
+						label: _year
+					})
+					.toggleClass(_todayClass, _todayWithinBounds && _year === _thisYear) // Heighlight the current year.
+					.on( 'click' + _eventsNs, { year: _year }, _onClick )
+                    
+                 // Heighlight the selected year.
+		        if (_selWithinBounds && _selYear && _selYear === _year) {
 			        this._selectedBtn = _setActive( _btn , true );
 		        }
                 
@@ -862,24 +862,19 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
 	        // Heighlight the selected month.
 			_setActive( this._selectedBtn, false );
 	        var _sel = this.GetSelectedDate();
-	        var _selMonth = _sel ? _toMonth(_sel) : null;
-	        var _withinBounds = 
-		    	(!_minDate || _selMonth > _minDate) && 
-		    	(!_maxDate || _selMonth < _maxDate);
+	        var _withinBounds = _between(_sel ? _toMonth(_sel) : null, _minDate, _maxDate);
 		    	
 	        if (_sel && _sel.getFullYear() === _curYear) {
 		        this._selectedBtn = _setActive( $(this._buttons[_sel.getMonth()]) , _withinBounds );
 	        }
 	        
 			// Highlights today's month.
-			var _todayMonth = _toMonth(_today);
-		    var _btn = this._buttons[ _today.getMonth() ];
-		    var _withinBounds = 
-		    	(!_minDate || _todayMonth > _minDate) && 
-		    	(!_maxDate || _todayMonth < _maxDate);
+		    var _withinBounds = _between(_toMonth(_today), _minDate, _maxDate);
 		    	
-		    $(_btn).toggleClass(_todayClass, _withinBounds && _curYear === _today.getFullYear());
+		    $(this._buttons[ _today.getMonth() ])
+		    	.toggleClass(_todayClass, _withinBounds && _curYear === _today.getFullYear());
 	        
+	        // Disable the next/prev button if we've reached the min/max year.
             this._prevButton.button('option', 'disabled', _minDate && _curYear == _toYear(_minDate));
             this._nextButton.button('option', 'disabled', _maxDate && _curYear == _toYear(_maxDate));
 	        
@@ -887,10 +882,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
 	            // Disable the button if the month is not between the 
 	            // min and max interval.
 	            var _currMonth = ((_curYear * 12) + i);
-	            $(this._buttons[i]).button('option', 'disabled', (
-                    (_minDate && _currMonth < _minDate) || 
-                    (_maxDate && _currMonth > _maxDate)
-                ));
+	            $(this._buttons[i]).button({ disabled: !_between(_currMonth, _minDate, _maxDate) });
             }
         }
     });

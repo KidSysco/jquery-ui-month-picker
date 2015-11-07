@@ -27,9 +27,6 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
     var _posErr = _setupErr + 'The jQuery UI position plug-in must be loaded.';
     var _badOptValErr = _setupErr + 'Unsupported % option value, supported values are: ';
     var _badMinMaxVal =  _setupErr + '"_" is not a valid %Month value.';
-    var $noop = $.noop;
-    var $proxy = $.proxy;
-    var $datepicker = $.datepicker;
     var _openedInstance = null;
     var _hasPosition = !!$.ui.position;
     var _animVals = {
@@ -48,6 +45,10 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
         MinMonth: '_setMinMonth',
         MaxMonth: '_setMaxMonth'
     };
+    var $noop = $.noop;
+    var $proxy = $.proxy;
+    var $datepicker = $.datepicker;
+    var click = 'click' + _eventsNs;
     
     function _toMonth(date) {
 	    return date.getMonth() + (date.getFullYear() * 12);
@@ -86,7 +87,11 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
 
         return _parsePeriod(_val);
     }
-        
+    
+    function _event(_event, _inst) {
+	    return $proxy(_inst.options[_event] || $noop, _inst.element[0]);
+    }
+    
     function _parsePeriod(_val, _initDate) {
         // Parsing is done by replacing tokens in the value to form
         // a JSON object with it's keys and values reversed 
@@ -197,20 +202,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             MaxMonth: null,
             Duration: 'normal',
             Button: _makeDefaultButton,
-            ButtonIcon: 'ui-icon-calculator',
-            OnAfterSetDisabled: $noop,
-            OnBeforeMenuOpen: $noop,
-            OnAfterMenuOpen: $noop,
-            OnBeforeMenuClose: $noop, 
-            OnAfterMenuClose: $noop,
-            OnAfterNextYear: $noop,
-            OnAfterNextYears: $noop,
-            OnAfterPreviousYear: $noop,
-            OnAfterPreviousYears: $noop,
-            OnAfterChooseMonth: $noop,
-            OnAfterChooseYear: $noop,
-            OnAfterChooseYears: $noop,
-            OnAfterChooseMonths: $noop
+            ButtonIcon: 'ui-icon-calculator'
         },
 
         _monthPickerButton: $(),
@@ -233,11 +225,11 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
 
             _elem.removeClass('month-year-input').off(_eventsNs);
 
-            $(document).off('click' + _eventsNs + this.uuid);
+            $(document).off(click + this.uuid);
 
             this._monthPickerMenu.remove();
             
-            var _button = this._monthPickerButton.off('click' + _eventsNs);
+            var _button = this._monthPickerButton.off(click);
             if (this._removeOldBtn) {
 	            _button.remove();
             }
@@ -328,7 +320,11 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             $('body').append(_menu);
 
             $('.year-title', _menu).text(this._i18n('year'));
-            $('.year-container-all', _menu).attr('title', this._i18n('jumpYears'));
+            
+            this._yearContainerAll = 
+            	$('.year-container-all', _menu)
+            	.attr('title', this._i18n('jumpYears'))
+            	.click($proxy(this._showYearsClickHandler, this));
 
             this._createValidationMessage();
 
@@ -349,10 +345,8 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             }
             
             this._buttons = $('button', $table).button();
-
-            $('.year-container-all', _menu).click($proxy(this._showYearsClickHandler, this));
             
-            _menu.on('click' + _eventsNs, function (event) {
+            _menu.on(click, function (event) {
                 return false;
             });
 
@@ -443,7 +437,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             
 	            // Allow the user to prevent opening the menu.
 	            event = event || new $.Event();
-	            if (_opts.OnBeforeMenuOpen.call(_elem[0], event) === false || event.isDefaultPrevented()) {
+	            if (_event('OnBeforeMenuOpen', this)(event) === false || event.isDefaultPrevented()) {
 	                return false;
 	            }
 	            
@@ -459,7 +453,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
 	            var _menu = this._monthPickerMenu;
 	            this._showMonths();
                 
-	            $(document).on('click' + _eventsNs + this.uuid, $proxy(this.Close, this))
+	            $(document).on(click + this.uuid, $proxy(this.Close, this))
                            .on('keydown' + _eventsNs + this.uuid, $proxy(this._keyDown, this));
                 
 	            // Trun off validation so that clicking one of the months
@@ -477,7 +471,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
                 _menu[ _noAnim ? 'fadeIn' : _anim ]({
                    duration: _noAnim ? 0 : this._duration(),
                    start: $proxy(this._position, this, _menu),
-                   complete: $proxy(_opts.OnAfterMenuOpen, _elem[0])
+                   complete: _event('OnAfterMenuOpen', this)
                 }); 
             }
             
@@ -491,19 +485,18 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
                     _elem = this.element;
                 
                 event = event || new $.Event();
-                if (_opts.OnBeforeMenuClose.call(_elem[0], event) === false || event.isDefaultPrevented()) {
+                if (_event('OnBeforeMenuClose', this)(event) === false || event.isDefaultPrevented()) {
                     return;
                 }
                 
                 this._visible = false;
                 _openedInstance = null;
                 $(document).off('keydown' + _eventsNs + this.uuid)
-                           .off('click' + _eventsNs + this.uuid);
+                           .off(click + this.uuid);
                 
                 this.Validate();
                 _elem.on('blur' + _eventsNs, $proxy(this.Validate, this));
-                
-                var _callback = $proxy(_opts.OnAfterMenuClose, _elem[0]);
+                var _callback = _event('OnAfterMenuClose', this);
                 
                 var _anim = _opts.HideAnim || _opts.Animation;
                 if (_anim === 'none') {
@@ -595,7 +588,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
                         $(this).insertAfter(_elem);
                     }
                 })
-                .on('click' + _eventsNs, $proxy(this.Toggle, this));
+                .on(click, $proxy(this.Toggle, this));
             
             if (this._removeOldBtn) {
 	            _oldButton.remove();
@@ -605,9 +598,9 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
         },
 
         _updateFieldEvents: function () {
-	        this.element.off('click' + _eventsNs);
+	        this.element.off(click);
             if (this.options.ShowOn === 'both' || !this._monthPickerButton.length) {
-				this.element.on('click' + _eventsNs, $proxy(this.Open, this));
+				this.element.on(click, $proxy(this.Open, this));
             }
         },
 
@@ -699,7 +692,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             this.Close();
             this._updateButton();
 
-            this.options.OnAfterSetDisabled.call(_elem[0], isDisabled);
+			_event('OnAfterSetDisabled', this)(isDisabled);
         },
         
         _getPickerYear: function () {
@@ -716,7 +709,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             _setActive( this._selectedBtn, false );
             this._selectedBtn = _setActive( $(this._buttons[month-1]), true );
             
-            this.options.OnAfterChooseMonth.call(this.element[0]);
+            _event('OnAfterChooseMonth', this)();
         },
 
         _chooseYear: function (year) {
@@ -724,11 +717,11 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             this._buttons.removeClass(_todayClass);
             this._showMonths();
 
-            this.options.OnAfterChooseYear.call(this.element[0]);
+			_event('OnAfterChooseYear', this)();
         },
 
         _showMonths: function () {
-            var _months = this._i18n('months'), click = 'click' + _eventsNs;
+            var _months = this._i18n('months');
             
             this._prevButton
                 .attr('title', this._i18n('prevYear'))
@@ -740,7 +733,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
                 .off(click)
                 .on(click, $proxy(this._addToYear, this, 1));
 
-            $('.year-container-all', this._monthPickerMenu).css('cursor', 'pointer');
+            this._yearContainerAll.css('cursor', 'pointer');
             
             this._buttons.off(_eventsNs);
 
@@ -758,7 +751,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
 	        this._buttons.removeClass(_todayClass);
             this._showYears();
 
-            this.options.OnAfterChooseYears.call(this.element[0]);
+			_event('OnAfterChooseYears', this)();
         },
 
         _showYears: function () {
@@ -766,9 +759,8 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
                 _yearDifferential = -4,
                 _firstYear = (_currYear + _yearDifferential),
                 AMOUNT_TO_ADD = 5,
-                _thisYear = new Date().getFullYear(),
-                click = 'click' + _eventsNs;
-            
+                _thisYear = new Date().getFullYear();
+                        
             var _minDate = this._MinMonth;
             var _maxDate = this._MaxMonth;
             var _minYear = _minDate ? _toYear(_minDate) : 0;
@@ -785,7 +777,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
                 .on(click, $proxy(this._addToYears, this, AMOUNT_TO_ADD))
                 .button('option', 'disabled', _maxYear && (_firstYear + 12) -1 > _maxYear);
 
-            $('.year-container-all', this._monthPickerMenu).css('cursor', 'default');
+            this._yearContainerAll.css('cursor', 'default');
             this._buttons.off(_eventsNs);
 
             _setActive( this._selectedBtn, false );
@@ -830,7 +822,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             
             this._decorateButtons();
             
-            this.options['OnAfter' + (amount > 0 ? 'Next' : 'Previous') + 'Year'].call(this.element[0]);
+            _event('OnAfter' + (amount > 0 ? 'Next' : 'Previous') + 'Year', this)();
         },
 
         _addToYears: function(amount) {
@@ -839,7 +831,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             this._showYears();
             this.element.focus();
 
-            this.options['OnAfter' + (amount > 0 ? 'Next' : 'Previous') + 'Years'].call(this.element[0]);
+			_event('OnAfter' + (amount > 0 ? 'Next' : 'Previous') + 'Years', this)();
         },
         
         _ajustYear: function(_opts) {
@@ -869,7 +861,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
 	        
 			// Highlights today's month.
 		    var _withinBounds = _between(_toMonth(_today), _minDate, _maxDate);
-		    	
+		   
 		    $(this._buttons[ _today.getMonth() ])
 		    	.toggleClass(_todayClass, _withinBounds && _curYear === _today.getFullYear());
 	        

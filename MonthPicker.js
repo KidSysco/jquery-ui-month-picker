@@ -16,6 +16,16 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
 */
 (function ($, window, document, Date) {
 	'use strict';
+	
+	// This test must be run before any rererence is made to jQuery.
+    // In case the user didn't load jQuery or jQuery UI the plugin
+    // will fail before it get's to this test + there is no reason
+    // to perform this test for every MonthPicker instance being created.
+    if (!$ || !$.ui || !$.ui.button || !$.ui.datepicker) {
+        alert(_setupErr + 'The jQuery UI button and datepicker plug-ins must be loaded.');
+        return false;
+    }
+    
     var _speeds = $.fx.speeds;
     var _eventsNs = '.MonthPicker';
     var _disabledClass = 'month-picker-disabled';
@@ -114,15 +124,6 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
         } catch (e) {
             return false;
         }
-    }
-    
-    // This test must be run before any rererence is made to jQuery.
-    // In case the user didn't load jQuery or jQuery UI the plugin
-    // will fail before it get's to this test + there is no reason
-    // to perform this test for every MonthPicker instance being created.
-    if (!$ || !$.ui || !$.ui.button || !$.ui.datepicker) {
-        alert(_setupErr + 'The jQuery UI button and datepicker plug-ins must be loaded.');
-        return false;
     }
     
     function _makeDefaultButton(options) {
@@ -493,7 +494,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
                 _openedInstance = null;
                 $(document).off('keydown' + _eventsNs + this.uuid)
                            .off(click + this.uuid);
-                
+                           
                 this.Validate();
                 _elem.on('blur' + _eventsNs, $proxy(this.Validate, this));
                 var _callback = _event('OnAfterMenuClose', this);
@@ -847,7 +848,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
         },
         
         _decorateButtons: function() {
-	        var _curYear = this._getPickerYear(), _today = new Date(),
+	        var _curYear = this._getPickerYear(), _todaysMonth = _toMonth(new Date),
 	            _minDate = this._MinMonth, _maxDate = this._MaxMonth;
 	        
 	        // Heighlight the selected month.
@@ -857,13 +858,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
 		    	
 	        if (_sel && _sel.getFullYear() === _curYear) {
 		        this._selectedBtn = _setActive( $(this._buttons[_sel.getMonth()]) , _withinBounds );
-	        }
-	        
-			// Highlights today's month.
-		    var _withinBounds = _between(_toMonth(_today), _minDate, _maxDate);
-		   
-		    $(this._buttons[ _today.getMonth() ])
-		    	.toggleClass(_todayClass, _withinBounds && _curYear === _today.getFullYear());
+	        }	
 	        
 	        // Disable the next/prev button if we've reached the min/max year.
             this._prevButton.button('option', 'disabled', _minDate && _curYear == _toYear(_minDate));
@@ -872,8 +867,11 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
 	        for (var i = 0; i < 12; i++) {
 	            // Disable the button if the month is not between the 
 	            // min and max interval.
-	            var _currMonth = ((_curYear * 12) + i);
-	            $(this._buttons[i]).button({ disabled: !_between(_currMonth, _minDate, _maxDate) });
+	            var _month = (_curYear * 12) + i, _isBetween = _between(_month, _minDate, _maxDate);
+	            
+	            $(this._buttons[i])
+	            	.button({ disabled: !_isBetween })
+					.toggleClass(_todayClass, _isBetween && _month == _todaysMonth); // Highlights today's month.
             }
         }
     });

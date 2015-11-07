@@ -1097,18 +1097,26 @@ QUnit.test('Today and selected months are highlighted', function (assert) {
 	
 	nextYearButton.trigger('click');
 	
-	assert.notOk(todaysButton.is('.ui-state-highlight'), 'Going to the next year removed highlighing');
+	assert.notOk(todaysButton.is('.ui-state-highlight'), 'Going to the next year removed highlighting');
 	
 	var selectedButton = buttons.filter('.ui-state-active');
-	assert.equal( selectedButton.length, 0, 'Going to the next year removed the selected highlighing');
+	assert.equal( selectedButton.length, 0, 'Going to the next year removed the selected highlighting');
 	
 	previousYearButton.trigger('click');
 	
-	assert.ok(todaysButton.is('.ui-state-highlight'), 'Returning to this year returnd the highlighing');
+	assert.ok(todaysButton.is('.ui-state-highlight'), 'Returning to this year returnd the highlighting');
 	
 	var selectedButton = buttons.filter('.ui-state-active');
 	assert.equal( selectedButton.length, 1, 'There is one selected button');
 	assert.equal( selectedButton[0], buttons[4], 'The selected month is highlighted');
+	
+	menu.find('.year').trigger('click');
+	
+	var selectdBtn = buttons.filter('.ui-state-active');
+	assert.equal( selectdBtn.button( "option", "label" ), _today.getFullYear(), 'The selected year is highlighted');
+	
+	var todayBtn = buttons.filter('.ui-state-highlight');
+	assert.equal( todayBtn.button( "option", "label" ), _today.getFullYear(), "Today's year is highlighted");
 	
 	field.MonthPicker('Close');
 	field.MonthPicker({MinMonth: 1});
@@ -1116,7 +1124,7 @@ QUnit.test('Today and selected months are highlighted', function (assert) {
 	field.MonthPicker('Open');
 	
 	var selectedButton = buttons.filter('.ui-state-highlight');
-	assert.equal( selectedButton.length, 0, "Today is not heighlighted because it's before the min month");
+	assert.equal( selectedButton.length, 0, "Today is not highlighted because it's before the min month");
 	
 	var selectedButton = buttons.filter('.ui-state-active');
 	assert.equal( selectedButton.length, 0, 'The selected mont is also not heighlighted');

@@ -612,7 +612,7 @@ QUnit.test('Img tag tests', function (assert) {
     // and make sure the button is also disabled.
     $(ImgButtonField).MonthPicker('Disable');
 
-	assert.strictEqual($('.ImgButton').prop('disabled'), undefined, "The plugin didn't try to disable the img button");
+	assert.notStrictEqual($('.ImgButton').prop('disabled'), true, "The plugin didn't try to disable the img button");
     assert.ok($(ImgButtonField).is(':disabled'), 'The input field was disabled.');
     assert.ok($(MonthPicker_ImgButtonField).is(':hidden'), 'The menu was closed.');
 

@@ -1,7 +1,7 @@
 /*
 https://github.com/KidSysco/jquery-ui-month-picker/
 
-Version 2.7
+Version 2.8
 
 This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
@@ -147,7 +147,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
     }
     
     $.MonthPicker = {
-	    VERSION: 2.7, // Added in version 2.4;
+	    VERSION: 2.8, // Added in version 2.4;
         i18n: {
             year: "Year",
             prevYear: "Previous Year",
@@ -279,7 +279,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             // TLDR:
             // http://www.w3.org/TR/html5/forms.html#the-input-element 
             // https://api.jquery.com/text-selector/
-            if (!_el.is('input') || ['text', 'month', void 0].indexOf(_el.attr('type')) === -1) {
+            if (!_el.is('input,div,span') || ['text', 'month', void 0].indexOf(_el.attr('type')) === -1) {
                 var error = _setupErr + 'MonthPicker can only be called on text or month inputs.';
                 // Call alert first so that IE<10 won't trip over console.log and swallow all errors.
                 alert(error + ' \n\nSee (developer tools) for more details.');
@@ -316,9 +316,10 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             _el.addClass('month-year-input');
 
             var _menu = this._monthPickerMenu = $('<div id="MonthPicker_' + _el.attr('id') + '" class="month-picker ui-helper-clearfix"></div>');
+            var _isInline = _el.is('div,span');
             
             $(_markup).appendTo(_menu);
-            $('body').append(_menu);
+            (_menu).appendTo( _isInline ? _el : document.body );
 
             $('.year-title', _menu).text(this._i18n('year'));
             
@@ -368,6 +369,10 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             this._setDisabledState();
             this._updateFieldEvents();
             this.Destroy = this.destroy;
+            
+            if (_isInline) {
+	            this.Open();
+            }
         },
 
         /****** Misc. Utility functions ******/
@@ -453,7 +458,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
 	            _openedInstance = this;
 	            var _menu = this._monthPickerMenu;
 	            this._showMonths();
-                
+                if (_elem.is('input')) {
 	            $(document).on(click + this.uuid, $proxy(this.Close, this))
                            .on('keydown' + _eventsNs + this.uuid, $proxy(this._keyDown, this));
                 
@@ -474,16 +479,20 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
                    start: $proxy(this._position, this, _menu),
                    complete: _event('OnAfterMenuOpen', this)
                 }); 
+                } else {
+	                _menu.show();
+	                _event('OnAfterMenuOpen', this)();
+                }
             }
             
             return false;
         },
         
         Close: function (event) {            
-            if (this._visible) {
+	        var _elem = this.element;
+            if (this._visible && _elem.is('input')) {
                 var _menu = this._monthPickerMenu, 
-                    _opts = this.options,
-                    _elem = this.element;
+                    _opts = this.options;
                 
                 event = event || new $.Event();
                 if (_event('OnBeforeMenuClose', this)(event) === false || event.isDefaultPrevented()) {

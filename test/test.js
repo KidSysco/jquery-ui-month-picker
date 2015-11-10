@@ -341,6 +341,16 @@ QUnit.test('MonthFormat Option Tests', function (assert) {
     assert.equal($(FormatField).val(), 'April 2012', 'The text field has the value April 2012');
 });
 
+QUnit.test('Inline menu', function(assert) {
+	var field = $(InlineMenuDiv).MonthPicker();
+	
+	var menu = $(MonthPicker_InlineMenuDiv);
+	
+	assert.ok(menu.is(':visible'), 'The menu is visible without having to call the Open method');
+	
+	field.MonthPicker('destroy');
+});
+
 // Makes sure that all events are triggered as expected.
 // Perhaps we should consider removing some of these events.
 QUnit.test('Events and context', function (assert) { // A.k.a duplicate code test.

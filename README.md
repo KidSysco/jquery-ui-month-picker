@@ -1,4 +1,4 @@
-<h1>The jQuery UI Month Picker Version 2.6.2</h1>
+<h1>The jQuery UI Month Picker Version 2.7</h1>
 <p>The jQuery UI Month Picker Plugin is designed to allow user input for only a month and year when only that input is 
 required. Clicking on the year, allows the user to jump ahead or back 5 years at a time. Clicking anywhere on the 
 page, except on the month picker menu itself, will cause the month picker to hide. The Month Picker has lots of options 
@@ -246,23 +246,12 @@ Button: function(options) {
 </p>
 
 <p>
-<b>NOTE:</b> If you just want to use a different <a href='http://api.jqueryui.com/theming/icons/'>icon class name</a> for the default icon see the <a href='#buttonicon'>ButtonIcon option</a>.
-</p>
-
-<p>
-If the element was not added to the document (is not a descendant of document.body)
-it will be inserted after the associated input field.
-</p>
-
-<p>
-When you change the <a href='#disabled'>Disabled</a> option the button will be visualy disabled if it's a <a href='https://jqueryui.com/button/'>jQuery UI button</a> or if it's a DOM element
-that responds to the disabled property (for example the <a href='https://developer.mozilla.org/en/docs/Web/HTML/Element/button'>button tag</a>, an <a href='https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/button'>input type button</a> etc...).  <br />
-This means that if you assign an image button and you are changing the Disabled option you must provide a disabled image as shown in the <a href='#disabledimgbtn'>example</a> below.
+If you just want to use a different <a href='http://api.jqueryui.com/theming/icons/'>icon class name</a> for the default icon see the <a href='#buttonicon'>ButtonIcon option</a>.
 </p>
 
 <p>
     Create a button similar to the default button created by jQuery UI Datepicker's <a href='http://api.jqueryui.com/datepicker/#option-showOn'>showOn:</a> 'both' option.
-<pre>
+<pre id='newelbtn'>
 $('.selector').MonthPicker({ 
     Button: '&lt;button type="button" class="ui-datepicker-trigger">...&lt;/button>'
 });
@@ -299,7 +288,7 @@ $('.selector').MonthPicker({
 
     Assign an existing element with a class of button that immediately follows
     the associated input field as a button.
-<pre>
+<pre id='existingelbtn'>
 $('.selector').MonthPicker({ 
     Button: function() {
         return $(this).next('.button');
@@ -307,10 +296,10 @@ $('.selector').MonthPicker({
 });
 </pre>
 
-    Assign a specific element with the class .selector
+    Assign a specific element with the class button.
 <pre>
 $('.selector').MonthPicker({ 
-    Button: '.selector'
+    Button: '.button'
 });
 </pre>
 
@@ -322,6 +311,17 @@ var button = $('.selector').MonthPicker('option', 'Button');
 //setter (hide the button and show the menu upon focus of the text box).
 $('.selector').MonthPicker('option', 'Button', false );
 </pre>
+</p>
+
+<p>
+You can create a button out of a <a href='#newelbtn'>new element</a> that will be inserted after the associated input field or pass in an <a href='#existingelbtn'>existing element</a> that is already placed somewhere else in the DOM.
+</p>
+
+<p>
+When you change the <a href='#disabled'>Disabled</a> option the button will be visually disabled if it's a <a href='https://jqueryui.com/button/'>jQuery UI button</a> or if it's a <a href='https://developer.mozilla.org/en/docs/Web/HTML/Element/button'>button tag</a> or an <a href='https://developer.mozilla.org/en/docs/Web/HTML/Element/Input'>input</a> etc...).  <br />
+</p>
+<p>
+If the button is not one of the elements above then you have to disable the element yourself as shown in the <a href='#disabledimgbtn'>example</a> above.
 </p>
 
 <p>

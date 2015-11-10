@@ -268,8 +268,13 @@ QUnit.test('API Tests', function (assert) {
     assert.equal(_picker.prop('disabled'), false, '#EnableDisableDemo was enabled by changing the Disabled option.');
     _picker.MonthPicker('Disable');
     assert.equal(_picker.prop('disabled'), true, '#EnableDisableDemo was disabled using the Disable() API call.');
+    
+    assert.ok(_picker.is('.month-picker-disabled'), 'The input field has the month-picker-disabled class');
+    
     _picker.MonthPicker('Enable');
     assert.equal(_picker.prop('disabled'), false, '#EnableDisableDemo was enabled using the Disable() API call.');
+    
+    assert.notOk(_picker.is('.month-picker-disabled'), 'The month-picker-disabled class was removed from the input field');
 });
 
 QUnit.test('Digital Bush Tests', function (assert) {
@@ -341,7 +346,7 @@ QUnit.test('MonthFormat Option Tests', function (assert) {
 QUnit.test('Events and context', function (assert) { // A.k.a duplicate code test.
 	// Good luck figuring out which callback is causing the 
 	// problem if this test fails.
-	assert.expect(27);
+	assert.expect(30);
 	
 	var field = $(EventsField).MonthPicker({
 		Animation: 'none', // Disable animation to make sure opening and closing the menu is synchronous.
@@ -475,6 +480,21 @@ QUnit.test('Events and context', function (assert) { // A.k.a duplicate code tes
 	assert.ok( !menu.is(':visible'), 'Clicking May closed the menu' );
 	assert.ok(OnAfterMenuCloseTriggered, 'Clicking May triggered the OnAfterMenuClose event');
 	
+	
+	field.MonthPicker('option', 'OnAfterSetDisabled', function(disabled) {
+		assert.equal( this, EventsField, 'OnAfterSetDisabled was called in the right context' );	
+		
+		assert.ok(disabled, 'Disabling the field passed true as the first argument to the OnAfterSetDisabled callback');
+	});
+	
+	field.MonthPicker('Disable');
+	
+	field.MonthPicker('option', 'OnAfterSetDisabled', function(disabled) {
+		assert.notOk(disabled, 'Enabling the field passed false as the first argument to the OnAfterSetDisabled callback');
+	});
+	
+	field.MonthPicker('Enable');
+	
 	field.MonthPicker('ClearAllCallbacks');
 });
 
@@ -557,6 +577,12 @@ QUnit.test('Plain HTML Button test', function (assert) {
     // Make sure clicking the button doesn't open the menu.
     $(PlainButton).trigger('click');
     assert.ok($(MonthPicker_PlainButtonField).is(':hidden'), "Clicking the button didn't open the menu.");
+    
+    $(PlainButtonField).MonthPicker({ 
+	    Button: '<input id="InputBtn" type="button" value="Click me" />'
+	});
+	
+	assert.ok($(InputBtn).is(':disabled'), 'The new button is disabled');
 });
 
 QUnit.test('Img tag tests', function (assert) {
@@ -586,6 +612,7 @@ QUnit.test('Img tag tests', function (assert) {
     // and make sure the button is also disabled.
     $(ImgButtonField).MonthPicker('Disable');
 
+	assert.notStrictEqual($('.ImgButton').prop('disabled'), true, "The plugin didn't try to disable the img button");
     assert.ok($(ImgButtonField).is(':disabled'), 'The input field was disabled.');
     assert.ok($(MonthPicker_ImgButtonField).is(':hidden'), 'The menu was closed.');
 
@@ -1046,6 +1073,63 @@ QUnit.test('Menu opens within range', function (assert) {
     field.MonthPicker('destroy');
 });
 
+QUnit.test('Today and selected months are highlighted', function (assert) {
+	var field = $(highlightedField).MonthPicker({
+		Animation: 'none' // Disable animation to make sure opening and closing the menu is synchronous.
+	});
+	
+	field.val('05/' + _today.getFullYear());
+	
+	field.MonthPicker('Open');
+	var menu = $(MonthPicker_highlightedField);
+	
+	var buttons = menu.find('.month-picker-month-table button');
+	
+	var todaysButton = $(buttons[new Date().getMonth()]);
+	var nextYearButton = menu.find('.next-year>button');
+	var previousYearButton = menu.find('.previous-year>button');
+	
+	assert.ok(todaysButton.is('.ui-state-highlight'), "Today's month is highlighted");
+	
+	var selectedButton = buttons.filter('.ui-state-active');
+	assert.equal( selectedButton.length, 1, 'There is one selected button');
+	assert.equal( selectedButton[0], buttons[4], 'The selected month is highlighted');
+	
+	nextYearButton.trigger('click');
+	
+	assert.notOk(todaysButton.is('.ui-state-highlight'), 'Going to the next year removed highlighting');
+	
+	var selectedButton = buttons.filter('.ui-state-active');
+	assert.equal( selectedButton.length, 0, 'Going to the next year removed the selected highlighting');
+	
+	previousYearButton.trigger('click');
+	
+	assert.ok(todaysButton.is('.ui-state-highlight'), 'Returning to this year returnd the highlighting');
+	
+	var selectedButton = buttons.filter('.ui-state-active');
+	assert.equal( selectedButton.length, 1, 'There is one selected button');
+	assert.equal( selectedButton[0], buttons[4], 'The selected month is highlighted');
+	
+	menu.find('.year').trigger('click');
+	
+	var selectdBtn = buttons.filter('.ui-state-active');
+	assert.equal( selectdBtn.button( "option", "label" ), _today.getFullYear(), 'The selected year is highlighted');
+	
+	var todayBtn = buttons.filter('.ui-state-highlight');
+	assert.equal( todayBtn.button( "option", "label" ), _today.getFullYear(), "Today's year is highlighted");
+	
+	field.MonthPicker('Close');
+	field.MonthPicker({MinMonth: 1});
+	
+	field.MonthPicker('Open');
+	
+	var selectedButton = buttons.filter('.ui-state-highlight');
+	assert.equal( selectedButton.length, 0, "Today is not highlighted because it's before the min month");
+	
+	var selectedButton = buttons.filter('.ui-state-active');
+	assert.equal( selectedButton.length, 0, 'The selected mont is also not heighlighted');
+});
+
 QUnit.test('Number of months from today', function (assert) {
     var field = $(RistrictMonthField).MonthPicker({
         Animation: 'none', // Disable animation to make sure opening and closing the menu is synchronous.
@@ -1065,6 +1149,7 @@ QUnit.test('Number of months from today', function (assert) {
     var buttons = menu.find('.month-picker-month-table button');
     var nextYearButton = menu.find('.next-year>button');
     var previousYearButton = menu.find('.previous-year>button');
+    
     var enabledMonths = 0;
     
     // Make sure that 16 buttons + 1 for today are disabled.

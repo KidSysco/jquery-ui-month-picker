@@ -342,13 +342,27 @@ QUnit.test('MonthFormat Option Tests', function (assert) {
 });
 
 QUnit.test('Inline menu', function(assert) {
-	var field = $(InlineMenuDiv).MonthPicker();
+	var field = $(InlineMenuDiv).MonthPicker({
+		        Animation: 'none', // Disable animation to make sure opening and closing the menu is synchronous.
+	});
 	
 	var menu = $(MonthPicker_InlineMenuDiv);
 	
 	assert.ok(menu.is(':visible'), 'The menu is visible without having to call the Open method');
 	
-	field.MonthPicker('destroy');
+	
+	$(document.body).trigger('click');
+	
+	assert.ok(menu.is(':visible'), 'The menu is still visible after clicking outside the menu');
+	
+	//var buttons = menu.find('.month-picker-month-table button');
+	menu.find('.button-1').trigger('click');
+	
+	assert.ok(menu.is(':visible'), 'The menu is still visible after choosing a month');
+	
+	assert.notOk($("#MonthPicker_Button_InlineMenuDiv").length, 'The default button was not created');
+	
+//	field.MonthPicker('destroy');
 });
 
 // Makes sure that all events are triggered as expected.

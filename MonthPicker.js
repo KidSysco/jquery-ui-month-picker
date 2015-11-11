@@ -450,37 +450,38 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
 				this._visible = true;
 	            this._ajustYear(_opts);
 
-	            // If there is an open menu close it first.
-	            if (_openedInstance) {
-	                _openedInstance.Close(event);
-	            }
-
-	            _openedInstance = this;
 	            var _menu = this._monthPickerMenu;
 	            this._showMonths();
                 if (_elem.is('input')) {
-	            $(document).on(click + this.uuid, $proxy(this.Close, this))
-                           .on('keydown' + _eventsNs + this.uuid, $proxy(this._keyDown, this));
-                
-	            // Trun off validation so that clicking one of the months
-	            // won't blur the input field and trogger vlaidation
-	            // befroe the month was chosen (click event was triggered).
-                // It is turned back on when Hide() is called.
-                _elem.off('blur' + _eventsNs).focus();
-                
-                var _anim = _opts.ShowAnim || _opts.Animation,
-                    _noAnim = _anim === 'none';
-                
-                // jQuery UI overrides jQuery.show and dosen't 
-                // call the start callback.
-                // see: http://api.jqueryui.com/show/
-                _menu[ _noAnim ? 'fadeIn' : _anim ]({
-                   duration: _noAnim ? 0 : this._duration(),
-                   start: $proxy(this._position, this, _menu),
-                   complete: _event('OnAfterMenuOpen', this)
-                }); 
+		            // If there is an open menu close it first.
+		            if (_openedInstance) {
+		                _openedInstance.Close(event);
+		            }
+		            
+		            _openedInstance = this;
+		                
+		            $(document).on(click + this.uuid, $proxy(this.Close, this))
+	                           .on('keydown' + _eventsNs + this.uuid, $proxy(this._keyDown, this));
+	                
+		            // Trun off validation so that clicking one of the months
+		            // won't blur the input field and trogger vlaidation
+		            // befroe the month was chosen (click event was triggered).
+	                // It is turned back on when Hide() is called.
+	                _elem.off('blur' + _eventsNs).focus();
+	                
+	                var _anim = _opts.ShowAnim || _opts.Animation,
+	                    _noAnim = _anim === 'none';
+	                
+	                // jQuery UI overrides jQuery.show and dosen't 
+	                // call the start callback.
+	                // see: http://api.jqueryui.com/show/
+	                _menu[ _noAnim ? 'fadeIn' : _anim ]({
+	                   duration: _noAnim ? 0 : this._duration(),
+	                   start: $proxy(this._position, this, _menu),
+	                   complete: _event('OnAfterMenuOpen', this)
+	                }); 
                 } else {
-	                _menu.show();
+	                _menu.css('position', 'static').show();
 	                _event('OnAfterMenuOpen', this)();
                 }
             }
@@ -576,15 +577,16 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             try {
                 _button.button('option', 'disabled', isDisabled);
             } catch (e) {
-                _button.filter('button, input').prop('disabled', isDisabled);
+                _button.filter('button,input').prop('disabled', isDisabled);
             }
         },
 
         _createButton: function () {
-	        if (!this.options.ShowIcon) return;
+	        var _elem = this.element;
+	        if (!this.options.ShowIcon || !_elem.is('input')) return;
 	        
 	        var _oldButton = this._monthPickerButton.off(_eventsNs);
-            var _btnOpt = this.options.Button, _elem = this.element;
+            var _btnOpt = this.options.Button;
             
             if ($.isFunction(_btnOpt)) {
                 _btnOpt = _btnOpt.call(_elem[0], $.extend(true, {i18n: $.MonthPicker.i18n}, this.options));

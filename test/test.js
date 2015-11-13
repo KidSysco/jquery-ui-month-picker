@@ -522,6 +522,32 @@ QUnit.test('Events and context', function (assert) { // A.k.a duplicate code tes
 	field.MonthPicker('ClearAllCallbacks');
 });
 
+QUnit.test('AltField and AltFormat tests', function( assert ) {
+    var field = $(MainAltField).MonthPicker({
+	   Animation: 'none', // Disable animation to make sure opening and closing the menu is synchronous.
+	   AltField: '#SecondaryAltField',
+	   AltFormat: 'yy-mm'
+    });
+    
+    field.MonthPicker('Open');
+    
+	var menu = $(MonthPicker_MainAltField);
+	menu.find('.button-1').trigger('click');
+	
+	assert.equal( field.val(), '01/' + _today.getFullYear(), 'The MainAltField was populated');
+	assert.equal( $( SecondaryAltField ).val(), _today.getFullYear() + '-01', 'The SecondaryAltField was populated with a different format');
+	
+	field.MonthPicker('option', 'AltFormat', null);
+	
+	assert.equal( $( SecondaryAltField ).val(), '01/' + _today.getFullYear(), 'Clearing AltFormat set the format to the MonthFormat');
+	
+	var hiddenField = $('<input type="hidden" name="AltField" />');
+	
+	field.MonthPicker('option', 'AltField', hiddenField);
+	
+	assert.equal( hiddenField.val(), '01/' + _today.getFullYear(), 'Changing the altField after init assigned the current value');
+});
+
 QUnit.test('Right to left', function (assert) {
     var field = $(RTLField).MonthPicker({
         Animation: 'none', // Disable animation to make sure opening and closing the menu is synchronous.

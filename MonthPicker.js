@@ -51,6 +51,8 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
         Button: '_updateButton',
         ShowOn: '_updateFieldEvents',
         IsRTL: '_setRTL',
+        AltFormat: '_updateAlt',
+        AltField: '_updateAlt',
         StartYear: '_setPickerYear',
         MinMonth: '_setMinMonth',
         MaxMonth: '_setMaxMonth'
@@ -551,8 +553,8 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             return this.ParseMonth(str || this.element.val(), this.options.MonthFormat);
         },
         
-        _formatMonth: function (date) {
-            return this.FormatMonth(date || this._parseMonth(), this.options.MonthFormat);
+        _formatMonth: function (date, format) {
+            return this.FormatMonth(date || this._parseMonth(), format || this.options.MonthFormat);
         },
 
         _showIcon: function () {
@@ -720,13 +722,23 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             this._yearContainer.text(year || new Date().getFullYear());
         },
 
+		_updateAlt: function (noop, date) {
+			// False means use the fields value.
+			var _field = $(this.options.AltField);
+			if (_field.length) {
+				_field.val(this._formatMonth(date, this.options.AltFormat));
+			}
+		},
+
         _chooseMonth: function (month) {
             var date = new Date(this._getPickerYear(), month-1);
             this.element.val(this._formatMonth( date )).blur();
+            this._updateAlt(0, date);
+            
             _setActive( this._selectedBtn, false );
             this._selectedBtn = _setActive( $(this._buttons[month-1]), true );
             
-            _event('OnAfterChooseMonth', this)();
+            _event('OnAfterChooseMonth', this)(date);
         },
 
         _chooseYear: function (year) {

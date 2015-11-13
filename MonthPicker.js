@@ -23,7 +23,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
     // to perform this test for every MonthPicker instance being created.
     if (!$ || !$.ui || !$.ui.button || !$.ui.datepicker) {
         alert(_setupErr + 'The jQuery UI button and datepicker plug-ins must be loaded.');
-        return false;
+        return;
     }
     
     var _speeds = $.fx.speeds;
@@ -144,6 +144,10 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
                 primary: 'ui-icon-circle-triangle-' + (dir ? 'w' : 'e')
             }
         });
+    }
+    
+    function _isInline(elem) {
+	    return !elem.is('input');
     }
     
     $.MonthPicker = {
@@ -315,11 +319,11 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
 
             _el.addClass('month-year-input');
 
-            var _menu = this._monthPickerMenu = $('<div id="MonthPicker_' + _el.attr('id') + '" class="month-picker ui-helper-clearfix"></div>');
-            var _isInline = _el.is('div,span');
+            var _menu = this._monthPickerMenu = $('<div id="MonthPicker_' + _el[0].id + '" class="month-picker ui-helper-clearfix"></div>');
+            var isInline = _isInline(_el);
             
             $(_markup).appendTo(_menu);
-            (_menu).appendTo( _isInline ? _el : document.body );
+            (_menu).appendTo( isInline ? _el : document.body );
 
             $('.year-title', _menu).text(this._i18n('year'));
             
@@ -337,8 +341,9 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             
             this._setRTL(_opts.IsRTL); //Assigns icons to the next/prev buttons.
             
-            $('.ui-button-icon-primary', this._nextButton).text(this._i18n('nextLabel'));
-            $('.ui-button-icon-primary', this._prevButton).text(this._i18n('prevLabel'));
+            var _iconClass = '.ui-button-icon-primary';
+            $(_iconClass, this._nextButton).text(this._i18n('nextLabel'));
+            $(_iconClass, this._prevButton).text(this._i18n('prevLabel'));
 
             var $table = $('.month-picker-month-table', _menu);
             for (var i = 0; i < 12; i++) {
@@ -370,7 +375,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             this._updateFieldEvents();
             this.Destroy = this.destroy;
             
-            if (_isInline) {
+            if (isInline) {
 	            this.Open();
             }
         },
@@ -438,11 +443,10 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
         },
         
         Open: function (event) {
-            if (!this.options.Disabled && !this._visible) {
-	            var _elem = this.element, _opts = this.options;
-            
+	        var _elem = this.element, _opts = this.options;
+            if (!_opts.Disabled && !this._visible) {
 	            // Allow the user to prevent opening the menu.
-	            event = event || new $.Event();
+	            event = event || $.Event();
 	            if (_event('OnBeforeMenuOpen', this)(event) === false || event.isDefaultPrevented()) {
 	                return false;
 	            }
@@ -452,8 +456,12 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
 
 	            var _menu = this._monthPickerMenu;
 	            this._showMonths();
-                if (_elem.is('input')) {
-		            // If there is an open menu close it first.
+	            
+                if (_isInline(_elem)) {
+		            _menu.css('position', 'static').show();
+	                _event('OnAfterMenuOpen', this)();
+                } else {
+	                // If there is an open menu close it first.
 		            if (_openedInstance) {
 		                _openedInstance.Close(event);
 		            }
@@ -479,10 +487,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
 	                   duration: _noAnim ? 0 : this._duration(),
 	                   start: $proxy(this._position, this, _menu),
 	                   complete: _event('OnAfterMenuOpen', this)
-	                }); 
-                } else {
-	                _menu.css('position', 'static').show();
-	                _event('OnAfterMenuOpen', this)();
+	                });
                 }
             }
             
@@ -491,11 +496,11 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
         
         Close: function (event) {            
 	        var _elem = this.element;
-            if (this._visible && _elem.is('input')) {
+            if (!_isInline(_elem) && this._visible) {
                 var _menu = this._monthPickerMenu, 
                     _opts = this.options;
                 
-                event = event || new $.Event();
+                event = event || $.Event();
                 if (_event('OnBeforeMenuClose', this)(event) === false || event.isDefaultPrevented()) {
                     return;
                 }
@@ -640,10 +645,10 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             switch (event.keyCode) {
                 case 13: // Enter.
                     this._chooseMonth(new Date().getMonth() + 1);
-                    this.Close();
+                    this.Close(event);
                     break;
                 case 27: // Escape
-                    this.Close();
+                    this.Close(event);
                     break;
             }
         },

@@ -1,4 +1,4 @@
-<h1>The jQuery UI Month Picker Version 2.7</h1>
+<h1>The jQuery UI Month Picker Version 2.8</h1>
 <p>The jQuery UI Month Picker Plugin is designed to allow user input for only a month and year when only that input is 
 required. Clicking on the year, allows the user to jump ahead or back 5 years at a time. Clicking anywhere on the 
 page, except on the month picker menu itself, will cause the month picker to hide. The Month Picker has lots of options 
@@ -119,7 +119,7 @@ However this is <b>not supported</b> and might stop working in future releases i
 <br />Destroys the month picker widget.</p>
 
 <h2>Theme Support</h2>
-<p>The MonthPicker plugin uses the jQuery UI CSS Framework to style its look and feel, including the colors of buttons and background textures. We recommend using the ThemeRoller tool to create and download custom themes that are easy to build and maintain.</p>
+<p>The MonthPicker plugin uses the jQuery UI CSS Framework to style its look and feel, including the colors of buttons and background textures. We recommend using the <a href='http://jqueryui.com/themeroller/'>ThemeRoller</a> tool to create and download custom themes that are easy to build and maintain.</p>
 <p>If a deeper level of customization is needed, there are widget-specific classes referenced within the MonthPicker.css stylesheet that can be modified. These classes are highlighed below.</p>
 <p> <b>.month-picker-disabled</b>
 
@@ -470,7 +470,7 @@ $('.selector').MonthPicker({ MonthFormat: 'MM, yy' });</pre>
 var disabled = $('.selector').MonthPicker('option', 'MonthFormat');
 
 //setter (Results in December, 2015)
-$('.selector').MonthPicker('option', MonthFormat: 'MM, yy' );
+$('.selector').MonthPicker('option', 'MonthFormat', 'MM, yy' );
 </pre>
 
 The following example shows how to use the popular <a href='http://momentjs.com'>Moment.js</a> library
@@ -520,6 +520,52 @@ $('.selector').MomentMonthPicker({
 });
 </pre>
 </p>
+
+<p>
+    <h3>AltField</h3>
+    Type: Selector or jQuery or Element<br />
+    Default: null.<br />
+    Since: 2.8<br />
+    An input element that is to be updated with the selected month from the month picker. Use the <a href='#altformat'>AltFormat</a> option to change the format of the date within this field. Leave as blank for no alternate field.
+</p>
+<p>
+    Set the option upon init.
+    
+    <pre>
+$('.selector').MonthPicker({ AltField: '#field' });</pre>
+    
+    Get or set the option, after init. 
+<pre>
+//getter
+var disabled = $('.selector').MonthPicker('option', 'AltField');
+
+//setter
+$('.selector').MonthPicker('option', 'AltField': '#OtherField' );
+</pre>
+
+<p>
+    <h3>AltFormat</h3>
+    Type: String<br />
+    Default: null.<br />
+    Since: 2.8<br />
+    The <a href='#monthformat'>MonthFormat</a> to be used for the <a href='#altfield'>AltField</a> option. This allows one month format to be shown to the user for selection purposes, while a different format is actually sent behind the scenes. For a full list of the possible formats see the <a href='https://api.jqueryui.com/datepicker/#utility-formatDate'>$.datepicker.formatDate()</a> function.
+</p>
+<p>
+    Set the option upon init.
+    
+    <pre>
+$('.selector').MonthPicker({ AltFormat: "yy-mm-dd" });</pre>
+    
+    Get or set the option, after init. 
+<pre>
+//getter
+var disabled = $('.selector').MonthPicker('option', 'AltFormat');
+
+//setter
+$('.selector').MonthPicker('option', 'AltFormat': 'yy-mm-dd' );
+</pre>
+
+
 <p>
     <h3>UseInputMask</h3>
     Type: Bool<br />

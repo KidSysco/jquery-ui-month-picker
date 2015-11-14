@@ -382,12 +382,6 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             }
         },
 
-        /****** Misc. Utility functions ******/
-
-        _i18n: function(str) {
-            return this.options.i18n[str] || $.MonthPicker.i18n[str];
-        },
-
         /****** Publicly Accessible API functions ******/
         
         GetSelectedDate: function () {
@@ -547,10 +541,14 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             }
         },
         
-        /****** Private functions ******/
+        /****** Private and Misc Utility functions ******/
 
-        _parseMonth: function (str) {
-            return this.ParseMonth(str || this.element.val(), this.options.MonthFormat);
+        _i18n: function(str) {
+            return this.options.i18n[str] || $.MonthPicker.i18n[str];
+        },
+        
+        _parseMonth: function (str, format) {
+            return this.ParseMonth(str || this.element.val(), format || this.options.MonthFormat);
         },
         
         _formatMonth: function (date, format) {
@@ -729,7 +727,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
 				_field.val(this._formatMonth(date, this.options.AltFormat));
 			}
 		},
-
+		
         _chooseMonth: function (month) {
             var date = new Date(this._getPickerYear(), month-1);
             this.element.val(this._formatMonth( date )).blur();
@@ -872,7 +870,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             	_year = Math.min(_toYear(this._MaxMonth), _year);
             }
             
-            this._setPickerYear( _year );  
+            this._setPickerYear( _year );
         },
         
         _decorateButtons: function() {

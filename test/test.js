@@ -523,29 +523,35 @@ QUnit.test('Events and context', function (assert) { // A.k.a duplicate code tes
 });
 
 QUnit.test('AltField and AltFormat tests', function( assert ) {
-    var field = $(MainAltField).MonthPicker({
+	var hiddenField = $('<input type="hidden" name="AltField" />');
+	
+    var field = $(MainAltField).val('05/2010').MonthPicker({
 	   Animation: 'none', // Disable animation to make sure opening and closing the menu is synchronous.
-	   AltField: '#SecondaryAltField',
+	   AltField: hiddenField,
 	   AltFormat: 'yy-mm'
     });
+    
+    assert.equal(hiddenField.val(), '2010-05', "The secondary field has the main field's value in the alt format");
     
     field.MonthPicker('Open');
     
 	var menu = $(MonthPicker_MainAltField);
 	menu.find('.button-1').trigger('click');
 	
-	assert.equal( field.val(), '01/' + _today.getFullYear(), 'The MainAltField was populated');
-	assert.equal( $( SecondaryAltField ).val(), _today.getFullYear() + '-01', 'The SecondaryAltField was populated with a different format');
+	assert.equal( field.val(), '01/2010', 'The main field was populated');
+	assert.equal( hiddenField.val(), '2010-01', 'The secondary field was populated with a different format');
 	
 	field.MonthPicker('option', 'AltFormat', null);
 	
-	assert.equal( $( SecondaryAltField ).val(), '01/' + _today.getFullYear(), 'Clearing AltFormat set the format to the MonthFormat');
+	assert.equal( hiddenField.val(), '01/2010', 'Clearing AltFormat set the format to the MonthFormat');
 	
-	var hiddenField = $('<input type="hidden" name="AltField" />');
+	field.MonthPicker('option', 'AltField', '#SecondaryAltField');
 	
-	field.MonthPicker('option', 'AltField', hiddenField);
+	assert.equal( $(SecondaryAltField).val(), '01/2010', 'Changing the altField after init assigned the current value');
 	
-	assert.equal( hiddenField.val(), '01/' + _today.getFullYear(), 'Changing the altField after init assigned the current value');
+	field.val('11/2015').trigger('change');
+	
+	assert.equal( $(SecondaryAltField).val(), '11/2015', 'Triggering a change event on the main field updated the secondary field');
 });
 
 QUnit.test('Right to left', function (assert) {

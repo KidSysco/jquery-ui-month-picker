@@ -372,6 +372,8 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
                 me._setOption(type + Month, me.options[type + Month]);
             });
             
+            this._updateAlt();
+            
             this._setUseInputMask();
             this._setDisabledState();
             this._updateFieldEvents();
@@ -379,6 +381,10 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             
             if (isInline) {
 	            this.Open();
+            } else {
+	           // Update the alt field if the user manually changes
+			   // the input field.
+			   _el.change($proxy(this._updateAlt, this));
             }
         },
 

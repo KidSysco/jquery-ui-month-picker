@@ -343,7 +343,7 @@ QUnit.test('MonthFormat Option Tests', function (assert) {
 
 QUnit.test('Inline menu', function(assert) {
 	var field = $(InlineMenuDiv).MonthPicker({
-		        Animation: 'none', // Disable animation to make sure opening and closing the menu is synchronous.
+		Animation: 'none', // Disable animation to make sure opening and closing the menu is synchronous.
 	});
 	
 	var menu = $(MonthPicker_InlineMenuDiv);
@@ -365,12 +365,34 @@ QUnit.test('Inline menu', function(assert) {
 	field.MonthPicker('destroy');
 });
 
+QUnit.test('SelectedMonth option', function(assert) {
+	var field = $(InlineMenuDiv).MonthPicker({
+		Animation: 'none', // Disable animation to make sure opening and closing the menu is synchronous.
+		
+		SelectedMonth: 0
+	});
+	
+	var menu = $(MonthPicker_InlineMenuDiv);
+	var date = field.MonthPicker('GetSelectedDate');
+	assert.equal( date.getMonth(), _today.getMonth(), 'The correct month was selected');
+	assert.equal( date.getFullYear(), _today.getFullYear(), 'The correct year was selected');
+	
+	assert.ok( menu.find('.button-' + (_today.getMonth()+1)).is('.ui-state-active'), 'The correct button is highlighted');
+	
+	field.MonthPicker('option', 'SelectedMonth', '01/2015');
+	
+	var date = field.MonthPicker('GetSelectedDate');
+	assert.ok( menu.find('.button-1').is('.ui-state-active'), 'January is selected after changing the SelectedMonth');
+	
+	field.MonthPicker('Destroy');
+});
+
 // Makes sure that all events are triggered as expected.
 // Perhaps we should consider removing some of these events.
 QUnit.test('Events and context', function (assert) { // A.k.a duplicate code test.
 	// Good luck figuring out which callback is causing the 
 	// problem if this test fails.
-	assert.expect(30);
+	assert.expect(31);
 	
 	var field = $(EventsField).MonthPicker({
 		Animation: 'none', // Disable animation to make sure opening and closing the menu is synchronous.
@@ -469,7 +491,8 @@ QUnit.test('Events and context', function (assert) { // A.k.a duplicate code tes
 	assert.ok(OnAfterChooseYearTriggered, 'Clicking a year triggered OnAfterChooseYear');
 	
 	var OnAfterChooseMonthTriggered = false;
-	field.MonthPicker('option', 'OnAfterChooseMonth', function() {
+	field.MonthPicker('option', 'OnAfterChooseMonth', function(date) {
+		assert.ok(date instanceof Date, 'A date value was passed to OnAfterChooseMonth as the first argument');
 		OnAfterChooseMonthTriggered = true;
 		assert.equal( this, EventsField, 'OnAfterChooseMonth was called in the right context' );
 	});
@@ -525,7 +548,8 @@ QUnit.test('Events and context', function (assert) { // A.k.a duplicate code tes
 QUnit.test('AltField and AltFormat tests', function( assert ) {
 	var hiddenField = $('<input type="hidden" name="AltField" />');
 	
-    var field = $(MainAltField).val('05/2010').MonthPicker({
+    var field = $(MainAltField).MonthPicker({
+	   SelectedMonth: '05/2010',
 	   Animation: 'none', // Disable animation to make sure opening and closing the menu is synchronous.
 	   AltField: hiddenField,
 	   AltFormat: 'yy-mm'

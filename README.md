@@ -45,7 +45,7 @@ $('input[type=month]').MonthPicker().css('backgroundColor', 'lightyellow');
 <p>
 All buttons, labels and other text can be changed out using the i18n support.<br/>
 <pre>
-$('#TextBox1').MonthPicker({
+$('.selector').MonthPicker({
       i18n: {
          year: "année",
          prevYear: "l'année dernière",
@@ -55,8 +55,24 @@ $('#TextBox1').MonthPicker({
 </pre>
 You can set the menu's run direction as right to left by using the <a href='#isrtl'>IsRTL option.</a><br/>
 <pre>
-$('#TextBox1').MonthPicker({
+$('.selector').MonthPicker({
       IsRTL: true
+});
+</pre>
+</p>
+
+<h2>Inline Month Picker Menu</h2>
+<p>
+You can create an inline month picker menu by calling the month picker function on a &lt;div> or &lt;span> tag, example:
+<pre>
+$('div').MonthPicker({
+	SelectedMonth: '+1y -3M', // Set the selected month.
+	AltField: '#hiddenInput' // Populate a hidden field and send to send the selected value to the server.
+	
+	OnAfterChooseMonth: function(selectedDate) {
+		// Do something with selected JavaScript date.
+        // console.log(selectedDate);
+	}
 });
 </pre>
 </p>
@@ -325,6 +341,37 @@ If the button is not one of the elements above then you have to disable the elem
 </p>
 
 <p>
+    <h3>SelectedMonth</h3>
+    Type: Date or Number or String<br />
+    Default: null<br />
+    Since: 2.8<br />
+    Set the selected month. When set to null nothing is selected.
+</p>
+
+<p>
+<b>Multiple types supported:</b>
+<ul>
+	<li><b>Date:</b> A <a href='https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Date'>Date</a> object containing the selected month.</li>
+	<li><b>Number:</b> A number of months from today. For example 2 represents two months from today and -1 represents the last month.</li>
+	<li><b>String:</b> A string in the format defined by the <a href='#monthformat'>MonthFormat option</a> option, or a relative month. <p> Relative months must contain value and period pairs; valid periods are "m" for months, and "y" for years. For example, "+1y +3m" represents one year and three months from today.</p></li>
+</ul>
+</p>
+
+Set the option upon init.
+<p>
+    <pre>$('.selector').MonthPicker({ SelectedMonth: 0 });</pre>
+    
+    Get or set the option, after init. 
+<pre>
+//getter
+var minMonth = $('.selector').MonthPicker('option', 'SelectedMonth');
+
+// setter
+$('.selector').MonthPicker('option', 'SelectedMonth', '+1y -3m');
+</pre>
+</p>
+
+<p>
     <h3>ShowIcon</h3>
     Type: Boolean<br />
     Default: true<br />
@@ -554,7 +601,7 @@ $('.selector').MonthPicker('option', 'AltField': '#OtherField' );
     Set the option upon init.
     
     <pre>
-$('.selector').MonthPicker({ AltFormat: "yy-mm-dd" });</pre>
+$('.selector').MonthPicker({ AltFormat: "yy-mm" });</pre>
     
     Get or set the option, after init. 
 <pre>
@@ -562,7 +609,7 @@ $('.selector').MonthPicker({ AltFormat: "yy-mm-dd" });</pre>
 var disabled = $('.selector').MonthPicker('option', 'AltFormat');
 
 //setter
-$('.selector').MonthPicker('option', 'AltFormat': 'yy-mm-dd' );
+$('.selector').MonthPicker('option', 'AltFormat': 'yy-mm' );
 </pre>
 
 

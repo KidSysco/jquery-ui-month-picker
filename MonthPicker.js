@@ -55,7 +55,8 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
         AltField: '_updateAlt',
         StartYear: '_setPickerYear',
         MinMonth: '_setMinMonth',
-        MaxMonth: '_setMaxMonth'
+        MaxMonth: '_setMaxMonth',
+        SelectedMonth: '_setSelectedMonth'
     };
     var $noop = $.noop;
     var $proxy = $.proxy;
@@ -372,6 +373,12 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
                 me._setOption(type + Month, me.options[type + Month]);
             });
             
+            var _selMonth = _opts.SelectedMonth;
+            if (_selMonth !== void 0) {
+	           	var month = _encodeMonth(this, _selMonth);
+			   	_el.val( this._formatMonth(new Date( _toYear(month), month % 12, 1)) );
+            }
+            
             this._updateAlt();
             
             this._setUseInputMask();
@@ -548,6 +555,19 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
         },
         
         /****** Private and Misc Utility functions ******/
+        
+        _setSelectedMonth: function (_selMonth) {            
+           	var month = _encodeMonth(this, _selMonth), _el = this.element;
+        
+		   	if (!month) {
+			   	_el.val( '' );
+		   	} else {
+			   	_el.val( this._formatMonth( new Date( _toYear(month), month % 12, 1)) );
+		   	}
+		   	
+		   	this._ajustYear(this.options);
+		   	this._showMonths();
+        },
 
         _i18n: function(str) {
             return this.options.i18n[str] || $.MonthPicker.i18n[str];

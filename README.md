@@ -1,4 +1,4 @@
-<h1>The jQuery UI Month Picker Version 2.7</h1>
+<h1>The jQuery UI Month Picker Version 2.8</h1>
 <p>The jQuery UI Month Picker Plugin is designed to allow user input for only a month and year when only that input is 
 required. Clicking on the year, allows the user to jump ahead or back 5 years at a time. Clicking anywhere on the 
 page, except on the month picker menu itself, will cause the month picker to hide. The Month Picker has lots of options 
@@ -45,7 +45,7 @@ $('input[type=month]').MonthPicker().css('backgroundColor', 'lightyellow');
 <p>
 All buttons, labels and other text can be changed out using the i18n support.<br/>
 <pre>
-$('#TextBox1').MonthPicker({
+$('.selector').MonthPicker({
       i18n: {
          year: "année",
          prevYear: "l'année dernière",
@@ -55,8 +55,24 @@ $('#TextBox1').MonthPicker({
 </pre>
 You can set the menu's run direction as right to left by using the <a href='#isrtl'>IsRTL option.</a><br/>
 <pre>
-$('#TextBox1').MonthPicker({
+$('.selector').MonthPicker({
       IsRTL: true
+});
+</pre>
+</p>
+
+<h2>Inline Month Picker Menu</h2>
+<p>
+You can create an inline month picker menu by calling the month picker function on a &lt;div> or &lt;span> tag, example:
+<pre>
+$('div').MonthPicker({
+	SelectedMonth: '+1y -3M', // Set the selected month.
+	AltField: '#hiddenInput' // Populate a hidden field and send to send the selected value to the server.
+	
+	OnAfterChooseMonth: function(selectedDate) {
+		// Do something with selected JavaScript date.
+        // console.log(selectedDate);
+	}
 });
 </pre>
 </p>
@@ -119,7 +135,7 @@ However this is <b>not supported</b> and might stop working in future releases i
 <br />Destroys the month picker widget.</p>
 
 <h2>Theme Support</h2>
-<p>The MonthPicker plugin uses the jQuery UI CSS Framework to style its look and feel, including the colors of buttons and background textures. We recommend using the ThemeRoller tool to create and download custom themes that are easy to build and maintain.</p>
+<p>The MonthPicker plugin uses the jQuery UI CSS Framework to style its look and feel, including the colors of buttons and background textures. We recommend using the <a href='http://jqueryui.com/themeroller/'>ThemeRoller</a> tool to create and download custom themes that are easy to build and maintain.</p>
 <p>If a deeper level of customization is needed, there are widget-specific classes referenced within the MonthPicker.css stylesheet that can be modified. These classes are highlighed below.</p>
 <p> <b>.month-picker-disabled</b>
 
@@ -325,6 +341,37 @@ If the button is not one of the elements above then you have to disable the elem
 </p>
 
 <p>
+    <h3>SelectedMonth</h3>
+    Type: Date or Number or String<br />
+    Default: null<br />
+    Since: 2.8<br />
+    Set the selected month. When set to null nothing is selected.
+</p>
+
+<p>
+<b>Multiple types supported:</b>
+<ul>
+	<li><b>Date:</b> A <a href='https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Date'>Date</a> object containing the selected month.</li>
+	<li><b>Number:</b> A number of months from today. For example 2 represents two months from today and -1 represents the last month.</li>
+	<li><b>String:</b> A string in the format defined by the <a href='#monthformat'>MonthFormat option</a> option, or a relative month. <p> Relative months must contain value and period pairs; valid periods are "m" for months, and "y" for years. For example, "+1y +3m" represents one year and three months from today.</p></li>
+</ul>
+</p>
+
+Set the option upon init.
+<p>
+    <pre>$('.selector').MonthPicker({ SelectedMonth: 0 });</pre>
+    
+    Get or set the option, after init. 
+<pre>
+//getter
+var minMonth = $('.selector').MonthPicker('option', 'SelectedMonth');
+
+// setter
+$('.selector').MonthPicker('option', 'SelectedMonth', '+1y -3m');
+</pre>
+</p>
+
+<p>
     <h3>ShowIcon</h3>
     Type: Boolean<br />
     Default: true<br />
@@ -470,7 +517,7 @@ $('.selector').MonthPicker({ MonthFormat: 'MM, yy' });</pre>
 var disabled = $('.selector').MonthPicker('option', 'MonthFormat');
 
 //setter (Results in December, 2015)
-$('.selector').MonthPicker('option', MonthFormat: 'MM, yy' );
+$('.selector').MonthPicker('option', 'MonthFormat', 'MM, yy' );
 </pre>
 
 The following example shows how to use the popular <a href='http://momentjs.com'>Moment.js</a> library
@@ -520,6 +567,52 @@ $('.selector').MomentMonthPicker({
 });
 </pre>
 </p>
+
+<p>
+    <h3>AltField</h3>
+    Type: Selector or jQuery or Element<br />
+    Default: null.<br />
+    Since: 2.8<br />
+    An input element that is to be updated with the selected month from the month picker. Use the <a href='#altformat'>AltFormat</a> option to change the format of the date within this field. Leave as blank for no alternate field.
+</p>
+<p>
+    Set the option upon init.
+    
+    <pre>
+$('.selector').MonthPicker({ AltField: '#field' });</pre>
+    
+    Get or set the option, after init. 
+<pre>
+//getter
+var disabled = $('.selector').MonthPicker('option', 'AltField');
+
+//setter
+$('.selector').MonthPicker('option', 'AltField': '#OtherField' );
+</pre>
+
+<p>
+    <h3>AltFormat</h3>
+    Type: String<br />
+    Default: null.<br />
+    Since: 2.8<br />
+    The <a href='#monthformat'>MonthFormat</a> to be used for the <a href='#altfield'>AltField</a> option. This allows one month format to be shown to the user for selection purposes, while a different format is actually sent behind the scenes. For a full list of the possible formats see the <a href='https://api.jqueryui.com/datepicker/#utility-formatDate'>$.datepicker.formatDate()</a> function.
+</p>
+<p>
+    Set the option upon init.
+    
+    <pre>
+$('.selector').MonthPicker({ AltFormat: "yy-mm" });</pre>
+    
+    Get or set the option, after init. 
+<pre>
+//getter
+var disabled = $('.selector').MonthPicker('option', 'AltFormat');
+
+//setter
+$('.selector').MonthPicker('option', 'AltFormat': 'yy-mm' );
+</pre>
+
+
 <p>
     <h3>UseInputMask</h3>
     Type: Bool<br />

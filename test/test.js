@@ -341,12 +341,58 @@ QUnit.test('MonthFormat Option Tests', function (assert) {
     assert.equal($(FormatField).val(), 'April 2012', 'The text field has the value April 2012');
 });
 
+QUnit.test('Inline menu', function(assert) {
+	var field = $(InlineMenuDiv).MonthPicker({
+		Animation: 'none', // Disable animation to make sure opening and closing the menu is synchronous.
+	});
+	
+	var menu = $(MonthPicker_InlineMenuDiv);
+	
+	assert.ok(menu.is(':visible'), 'The menu is visible without having to call the Open method');
+	
+	
+	$(document.body).trigger('click');
+	
+	assert.ok(menu.is(':visible'), 'The menu is still visible after clicking outside the menu');
+	
+	//var buttons = menu.find('.month-picker-month-table button');
+	menu.find('.button-1').trigger('click');
+	
+	assert.ok(menu.is(':visible'), 'The menu is still visible after choosing a month');
+	
+	assert.notOk($("#MonthPicker_Button_InlineMenuDiv").length, 'The default button was not created');
+	
+	field.MonthPicker('destroy');
+});
+
+QUnit.test('SelectedMonth option', function(assert) {
+	var field = $(InlineMenuDiv).MonthPicker({
+		Animation: 'none', // Disable animation to make sure opening and closing the menu is synchronous.
+		
+		SelectedMonth: 0
+	});
+	
+	var menu = $(MonthPicker_InlineMenuDiv);
+	var date = field.MonthPicker('GetSelectedDate');
+	assert.equal( date.getMonth(), _today.getMonth(), 'The correct month was selected');
+	assert.equal( date.getFullYear(), _today.getFullYear(), 'The correct year was selected');
+	
+	assert.ok( menu.find('.button-' + (_today.getMonth()+1)).is('.ui-state-active'), 'The correct button is highlighted');
+	
+	field.MonthPicker('option', 'SelectedMonth', '01/2015');
+	
+	var date = field.MonthPicker('GetSelectedDate');
+	assert.ok( menu.find('.button-1').is('.ui-state-active'), 'January is selected after changing the SelectedMonth');
+	
+	field.MonthPicker('Destroy');
+});
+
 // Makes sure that all events are triggered as expected.
 // Perhaps we should consider removing some of these events.
 QUnit.test('Events and context', function (assert) { // A.k.a duplicate code test.
 	// Good luck figuring out which callback is causing the 
 	// problem if this test fails.
-	assert.expect(30);
+	assert.expect(31);
 	
 	var field = $(EventsField).MonthPicker({
 		Animation: 'none', // Disable animation to make sure opening and closing the menu is synchronous.
@@ -445,7 +491,8 @@ QUnit.test('Events and context', function (assert) { // A.k.a duplicate code tes
 	assert.ok(OnAfterChooseYearTriggered, 'Clicking a year triggered OnAfterChooseYear');
 	
 	var OnAfterChooseMonthTriggered = false;
-	field.MonthPicker('option', 'OnAfterChooseMonth', function() {
+	field.MonthPicker('option', 'OnAfterChooseMonth', function(date) {
+		assert.ok(date instanceof Date, 'A date value was passed to OnAfterChooseMonth as the first argument');
 		OnAfterChooseMonthTriggered = true;
 		assert.equal( this, EventsField, 'OnAfterChooseMonth was called in the right context' );
 	});
@@ -496,6 +543,39 @@ QUnit.test('Events and context', function (assert) { // A.k.a duplicate code tes
 	field.MonthPicker('Enable');
 	
 	field.MonthPicker('ClearAllCallbacks');
+});
+
+QUnit.test('AltField and AltFormat tests', function( assert ) {
+	var hiddenField = $('<input type="hidden" name="AltField" />');
+	
+    var field = $(MainAltField).MonthPicker({
+	   SelectedMonth: '05/2010',
+	   Animation: 'none', // Disable animation to make sure opening and closing the menu is synchronous.
+	   AltField: hiddenField,
+	   AltFormat: 'yy-mm'
+    });
+    
+    assert.equal(hiddenField.val(), '2010-05', "The secondary field has the main field's value in the alt format");
+    
+    field.MonthPicker('Open');
+    
+	var menu = $(MonthPicker_MainAltField);
+	menu.find('.button-1').trigger('click');
+	
+	assert.equal( field.val(), '01/2010', 'The main field was populated');
+	assert.equal( hiddenField.val(), '2010-01', 'The secondary field was populated with a different format');
+	
+	field.MonthPicker('option', 'AltFormat', null);
+	
+	assert.equal( hiddenField.val(), '01/2010', 'Clearing AltFormat set the format to the MonthFormat');
+	
+	field.MonthPicker('option', 'AltField', '#SecondaryAltField');
+	
+	assert.equal( $(SecondaryAltField).val(), '01/2010', 'Changing the altField after init assigned the current value');
+	
+	field.val('11/2015').trigger('change');
+	
+	assert.equal( $(SecondaryAltField).val(), '11/2015', 'Triggering a change event on the main field updated the secondary field');
 });
 
 QUnit.test('Right to left', function (assert) {

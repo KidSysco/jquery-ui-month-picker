@@ -43,6 +43,7 @@ QUnit.module("Functionality");
 
 QUnit.test('Icon Option Tests', function (assert) {
     var _picker = $('#IconDemo').MonthPicker({
+        Animation: 'none', 
         ShowIcon: true
     });
 
@@ -54,12 +55,26 @@ QUnit.test('Icon Option Tests', function (assert) {
     assert.ok($('#MonthPicker_IconDemo').length === 0, "#IconDemo has been destroyed.");
 
     _picker = $('#IconDemo').MonthPicker({
+        Animation: 'none',
         ShowIcon: false
     });
+
+    var menu = $(MonthPicker_IconDemo);
+
+    _picker.trigger('focus');
+    assert.ok(menu.css('visibility') !== 'hidden', 'The menu was opened by focusing on the input field');
+
+    // Make pressing tab closes the menu.
+    _picker.trigger($.Event( "keydown", { keyCode: $.ui.keyCode.TAB } ));
+    assert.notOk(menu.is(':visible'), 'The menu was closed by pressing tab');
 
     assert.equal($('#MonthPicker_Button_IconDemo').length, 0, '#IconDemo initialized without an icon.');
     _picker.MonthPicker('option', 'ShowIcon', true);
     assert.equal($('#MonthPicker_Button_IconDemo').length, 1, '#IconDemo icon added after init.');
+
+    // Make sure focusing on the field doesn't open the menu.
+    _picker.trigger('focus');
+    assert.notOk(menu.is(':visible'), 'The menu did not opened by focusing on the input field because the icon is now visible');
 });
 
 QUnit.test('HTML 5 & Formatting Tests', function (assert) {
@@ -808,24 +823,34 @@ QUnit.test('Change selector after init', function (assert) {
 
 QUnit.test('Disable button', function (assert) {
     // Create a month picker and make sure that clicking the input field opens the menu.
-    $(NoButtonField).MonthPicker({
+    var field = $(NoButtonField).MonthPicker({
         Animation: 'none', // Disable animation to make sure opening and closing the menu is synchronous.
 		
         Button: false
     });
 
     assert.equal($('#MonthPicker_Button_NoButtonField').length, 0, "The plugin didn't create a button");
+
+    var menu = $(MonthPicker_NoButtonField);
+
+    // Make sure focusing on the field opens the menu.
+    field.trigger('focus');
+    assert.ok(menu.css('visibility') !== 'hidden', 'The menu was opened by focusing on the input field');
+
+    // Make pressing tab closes the menu.
+    field.trigger($.Event( "keydown", { keyCode: $.ui.keyCode.TAB } ));
+    assert.notOk(menu.is(':visible'), 'The menu was closed by pressing tab');
 	
     // Make sure that clicking the input field opens the menu.
     $(NoButtonField).trigger('click');
-    assert.ok($(MonthPicker_NoButtonField).is(':visible'), 'Clicking the input field opened the correct menu.');
+    assert.ok(menu.is(':visible'), 'Clicking the input field opened the correct menu.');
 	
     // Don't leave the menu open (not really necessary).
     $(NoButtonField).MonthPicker('Disable');
 	
     // Make sure clicking the input field when it's disabled doesn't open the menu.
     $(NoButtonField).trigger('click');
-    assert.ok($(MonthPicker_NoButtonField).is(':hidden'), 'Clicking the input field opened the correct menu.');
+    assert.ok(menu.is(':hidden'), 'Clicking the input field did not open the menu.');
 	
     // Don't leave the menu open (not really necessary).
     $(NoButtonField).MonthPicker('Enable');
@@ -839,7 +864,7 @@ QUnit.test('Disable button', function (assert) {
 	
     // Make sure that clicking the input field still opens the menu.
     $(NoButtonField).trigger('click');
-    assert.ok($(MonthPicker_NoButtonField).is(':visible'), 'Clicking the input field still openes the correct menu.');
+    assert.ok(menu.is(':visible'), 'Clicking the input field still openes the correct menu.');
 
     $(NoButtonField).trigger('click');
 	
@@ -869,6 +894,15 @@ QUnit.test('ShowOn both', function (assert) {
 	assert.ok(menu.is(':visible'), 'The menu was opened by clicking on the button');
 	
 	field.MonthPicker('Close');
+    assert.notOk(menu.is(':visible'), 'The menu was closed');
+
+    // Make sure focusing on the field opens the menu.
+    field.trigger('focus');
+    assert.ok(menu.is(':visible'), 'The menu was opened by focusing on the input field');
+
+    // Make pressing tab closes the menu.
+    field.trigger($.Event( "keydown", { keyCode: $.ui.keyCode.TAB } ));
+    assert.notOk(menu.is(':visible'), 'The menu was closed by pressing tab');
 });
 
 QUnit.module("Min/MaxMonth");
@@ -885,7 +919,6 @@ QUnit.test('Month buttons are disabled', function (assert) {
 	var menu = $(MonthPicker_RistrictMonthField);
 	var previousYearButton = menu.find('.previous-year>button');
 	var nextYearButton = menu.find('.next-year>button');
-	
 	
 	// Try to click the disabled buttons.
 	var buttons = menu.find('.month-picker-month-table button');

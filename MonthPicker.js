@@ -1,7 +1,7 @@
 /*
 https://github.com/KidSysco/jquery-ui-month-picker/
 
-Version 2.8
+Version 2.8.1
 
 This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
@@ -15,9 +15,9 @@ License along with this library; if not, visit
 http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
 */
 (function ($, window, document, Date) {
-	'use strict';
-	
-	// This test must be run before any rererence is made to jQuery.
+    'use strict';
+    
+    // This test must be run before any rererence is made to jQuery.
     // In case the user didn't load jQuery or jQuery UI the plugin
     // will fail before it get's to this test + there is no reason
     // to perform this test for every MonthPicker instance being created.
@@ -47,7 +47,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
     var _setOptionHooks = {
         ValidationErrorMessage: '_createValidationMessage',
         Disabled: '_setDisabledState', 
-        ShowIcon: '_showIcon', 
+        ShowIcon: '_updateButton', 
         Button: '_updateButton',
         ShowOn: '_updateFieldEvents',
         IsRTL: '_setRTL',
@@ -64,24 +64,24 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
     var click = 'click' + _eventsNs;
     
     function _toMonth(date) {
-	    return date.getMonth() + (date.getFullYear() * 12);
+        return date.getMonth() + (date.getFullYear() * 12);
     }
     
     function _toYear(month) {
-	    return Math.floor(month / 12);
+        return Math.floor(month / 12);
     }
     
     function _stayActive() {
-	    $(this).addClass(_selectedClass);
+        $(this).addClass(_selectedClass);
     }
     
     function _setActive( el, state ) {
-		return el[ state ? 'on' : 'off' ]('mousenter mouseout',  _stayActive )
-		      .toggleClass(_selectedClass, state);
+        return el[ state ? 'on' : 'off' ]('mousenter mouseout',  _stayActive )
+              .toggleClass(_selectedClass, state);
     }
     
     function _between(month, from, until) {
-	    return (!from || month >= from) && (!until || month <= until);
+        return (!from || month >= from) && (!until || month <= until);
     }
     
     function _encodeMonth(_inst, _val) {
@@ -90,7 +90,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
         } else if (_val instanceof Date) {
             return _toMonth(_val);
         } else if ($.isNumeric(_val)) {
-			return _toMonth(new Date) + parseInt(_val, 10);
+            return _toMonth(new Date) + parseInt(_val, 10);
         }
         
         var _date = _inst._parseMonth(_val);
@@ -102,7 +102,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
     }
     
     function _event(_event, _inst) {
-	    return $proxy(_inst.options[_event] || $noop, _inst.element[0]);
+        return $proxy(_inst.options[_event] || $noop, _inst.element[0]);
     }
     
     function _parsePeriod(_val, _initDate) {
@@ -116,33 +116,33 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
 
         try {
             var _rev = JSON.parse( '{"' + _json.replace(/ /g, ',"') + '}' ), obj = {};
-        		
+                
             for (var key in _rev) {
                 obj[ _rev[key] ] = key;
             }
-        	
-        	var _month = _toMonth(new Date);
-        	_month += (parseInt(obj.m, 10) || 0);
-        	return _month + (parseInt(obj.y, 10) || 0) * 12;
+            
+            var _month = _toMonth(new Date);
+            _month += (parseInt(obj.m, 10) || 0);
+            return _month + (parseInt(obj.y, 10) || 0) * 12;
         } catch (e) {
             return false;
         }
     }
     
     function _makeDefaultButton(options) {
-	    // this refers to the associated input field.
+        // this refers to the associated input field.
         return $('<span id="MonthPicker_Button_' + this.id + '" class="month-picker-open-button">' + options.i18n.buttonText + '</span>')
             .button({
                 text: false,
                 icons: {
-	                // Defaults to 'ui-icon-calculator'.
+                    // Defaults to 'ui-icon-calculator'.
                     primary: options.ButtonIcon
                 }
             });
     }
     
     function _applyArrowButton($el, dir) {
-	    $el.button('option', {
+        $el.button('option', {
             icons: {
                 primary: 'ui-icon-circle-triangle-' + (dir ? 'w' : 'e')
             }
@@ -150,11 +150,11 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
     }
     
     function _isInline(elem) {
-	    return !elem.is('input');
+        return !elem.is('input');
     }
     
     $.MonthPicker = {
-	    VERSION: 2.8, // Added in version 2.4;
+        VERSION: '2.8.1', // Added in version 2.4;
         i18n: {
             year: "Year",
             prevYear: "Previous Year",
@@ -233,13 +233,13 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
 
             _elem.removeClass('month-year-input').off(_eventsNs);
 
-            $(document).off(click + this.uuid);
+            $(document).off(_eventsNs + this.uuid);
 
             this._monthPickerMenu.remove();
             
             var _button = this._monthPickerButton.off(click);
             if (this._removeOldBtn) {
-	            _button.remove();
+                _button.remove();
             }
             
             this._validationMessage.remove();
@@ -257,11 +257,11 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
                         return;
                     }
                 case 'MonthFormat':
-                	var date = this.GetSelectedDate();
-                	if (date) {
-                		this.element.val( this.FormatMonth(date, value) );
-                	}
-                	break;
+                    var date = this.GetSelectedDate();
+                    if (date) {
+                        this.element.val( this.FormatMonth(date, value) );
+                    }
+                    break;
             }
             
             // Make sure the user passed in a valid Animation, ShowAnim and HideAnim options values.
@@ -331,9 +331,9 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             $('.year-title', _menu).text(this._i18n('year'));
             
             this._yearContainerAll = 
-            	$('.year-container-all', _menu)
-            	.attr('title', this._i18n('jumpYears'))
-            	.click($proxy(this._showYearsClickHandler, this));
+                $('.year-container-all', _menu)
+                .attr('title', this._i18n('jumpYears'))
+                .click($proxy(this._showYearsClickHandler, this));
 
             this._createValidationMessage();
 
@@ -369,14 +369,14 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
                         alert(_badMinMaxVal.replace(/%/, type).replace(/_/, val));
                     }
                 };
-	            
+                
                 me._setOption(type + Month, me.options[type + Month]);
             });
             
             var _selMonth = _opts.SelectedMonth;
             if (_selMonth !== void 0) {
-	           	var month = _encodeMonth(this, _selMonth);
-			   	_el.val( this._formatMonth(new Date( _toYear(month), month % 12, 1)) );
+                var month = _encodeMonth(this, _selMonth);
+                _el.val( this._formatMonth(new Date( _toYear(month), month % 12, 1)) );
             }
             
             this._updateAlt();
@@ -387,11 +387,11 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             this.Destroy = this.destroy;
             
             if (isInline) {
-	            this.Open();
+                this.Open();
             } else {
-	           // Update the alt field if the user manually changes
-			   // the input field.
-			   _el.change($proxy(this._updateAlt, this));
+               // Update the alt field if the user manually changes
+               // the input field.
+               _el.change($proxy(this._updateAlt, this));
             }
         },
 
@@ -452,51 +452,51 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
         },
         
         Open: function (event) {
-	        var _elem = this.element, _opts = this.options;
+            var _elem = this.element, _opts = this.options;
             if (!_opts.Disabled && !this._visible) {
-	            // Allow the user to prevent opening the menu.
-	            event = event || $.Event();
-	            if (_event('OnBeforeMenuOpen', this)(event) === false || event.isDefaultPrevented()) {
-	                return false;
-	            }
-	            
-				this._visible = true;
-	            this._ajustYear(_opts);
+                // Allow the user to prevent opening the menu.
+                event = event || $.Event();
+                if (_event('OnBeforeMenuOpen', this)(event) === false || event.isDefaultPrevented()) {
+                    return false;
+                }
+                
+                this._visible = true;
+                this._ajustYear(_opts);
 
-	            var _menu = this._monthPickerMenu;
-	            this._showMonths();
-	            
+                var _menu = this._monthPickerMenu;
+                this._showMonths();
+                
                 if (_isInline(_elem)) {
-		            _menu.css('position', 'static').show();
-	                _event('OnAfterMenuOpen', this)();
+                    _menu.css('position', 'static').show();
+                    _event('OnAfterMenuOpen', this)();
                 } else {
-	                // If there is an open menu close it first.
-		            if (_openedInstance) {
-		                _openedInstance.Close(event);
-		            }
-		            
-		            _openedInstance = this;
-		                
-		            $(document).on(click + this.uuid, $proxy(this.Close, this))
-	                           .on('keydown' + _eventsNs + this.uuid, $proxy(this._keyDown, this));
-	                
-		            // Trun off validation so that clicking one of the months
-		            // won't blur the input field and trogger vlaidation
-		            // befroe the month was chosen (click event was triggered).
-	                // It is turned back on when Hide() is called.
-	                _elem.off('blur' + _eventsNs).focus();
-	                
-	                var _anim = _opts.ShowAnim || _opts.Animation,
-	                    _noAnim = _anim === 'none';
-	                
-	                // jQuery UI overrides jQuery.show and dosen't 
-	                // call the start callback.
-	                // see: http://api.jqueryui.com/show/
-	                _menu[ _noAnim ? 'fadeIn' : _anim ]({
-	                   duration: _noAnim ? 0 : this._duration(),
-	                   start: $proxy(this._position, this, _menu),
-	                   complete: _event('OnAfterMenuOpen', this)
-	                });
+                    // If there is an open menu close it first.
+                    if (_openedInstance) {
+                        _openedInstance.Close(event);
+                    }
+                    
+                    _openedInstance = this;
+                        
+                    $(document).on(click + this.uuid, $proxy(this.Close, this))
+                               .on('keydown' + _eventsNs + this.uuid, $proxy(this._keyDown, this));
+                    
+                    // Trun off validation so that clicking one of the months
+                    // won't blur the input field and trogger vlaidation
+                    // befroe the month was chosen (click event was triggered).
+                    // It is turned back on when Hide() is called.
+                    _elem.off('blur' + _eventsNs).focus();
+                    
+                    var _anim = _opts.ShowAnim || _opts.Animation,
+                        _noAnim = _anim === 'none';
+                    
+                    // jQuery UI overrides jQuery.show and dosen't 
+                    // call the start callback.
+                    // see: http://api.jqueryui.com/show/
+                    _menu[ _noAnim ? 'fadeIn' : _anim ]({
+                       duration: _noAnim ? 0 : this._duration(),
+                       start: $proxy(this._position, this, _menu),
+                       complete: _event('OnAfterMenuOpen', this)
+                    });
                 }
             }
             
@@ -504,7 +504,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
         },
         
         Close: function (event) {            
-	        var _elem = this.element;
+            var _elem = this.element;
             if (!_isInline(_elem) && this._visible) {
                 var _menu = this._monthPickerMenu, 
                     _opts = this.options;
@@ -557,16 +557,16 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
         /****** Private and Misc Utility functions ******/
         
         _setSelectedMonth: function (_selMonth) {            
-           	var month = _encodeMonth(this, _selMonth), _el = this.element;
+            var month = _encodeMonth(this, _selMonth), _el = this.element;
         
-		   	if (!month) {
-			   	_el.val( '' );
-		   	} else {
-			   	_el.val( this._formatMonth( new Date( _toYear(month), month % 12, 1)) );
-		   	}
-		   	
-		   	this._ajustYear(this.options);
-		   	this._showMonths();
+            if (!month) {
+                _el.val( '' );
+            } else {
+                _el.val( this._formatMonth( new Date( _toYear(month), month % 12, 1)) );
+            }
+            
+            this._ajustYear(this.options);
+            this._showMonths();
         },
 
         _i18n: function(str) {
@@ -581,21 +581,9 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             return this.FormatMonth(date || this._parseMonth(), format || this.options.MonthFormat);
         },
 
-        _showIcon: function () {
-            var _button = this._monthPickerButton;
-            
-            if (!_button.length) {
-	            this._createButton();
-            } else {
-	            _button.toggle(!!this.options.ShowIcon);
-            }
-            
-            this._updateFieldEvents();
-        },
-
         _updateButton: function () {
             var isDisabled = this.options.Disabled;
-			
+            
             this._createButton();
             
             // If the button is a jQuery UI button, 
@@ -610,14 +598,16 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             } catch (e) {
                 _button.filter('button,input').prop('disabled', isDisabled);
             }
+
+            this._updateFieldEvents();
         },
 
         _createButton: function () {
-	        var _elem = this.element;
-	        if (!this.options.ShowIcon || !_elem.is('input')) return;
-	        
-	        var _oldButton = this._monthPickerButton.off(_eventsNs);
-            var _btnOpt = this.options.Button;
+            var _elem = this.element, _opts = this.options;
+            if (_isInline(_elem)) return;
+            
+            var _oldButton = this._monthPickerButton.off(_eventsNs);
+            var _btnOpt = _opts.ShowIcon ? _opts.Button : false;
             
             if ($.isFunction(_btnOpt)) {
                 _btnOpt = _btnOpt.call(_elem[0], $.extend(true, {i18n: $.MonthPicker.i18n}, this.options));
@@ -627,23 +617,24 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             this._monthPickerButton = ( _btnOpt instanceof $ ? _btnOpt : $(_btnOpt) )
                 .each(function() {
                     if (!$.contains(document.body, this)) {
-	                    _removeOldBtn = true;
+                        _removeOldBtn = true;
                         $(this).insertAfter(_elem);
                     }
                 })
                 .on(click, $proxy(this.Toggle, this));
             
             if (this._removeOldBtn) {
-	            _oldButton.remove();
+                _oldButton.remove();
             }
             
             this._removeOldBtn = _removeOldBtn;
         },
 
         _updateFieldEvents: function () {
-	        this.element.off(click);
+            var _events = click + ' focus' + _eventsNs;
+            this.element.off(_events);
             if (this.options.ShowOn === 'both' || !this._monthPickerButton.length) {
-				this.element.on(click, $proxy(this.Open, this));
+                this.element.on(_events, $proxy(this.Open, this));
             }
         },
 
@@ -652,12 +643,12 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             if ([null, ''].indexOf(_errMsg) === -1) {
                 var _msgEl = $('<span id="MonthPicker_Validation_' + _elem[0].id + '" class="month-picker-invalid-message">' + _errMsg + '</span>');
 
-				var _button = this._monthPickerButton;
+                var _button = this._monthPickerButton;
                 this._validationMessage = _msgEl.insertAfter(_button.length ? _button : _elem);
                 
                 _elem.on('blur' + _eventsNs, $proxy(this.Validate, this));
             } else {
-	            this._validationMessage.remove();
+                this._validationMessage.remove();
             }
         },
         
@@ -667,13 +658,14 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
         },
         
         _keyDown: function (event) {
-	        // Don't use $.ui.keyCode to help minification.
+            // Don't use $.ui.keyCode to help minification.
             switch (event.keyCode) {
                 case 13: // Enter.
                     this._chooseMonth(new Date().getMonth() + 1);
                     this.Close(event);
                     break;
                 case 27: // Escape
+                case 9: // Tab
                     this.Close(event);
                     break;
             }
@@ -735,7 +727,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             this.Close();
             this._updateButton();
 
-			_event('OnAfterSetDisabled', this)(isDisabled);
+            _event('OnAfterSetDisabled', this)(isDisabled);
         },
         
         _getPickerYear: function () {
@@ -746,14 +738,14 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             this._yearContainer.text(year || new Date().getFullYear());
         },
 
-		_updateAlt: function (noop, date) {
-			// False means use the fields value.
-			var _field = $(this.options.AltField);
-			if (_field.length) {
-				_field.val(this._formatMonth(date, this.options.AltFormat));
-			}
-		},
-		
+        _updateAlt: function (noop, date) {
+            // False means use the fields value.
+            var _field = $(this.options.AltField);
+            if (_field.length) {
+                _field.val(this._formatMonth(date, this.options.AltFormat));
+            }
+        },
+        
         _chooseMonth: function (month) {
             var date = new Date(this._getPickerYear(), month-1);
             this.element.val(this._formatMonth( date )).blur();
@@ -770,7 +762,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             this._buttons.removeClass(_todayClass);
             this._showMonths();
 
-			_event('OnAfterChooseYear', this)();
+            _event('OnAfterChooseYear', this)();
         },
 
         _showMonths: function () {
@@ -792,19 +784,19 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
 
             var me = this, _onMonthClick = $proxy(me._onMonthClick, me);
             $.each(_months, function(index, monthName) {
-	            $(me._buttons[index])
-	                .on(click, {month: index+1}, _onMonthClick )
-	            	.button('option', 'label', monthName);
+                $(me._buttons[index])
+                    .on(click, {month: index+1}, _onMonthClick )
+                    .button('option', 'label', monthName);
             });
             
             this._decorateButtons();
         },
 
         _showYearsClickHandler: function () {
-	        this._buttons.removeClass(_todayClass);
+            this._buttons.removeClass(_todayClass);
             this._showYears();
 
-			_event('OnAfterChooseYears', this)();
+            _event('OnAfterChooseYears', this)();
         },
 
         _showYears: function () {
@@ -834,38 +826,38 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             this._buttons.off(_eventsNs);
 
             _setActive( this._selectedBtn, false );
-		    
-	        var _selYear = this.GetSelectedYear();
-	        var _onClick = $proxy(this._onYearClick, this);
-	        var _todayWithinBounds = _between(_thisYear, _minYear, _maxYear);
-	        var _selWithinBounds = _between(_selYear, _minYear, _maxYear);
-	        
+            
+            var _selYear = this.GetSelectedYear();
+            var _onClick = $proxy(this._onYearClick, this);
+            var _todayWithinBounds = _between(_thisYear, _minYear, _maxYear);
+            var _selWithinBounds = _between(_selYear, _minYear, _maxYear);
+            
             for (var _counter = 0; _counter < 12; _counter++) {
                 var _year = _currYear + _yearDifferential;
-		        
+                
                 var _btn = $( this._buttons[_counter] ).button({
-						disabled: !_between(_year, _minYear, _maxYear),
-						label: _year
-					})
-					.toggleClass(_todayClass, _year === _thisYear && _todayWithinBounds) // Heighlight the current year.
-					.on(click, { year: _year }, _onClick )
+                        disabled: !_between(_year, _minYear, _maxYear),
+                        label: _year
+                    })
+                    .toggleClass(_todayClass, _year === _thisYear && _todayWithinBounds) // Heighlight the current year.
+                    .on(click, { year: _year }, _onClick )
                     
                  // Heighlight the selected year.
-		        if (_selWithinBounds && _selYear && _selYear === _year) {
-			        this._selectedBtn = _setActive( _btn , true );
-		        }
+                if (_selWithinBounds && _selYear && _selYear === _year) {
+                    this._selectedBtn = _setActive( _btn , true );
+                }
                 
                 _yearDifferential++;
             }
         },
         
         _onMonthClick: function(event) {
-	        this._chooseMonth(event.data.month);
-	        this.Close(event);
+            this._chooseMonth(event.data.month);
+            this.Close(event);
         },
         
         _onYearClick: function(event) {
-	        this._chooseYear(event.data.year);
+            this._chooseYear(event.data.year);
         },
         
         _addToYear: function(amount) {
@@ -884,46 +876,46 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             this._showYears();
             this.element.focus();
 
-			_event('OnAfter' + (amount > 0 ? 'Next' : 'Previous') + 'Years', this)();
+            _event('OnAfter' + (amount > 0 ? 'Next' : 'Previous') + 'Years', this)();
         },
         
         _ajustYear: function(_opts) {
-	        var _year = _opts.StartYear || this.GetSelectedYear() || new Date().getFullYear();
+            var _year = _opts.StartYear || this.GetSelectedYear() || new Date().getFullYear();
             if (this._MinMonth !== null) {
-            	_year = Math.max(_toYear(this._MinMonth), _year);
+                _year = Math.max(_toYear(this._MinMonth), _year);
             }
             if (this._MaxMonth !== null) {
-            	_year = Math.min(_toYear(this._MaxMonth), _year);
+                _year = Math.min(_toYear(this._MaxMonth), _year);
             }
             
             this._setPickerYear( _year );
         },
         
         _decorateButtons: function() {
-	        var _curYear = this._getPickerYear(), _todaysMonth = _toMonth(new Date),
-	            _minDate = this._MinMonth, _maxDate = this._MaxMonth;
-	        
-	        // Heighlight the selected month.
-			_setActive( this._selectedBtn, false );
-	        var _sel = this.GetSelectedDate();
-	        var _withinBounds = _between(_sel ? _toMonth(_sel) : null, _minDate, _maxDate);
-		    	
-	        if (_sel && _sel.getFullYear() === _curYear) {
-		        this._selectedBtn = _setActive( $(this._buttons[_sel.getMonth()]) , _withinBounds );
-	        }	
-	        
-	        // Disable the next/prev button if we've reached the min/max year.
+            var _curYear = this._getPickerYear(), _todaysMonth = _toMonth(new Date),
+                _minDate = this._MinMonth, _maxDate = this._MaxMonth;
+            
+            // Heighlight the selected month.
+            _setActive( this._selectedBtn, false );
+            var _sel = this.GetSelectedDate();
+            var _withinBounds = _between(_sel ? _toMonth(_sel) : null, _minDate, _maxDate);
+                
+            if (_sel && _sel.getFullYear() === _curYear) {
+                this._selectedBtn = _setActive( $(this._buttons[_sel.getMonth()]) , _withinBounds );
+            }   
+            
+            // Disable the next/prev button if we've reached the min/max year.
             this._prevButton.button('option', 'disabled', _minDate && _curYear == _toYear(_minDate));
             this._nextButton.button('option', 'disabled', _maxDate && _curYear == _toYear(_maxDate));
-	        
-	        for (var i = 0; i < 12; i++) {
-	            // Disable the button if the month is not between the 
-	            // min and max interval.
-	            var _month = (_curYear * 12) + i, _isBetween = _between(_month, _minDate, _maxDate);
-	            
-	            $(this._buttons[i])
-	            	.button({ disabled: !_isBetween })
-					.toggleClass(_todayClass, _isBetween && _month == _todaysMonth); // Highlights today's month.
+            
+            for (var i = 0; i < 12; i++) {
+                // Disable the button if the month is not between the 
+                // min and max interval.
+                var _month = (_curYear * 12) + i, _isBetween = _between(_month, _minDate, _maxDate);
+                
+                $(this._buttons[i])
+                    .button({ disabled: !_isBetween })
+                    .toggleClass(_todayClass, _isBetween && _month == _todaysMonth); // Highlights today's month.
             }
         }
     });

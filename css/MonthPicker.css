@@ -17,7 +17,9 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
 */
 
 .month-picker {
-    width: 200px;
+	/*padding: 2px;*/
+	background-color: #fff;
+    /*width: 200px;*/
     display: none;
     position: absolute;
     z-index: 9999;
@@ -27,6 +29,9 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
 }
 .month-picker .year-container-all {
     cursor: pointer;
+}
+.month-picker-header {
+    margin: 3px 3px 0px 3px;
 }
 .month-picker-year-table .year-container-all {
     text-align: center;
@@ -48,7 +53,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
     width: 50px;
 }
 .month-picker-year-table .previous-year {
-    width: 35px;
+    /*width: 35px;*/
     /* 
 	 In case the user's css reset the user agent stylesheet
 	 this is often done in RTL pages.
@@ -56,9 +61,14 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
     text-align: left;
 }
 .month-picker-year-table .next-year {
-    width: 35px;
+    /*width: 35px;*/
     text-align: right;
 }
+
+.month-picker-year-table .next-year>button {
+    margin-right: 0;
+}
+
 .month-picker-year-table button {
     width: 28px;
     width: 1.8em;
@@ -70,9 +80,14 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
     text-align: center;
 }
 .month-picker-month-table td {
+    padding: 0;
     height: 35px;
     text-align: center;
     font-size: 12px;
+}
+.month-picker-month-table button {
+    width: 55px;
+    margin: 3px;
 }
 .month-picker-open-button {
     height: 20px;

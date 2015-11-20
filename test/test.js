@@ -377,7 +377,7 @@ QUnit.test('Inline menu', function(assert) {
 	
 	assert.notOk($("#MonthPicker_Button_InlineMenuDiv").length, 'The default button was not created');
 	
-	field.MonthPicker('destroy');
+	//field.MonthPicker('destroy');
 });
 
 QUnit.test('SelectedMonth option', function(assert) {
@@ -399,7 +399,7 @@ QUnit.test('SelectedMonth option', function(assert) {
 	var date = field.MonthPicker('GetSelectedDate');
 	assert.ok( menu.find('.button-1').is('.ui-state-active'), 'January is selected after changing the SelectedMonth');
 	
-	field.MonthPicker('Destroy');
+	//field.MonthPicker('Destroy');
 });
 
 // Makes sure that all events are triggered as expected.

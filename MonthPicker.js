@@ -170,7 +170,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
     };
     
     var _markup =
-        '<div class="ui-widget-header ui-helper-clearfix ui-corner-all">' +
+        '<div class="ui-widget-header month-picker-header ui-corner-all">' +
             '<table class="month-picker-year-table" width="100%" border="0" cellspacing="1" cellpadding="2">' +
                 '<tr>' +
                     '<td class="previous-year"><button /></td>' +
@@ -184,7 +184,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
                 '</tr>' +
             '</table>' +
         '</div>' +
-        '<div class="ui-widget ui-widget-content ui-helper-clearfix ui-corner-all">' +
+        '<div class="ui-widget">' +
             '<table class="month-picker-month-table" width="100%" border="0" cellspacing="1" cellpadding="2" />' +
         '</div>';
 
@@ -322,7 +322,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
 
             _el.addClass('month-year-input');
 
-            var _menu = this._monthPickerMenu = $('<div id="MonthPicker_' + _el[0].id + '" class="month-picker ui-helper-clearfix"></div>');
+            var _menu = this._monthPickerMenu = $('<div id="MonthPicker_' + _el[0].id + '" class="month-picker ui-widget-content ui-corner-all"></div>');
             var isInline = _isInline(_el);
             
             $(_markup).appendTo(_menu);
@@ -383,7 +383,6 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             
             this._setUseInputMask();
             this._setDisabledState();
-            this._updateFieldEvents();
             this.Destroy = this.destroy;
             
             if (isInline) {

@@ -122,7 +122,8 @@ if ($.ui.position) {
                 collision: 'fit flip'
             },
             OnAfterMenuOpen: function () {
-                var _lastPointFullyVisibleX = _windowWidth - 200;
+                var _meun = $(MonthPicker_PositionDemo);
+                var _lastPointFullyVisibleX = _windowWidth - _meun.width();
                 var _lastPointFullyVisibleY = _windowHeight - _pickerMenu.height();
                 assert.equal(_pickerMenu.css('display'), 'block', '#PositionDemo responded to a text input click event and showed the menu.');
                 assert.ok(_pickerMenu.position().left <= _lastPointFullyVisibleX, "#PositionDemo does not overlap the right window boundary on the X axis.");
@@ -363,21 +364,19 @@ QUnit.test('Inline menu', function(assert) {
 	
 	var menu = $(MonthPicker_InlineMenuDiv);
 	
-	assert.ok(menu.is(':visible'), 'The menu is visible without having to call the Open method');
-	
+	assert.ok(menu.width() <= 200, 'The menu is visible and has the expected width');
 	
 	$(document.body).trigger('click');
 	
 	assert.ok(menu.is(':visible'), 'The menu is still visible after clicking outside the menu');
 	
-	//var buttons = menu.find('.month-picker-month-table button');
 	menu.find('.button-1').trigger('click');
 	
 	assert.ok(menu.is(':visible'), 'The menu is still visible after choosing a month');
 	
 	assert.notOk($("#MonthPicker_Button_InlineMenuDiv").length, 'The default button was not created');
 	
-	//field.MonthPicker('destroy');
+	field.MonthPicker('destroy');
 });
 
 QUnit.test('SelectedMonth option', function(assert) {
@@ -399,7 +398,7 @@ QUnit.test('SelectedMonth option', function(assert) {
 	var date = field.MonthPicker('GetSelectedDate');
 	assert.ok( menu.find('.button-1').is('.ui-state-active'), 'January is selected after changing the SelectedMonth');
 	
-	//field.MonthPicker('Destroy');
+	field.MonthPicker('Destroy');
 });
 
 // Makes sure that all events are triggered as expected.
@@ -612,10 +611,11 @@ QUnit.test('Right to left', function (assert) {
     assert.ok(nextYearButton.find('span.ui-icon-circle-triangle-w').length, 'Next button is pointed west');
     
     // Make sure the menu opens to the right of the field.
+    //alert(field.position().left - menu.position().left);
     var opendToTheRight = (field.position().left - menu.position().left) > 100;
     assert.ok(opendToTheRight, 'The menu opened to the right of rhe field');
     
-    field.MonthPicker('Close');
+    //field.MonthPicker('Close');
 });
 
 QUnit.test('Toggle method', function (assert) {

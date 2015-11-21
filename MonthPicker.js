@@ -1,7 +1,7 @@
 /*
 https://github.com/KidSysco/jquery-ui-month-picker/
 
-Version 2.8.1
+Version 3.0-alpha1
 
 This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
@@ -154,7 +154,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
     }
     
     $.MonthPicker = {
-        VERSION: '2.8.1', // Added in version 2.4;
+        VERSION: '3.0-alpha1', // Added in version 2.4;
         i18n: {
             year: "Year",
             prevYear: "Previous Year",
@@ -320,9 +320,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
                 _el.css('width', 'auto');
             }
 
-            _el.addClass('month-year-input');
-
-            var _menu = this._monthPickerMenu = $('<div id="MonthPicker_' + _el[0].id + '" class="month-picker ui-widget-content ui-corner-all"></div>');
+            var _menu = this._monthPickerMenu = $('<div id="MonthPicker_' + _el[0].id + '" class="month-picker ui-widget-content ui-corner-all"></div>').hide();
             var isInline = _isInline(_el);
             
             $(_markup).appendTo(_menu);
@@ -390,6 +388,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             } else {
                // Update the alt field if the user manually changes
                // the input field.
+               _el.addClass('month-year-input');
                _el.change($proxy(this._updateAlt, this));
             }
         },

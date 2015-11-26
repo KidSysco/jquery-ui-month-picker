@@ -322,6 +322,34 @@ QUnit.test('Only one open menu', function (assert) {
     assert.equal($('.month-picker').filter(':visible').length, 1, 'There is only one menu opened.');
 });
 
+QUnit.test('Keydown handling', function (assert) {
+    var field = $(EventsField).val('').MonthPicker({
+		Animation: 'none' // Disable animation to make sure opening and closing the menu is synchronous.
+	});
+	
+	field.MonthPicker('Open');
+	
+	field.trigger($.Event('keydown', {keyCode: $.ui.keyCode.ENTER}));
+	assert.equal(field.val(), _today.getMonth()+1 + '/' + _today.getFullYear(), 'Pressing enter selected todays month');
+	
+	var menu = $(MonthPicker_EventsField);
+	assert.ok(!menu.is(':visible'), 'Pressing enter closed the menu');
+	
+	var mayOfNextYear = '05/' + (_today.getFullYear()+1);
+	field.MonthPicker('Open');
+	field.val( mayOfNextYear );
+	
+	field.trigger($.Event('keydown', {keyCode: $.ui.keyCode.ENTER}));
+	assert.ok(!menu.is(':visible'), 'Pressing enter closed the menu');
+	assert.equal(field.val(), mayOfNextYear, "Pressing enter didn't override the month the user entered");
+	
+	field.MonthPicker('Open');
+	field.trigger($.Event('keydown', {keyCode: $.ui.keyCode.ESCAPE}));
+	assert.ok(!menu.is(':visible'), 'Pressing escape closed the menu');
+	
+	field.MonthPicker('Destroy');
+});
+
 QUnit.test('MonthFormat Option Tests', function (assert) {
     // Create a month picker with a funky month format.
     $(FormatField).val('10--->  {2010}').MonthPicker({
@@ -556,7 +584,7 @@ QUnit.test('Events and context', function (assert) { // A.k.a duplicate code tes
 	
 	field.MonthPicker('Enable');
 	
-	field.MonthPicker('ClearAllCallbacks');
+	field.MonthPicker('destroy');
 });
 
 QUnit.test('AltField and AltFormat tests', function( assert ) {

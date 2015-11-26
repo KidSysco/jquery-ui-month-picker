@@ -1,7 +1,7 @@
 /*
 https://github.com/KidSysco/jquery-ui-month-picker/
 
-Version 3.0-alpha1
+Version 3.0-alpha2
 
 This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
@@ -154,7 +154,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
     }
     
     $.MonthPicker = {
-        VERSION: '3.0-alpha1', // Added in version 2.4;
+        VERSION: '3.0-alpha2', // Added in version 2.4;
         i18n: {
             year: "Year",
             prevYear: "Previous Year",
@@ -659,7 +659,9 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             // Don't use $.ui.keyCode to help minification.
             switch (event.keyCode) {
                 case 13: // Enter.
-                    this._chooseMonth(new Date().getMonth() + 1);
+                    if (!this.element.val()) {
+                        this._chooseMonth(new Date().getMonth() + 1);
+                    }
                     this.Close(event);
                     break;
                 case 27: // Escape

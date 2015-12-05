@@ -169,18 +169,21 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
         }
     };
     
+    //<a class="ui-state-hover ui-corner-all" style="width:23px;height:23px;display:inline-block;"><span class="ui-icon ui-icon-circle-triangle-w"></span></a>
+    
+    
     var _markup =
         '<div class="ui-widget-header month-picker-header ui-corner-all">' +
             '<table class="month-picker-year-table" width="100%" border="0" cellspacing="1" cellpadding="2">' +
                 '<tr>' +
-                    '<td class="previous-year"><button /></td>' +
+                    '<td class="previous-year"><a /></td>' +
                     '<td class="year-container-all">' +
                         '<div id="year-container">' +
                             '<span class="year-title" />' +
                             '<span class="year" />' +
                         '</div>' +
                     '</td>' +
-                    '<td class="next-year"><button /></td>' +
+                    '<td class="next-year"><a /></td>' +
                 '</tr>' +
             '</table>' +
         '</div>' +
@@ -337,8 +340,9 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
 
             this._yearContainer = $('.year', _menu);
             
-            this._prevButton = $('.previous-year button', _menu).button({ text: false });
-            this._nextButton = $('.next-year button', _menu).button({ text: false });
+            this._prevButton = $('.previous-year a', _menu);
+            this._prevButton.button({ text: false }).removeClass('ui-state-default').css('cursor', 'default');
+            this._nextButton = $('.next-year a', _menu).button({ text: false }).removeClass('ui-state-default').css('cursor', 'default');
             
             this._setRTL(_opts.IsRTL); //Assigns icons to the next/prev buttons.
             
@@ -864,6 +868,12 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             var _year = this._yearContainer;
             _year.text(parseInt(_year.text()) + amount, 10);
             this.element.focus();
+            
+            var me = this;
+            setTimeout(function() {
+                var _btn = amount > 0 ? me._nextButton : me._prevButton;
+                _btn.addClass('ui-state-hover');
+            }, 1);
             
             this._decorateButtons();
             

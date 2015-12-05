@@ -36,6 +36,10 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
 .month-picker-year-table .year-container {
     margin: 0 auto;
 }
+.month-picker-year-table a {
+    border: 1px solid transparent;
+}
+
 .month-picker-year-table .year-title {
     margin: 3px;
     font-size: 12px;
@@ -67,7 +71,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
     margin-right: 0;
 }
 
-.month-picker-year-table button {
+.month-picker-year-table /*button*/ a {
     width: 28px;
     width: 1.8em;
     height: 1.8em;

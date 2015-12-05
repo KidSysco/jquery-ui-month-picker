@@ -1,7 +1,7 @@
 /*
 https://github.com/KidSysco/jquery-ui-month-picker/
 
-Version 3.0-alpha2
+Version 3.0-alpha3
 
 This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
@@ -154,7 +154,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
     }
     
     $.MonthPicker = {
-        VERSION: '3.0-alpha2', // Added in version 2.4;
+        VERSION: '3.0-alpha3', // Added in version 2.4;
         i18n: {
             year: "Year",
             prevYear: "Previous Year",
@@ -169,12 +169,9 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
         }
     };
     
-    //<a class="ui-state-hover ui-corner-all" style="width:23px;height:23px;display:inline-block;"><span class="ui-icon ui-icon-circle-triangle-w"></span></a>
-    
-    
     var _markup =
         '<div class="ui-widget-header month-picker-header ui-corner-all">' +
-            '<table class="month-picker-year-table" width="100%" border="0" cellspacing="1" cellpadding="2">' +
+            '<table class="month-picker-year-table">' +
                 '<tr>' +
                     '<td class="previous-year"><a /></td>' +
                     '<td class="year-container-all">' +
@@ -188,9 +185,9 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             '</table>' +
         '</div>' +
         '<div class="ui-widget">' +
-            '<table class="month-picker-month-table" width="100%" border="0" cellspacing="1" cellpadding="2" />' +
+            '<table class="month-picker-month-table" />' +
         '</div>';
-
+        
     $.widget("KidSysco.MonthPicker", {
 
         /******* Properties *******/

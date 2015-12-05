@@ -640,8 +640,8 @@ QUnit.test('Right to left', function (assert) {
     
     // Make sure the menu opens to the right of the field.
     //alert(field.position().left - menu.position().left);
-    var opendToTheRight = (field.position().left - menu.position().left) > 100;
-    assert.ok(opendToTheRight, 'The menu opened to the right of rhe field');
+    var opendToTheRight = (field.position().left - menu.position().left) > 5;
+    assert.ok(opendToTheRight, 'The menu opened to the right of the field');
     
     //field.MonthPicker('Close');
 });

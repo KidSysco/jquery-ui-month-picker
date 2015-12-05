@@ -21,9 +21,6 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
     position: absolute;
     z-index: 9999;
 }
-.month-year-input {
-    width: 60px;
-}
 .month-picker .year-container-all {
     cursor: pointer;
 }
@@ -39,7 +36,6 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
 .month-picker-year-table a {
     border: 1px solid transparent;
 }
-
 .month-picker-year-table .year-title {
     margin: 3px;
     font-size: 12px;
@@ -56,25 +52,28 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
 .month-picker-year-table .year-container {
     width: 50px;
 }
-.month-picker-year-table .previous-year {
+.month-picker-year-table .previous-year>a {
     /* 
 	 In case the user's css reset the user agent stylesheet
 	 this is often done in RTL pages.
 	*/
-    text-align: left;
+    /*text-align: left;*/
+    float: left;
 }
-.month-picker-year-table .next-year {
-    text-align: right;
+.month-picker-year-table .next-year>a {
+    /*text-align: right;*/
+    float: right;
 }
 
-.month-picker-year-table .next-year>button {
-    margin-right: 0;
+.month-picker-year-table td {
+    padding: 0px;
 }
 
 .month-picker-year-table /*button*/ a {
-    width: 28px;
-    width: 1.8em;
-    height: 1.8em;
+    /*width: 28px;*/
+    margin: 0px;
+    width: 1.5em;
+    height: 1.5em;
     text-align: center;
     cursor: pointer;
 }

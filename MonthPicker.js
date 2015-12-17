@@ -110,7 +110,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
         // a JSON object with it's keys and values reversed 
         // (example '+1y +2m' will turn into {"+1":"y","+2":"m"})
         // After that we just revers the keys and values.
-        var _json = _val.trim();
+        var _json = $.trim(_val);
         _json = _json.replace(/y/i, '":"y"');
         _json = _json.replace(/m/i, '":"m"');
 
@@ -286,7 +286,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             // TLDR:
             // http://www.w3.org/TR/html5/forms.html#the-input-element 
             // https://api.jquery.com/text-selector/
-            if (!_el.is('input,div,span') || ['text', 'month', void 0].indexOf(_el.attr('type')) === -1) {
+            if (!_el.is('input,div,span') || $.inArray(_el.attr('type'), ['text', 'month', void 0]) === -1) {
                 var error = _setupErr + 'MonthPicker can only be called on text or month inputs.';
                 // Call alert first so that IE<10 won't trip over console.log and swallow all errors.
                 alert(error + ' \n\nSee (developer tools) for more details.');
@@ -308,7 +308,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             
             // Make sure the user passed in a valid Animation, ShowAnim and HideAnim options values.
             for (var opt in _animVals) {
-                if (_opts[opt] !== null && _animVals[opt].indexOf(_opts[opt]) === -1) {
+                if (_opts[opt] !== null && $.inArray(_opts[opt], _animVals[opt]) === -1) {
                     alert(_badOptValErr.replace(/%/, opt) + _animVals[opt]);
                     return false;
                 }
@@ -640,7 +640,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
 
         _createValidationMessage: function () {
             var _errMsg = this.options.ValidationErrorMessage, _elem = this.element;
-            if ([null, ''].indexOf(_errMsg) === -1) {
+            if ($.inArray(_errMsg, [null, '']) === -1) {
                 var _msgEl = $('<span id="MonthPicker_Validation_' + _elem[0].id + '" class="month-picker-invalid-message">' + _errMsg + '</span>');
 
                 var _button = this._monthPickerButton;

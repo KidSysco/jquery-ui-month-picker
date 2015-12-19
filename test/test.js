@@ -1165,7 +1165,7 @@ QUnit.test('Menu opens within range', function (assert) {
     field.val('02/2010');
     field.MonthPicker('Open');
 
-    assert.equal(menu.find('.year').text(), 2013, 'The menu opend at the minimum year (2013) and not 2010' );
+    assert.equal(_getPickerYear(menu), 2013, 'The menu opend at the minimum year (2013) and not 2010' );
 
     field.MonthPicker('Close');
 
@@ -1174,7 +1174,7 @@ QUnit.test('Menu opens within range', function (assert) {
     field.val('12/2020');
     field.MonthPicker('Open');
 
-    assert.equal(menu.find('.year').text(), 2016, 'The menu opend at the maximum year (2016) and not 2020' );
+    assert.equal(_getPickerYear(menu), 2016, 'The menu opend at the maximum year (2016) and not 2020' );
 
     field.MonthPicker('Close');
 
@@ -1183,7 +1183,7 @@ QUnit.test('Menu opens within range', function (assert) {
     field.MonthPicker('option', 'MaxMonth', '12/2018');
     field.MonthPicker('Open');
 
-    assert.equal(menu.find('.year').text(), 2018, 'The menu opend at the year 2018 after changing the MaxMonth option' );
+    assert.equal(_getPickerYear(menu), 2018, 'The menu opend at the year 2018 after changing the MaxMonth option' );
 
     field.MonthPicker('Close');
 
@@ -1192,7 +1192,7 @@ QUnit.test('Menu opens within range', function (assert) {
     field.MonthPicker('option', 'MaxMonth', new Date(2021, 12 - 1));
     field.MonthPicker('Open');
 
-    assert.equal(menu.find('.year').text(), 2020, 'The menu opend at the the selected year 2020 after' );
+    assert.equal(_getPickerYear(menu), 2020, 'The menu opend at the the selected year 2020 after' );
 
     field.MonthPicker('Close');
 
@@ -1200,7 +1200,7 @@ QUnit.test('Menu opens within range', function (assert) {
     field.val('02/2009');
     field.MonthPicker('Open');
 
-    assert.equal(menu.find('.year').text(), 2010, 'The menu opend at the year 2010 after chagnig the MinMonth option' );
+    assert.equal(_getPickerYear(menu), 2010, 'The menu opend at the year 2010 after chagnig the MinMonth option' );
 
     field.MonthPicker('Close');
 
@@ -1209,7 +1209,7 @@ QUnit.test('Menu opens within range', function (assert) {
     field.MonthPicker('option', 'MinMonth', new Date(2008, 04));
     field.MonthPicker('Open');
 
-    assert.equal(menu.find('.year').text(), 2009, 'The menu opend at the selected year after changing the MinMonth option again' );
+    assert.equal(_getPickerYear(menu), 2009, 'The menu opend at the selected year after changing the MinMonth option again' );
 
     // Destroy the plugin so we can use the field over again
     // in another Min/MaxMonth test.
@@ -1253,7 +1253,7 @@ QUnit.test('Today and selected months are highlighted', function (assert) {
 	assert.equal( selectedButton.length, 1, 'There is one selected button');
 	assert.equal( selectedButton[0], buttons[4], 'The selected month is highlighted');
 
-	menu.find('.year').trigger('click');
+	menu.find('.jump-years a').trigger('click');
 
 	var selectdBtn = buttons.filter('.ui-state-active');
 	assert.equal( selectdBtn.button( "option", "label" ), _today.getFullYear(), 'The selected year is highlighted');
@@ -1405,7 +1405,7 @@ QUnit.test('JavaScript Date objects', function (assert) {
     field.MonthPicker('option', 'MaxMonth', new Date(2016, 6 - 1));
 
     field.MonthPicker('Open');
-    assert.equal(menu.find('.year').text(), 2016, 'The menu opend at the expected year 2015');
+    assert.equal(_getPickerYear(menu), 2016, 'The menu opend at the expected year 2015');
     assert.equal(buttons.not('.ui-button-disabled').length, 6, '12 month buttons are enabled');
 
     // Destroy the plugin so we can use the field over again

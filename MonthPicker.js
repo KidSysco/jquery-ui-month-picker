@@ -834,7 +834,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             var _currYear = this._getPickerYear(),
                 _yearDifferential = -4,
                 _firstYear = (_currYear + _yearDifferential),
-                AMOUNT_TO_ADD = 5,
+                AMOUNT_TO_ADD = 12,
                 _thisYear = new Date().getFullYear();
 
             var _minDate = this._MinMonth;

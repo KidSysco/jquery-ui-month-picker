@@ -330,17 +330,18 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             $(_markup).appendTo(_menu);
             (_menu).appendTo( isInline ? _el : document.body );
 
-            $('.year-title', _menu).text(this._i18n('year'));
+            //$('.year-title', _menu).text(this._i18n('year'));
 
             this._yearContainerAll =
                 $('.year-container-all', _menu)
                 .attr('title', this._i18n('jumpYears'))
                 .click($proxy(this._showYearsClickHandler, this));
 
-                this._yearContainerAll.find('a').css({'cursor': 'default','fontWeight':'bold'}).button({label:'Year 2015'}).removeClass('ui-state-default');
+                this._yearButton = this._yearContainerAll.find('a').css({'cursor': 'default','fontWeight':'bold'}).button().removeClass('ui-state-default');
 
 
                     var tOut = null, speed = 125, _yca = this._yearContainerAll[0];
+                    var _prevText;
 /*_menu.find('.month-picker-year-table').*/$(_yca).mouseover(function(e) {
     var me = this;
     if ($.contains(_yca, e.target)) {
@@ -349,10 +350,11 @@ tOut = setTimeout(function() {
   /*$(".year-container-all span", me)*/$("span", me).animate({ opacity: .45 },{
   	duration: speed,
   	complete: function() {
+      _prevText=$(/*".year-container-all*/"span", me).text();
     	$(/*".year-container-all*/"span", me).animate({opacity: 1}, speed).text("Jump Years");
     }
   });
-}, 175); } else     $(".year-container-all a", me).addClass('ui-state-default')	;
+}, 175); } else     $("a", me).addClass('ui-state-default')	;
 }).mouseout(function(e) {
 if (tOut) return clearTimeout(tOut);
 var me = this;
@@ -360,9 +362,9 @@ if ($.contains(_yca, e.target)) {
   $(/*".year-container-all*/ "span", me).animate({ opacity: .45 },{
   	duration: speed,
   	complete: function() {
-    	$("span", me).text("Year 2015").animate({opacity: 1}, speed);
+    	$("span", me).text(_prevText).animate({opacity: 1}, speed);
     }
-  }); } else $(".year-container-all a", me).removeClass('ui-state-default')	;
+  }); } else $("a", me).removeClass('ui-state-default')	;
 });
 
             this._createValidationMessage();
@@ -764,11 +766,14 @@ if ($.contains(_yca, e.target)) {
         },
 
         _getPickerYear: function () {
-            return parseInt(this._yearContainer.text(), 10);
+            //return parseInt(this._yearContainer.text(), 10);
+            return this._pickerYear;
         },
 
         _setPickerYear: function (year) {
-            this._yearContainer.text(year || new Date().getFullYear());
+            this._pickerYear = year || new Date().getFullYear();
+            this._yearButton.button({ label: this._i18n('year') + ' ' + this._pickerYear })
+            //this._yearContainer.text(year || new Date().getFullYear());
         },
 
         _updateAlt: function (noop, date) {
@@ -894,8 +899,9 @@ if ($.contains(_yca, e.target)) {
         },
 
         _addToYear: function(amount) {
-            var _year = this._yearContainer;
-            _year.text(parseInt(_year.text()) + amount, 10);
+            //var _year = this._yearContainer;
+            this._setPickerYear( this._getPickerYear() + amount );
+            //_year.text(parseInt(_year.text()) + amount, 10);
             this.element.focus();
 
             var me = this;
@@ -910,8 +916,9 @@ if ($.contains(_yca, e.target)) {
         },
 
         _addToYears: function(amount) {
-            var _year = this._yearContainer;
-            _year.text(parseInt(_year.text()) + amount, 10);
+            //var _year = this._yearContainer;
+            //_year.text(parseInt(_year.text()) + amount, 10);
+            this._setPickerYear( this._getPickerYear() + amount );
             this._showYears();
             this.element.focus();
 

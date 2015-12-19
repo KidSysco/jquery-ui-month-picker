@@ -16,6 +16,10 @@ var _today = new Date();
 // the tests.
 $.KidSysco.MonthPicker.prototype.options.Duration = 1;
 
+function _getPickerYear(_pickerMenu) {
+  return parseInt($('.jump-years span', _pickerMenu).text().replace(/\D/g, ''), 10);
+}
+
 QUnit.module("Installation");
 
 /***** Test basic the installation for the pre-requisite objects and namespaces *****/
@@ -197,7 +201,7 @@ QUnit.test('Start Year Option Tests', function (assert) {
             assert.equal(_pickerMenu.css('display'), 'block', '#StartYearDemo responded to a text input click event and showed the menu.');
             assert.equal(parseInt(_picker.MonthPicker('GetSelectedYear'), 10), 2025, '#StartYearDemo defaulted to 2025, the year specified in the textbox.');
             _picker.MonthPicker('option', 'StartYear', 2095);
-            assert.equal(parseInt($('.jump-years span', _pickerMenu).text().replace(/\D/g, ''), 10), 2095, '#StartYearDemo switched the year to 2095 after init.');
+            assert.equal(_getPickerYear(_pickerMenu), 2095, '#StartYearDemo switched the year to 2095 after init.');
             $('.button-1', _pickerMenu).trigger($.Event('click'));
             assert.equal(parseInt(_picker.MonthPicker('GetSelectedYear'), 10), 2095, '#StartYearDemo selected the correct year, 2095, upon choosing a month.');
             done();
@@ -498,7 +502,7 @@ QUnit.test('Events and context', function (assert) { // A.k.a duplicate code tes
 		assert.equal( this, EventsField, 'OnAfterChooseYears was called in the right context' );
 	});
 
-	var showYearsButton = menu.find('.year-container-all');
+	var showYearsButton = menu.find('.jump-years a');
 	showYearsButton.trigger('click');
 
 	assert.ok(OnAfterChooseYearsTriggerd, 'Clicking the show years button triggered OnAfterChooseYears');
@@ -948,7 +952,7 @@ QUnit.test('Month buttons are disabled', function (assert) {
 
 	// Try to click the disabled buttons.
 	var buttons = menu.find('.month-picker-month-table button');
-    $(buttons.slice(0, 8)).trigger('click');
+  $(buttons.slice(0, 8)).trigger('click');
 
 	assert.ok(previousYearButton.is('.ui-button-disabled'), 'The previous year button is disabled');
 
@@ -961,7 +965,7 @@ QUnit.test('Month buttons are disabled', function (assert) {
 
 	// Make sure we can still go to the next year.
 	nextYearButton.trigger('click');
-	var pickerYear = parseInt(menu.find('.year').text(), 10);
+	var pickerYear = _getPickerYear(menu);
 	assert.equal(pickerYear, 2016, 'Clicking next year changed the year to 2016');
 
 	// Make none of the buttons are disabled.
@@ -978,7 +982,7 @@ QUnit.test('Month buttons are disabled', function (assert) {
 	previousYearButton.trigger('click');
 	previousYearButton.trigger('click');
 
-	var pickerYear = parseInt(menu.find('.year').text(), 10);
+	var pickerYear = _getPickerYear(menu);
 	assert.equal(pickerYear, 2015, 'clicking previous year tweice keept the year at 2015');
 
 	// Make sure that month buttons before October (the minimum month)
@@ -1021,7 +1025,7 @@ QUnit.test('Year buttons are disabled', function (assert) {
     var menu = $(MonthPicker_RistrictMonthField);
 
     // Click the year title to show the years.
-    menu.find('.year-title').trigger('click');
+    menu.find('.jump-years a').trigger('click');
 
     // Make sure we are in years view.
     var buttons = menu.find('.month-picker-month-table button');
@@ -1103,7 +1107,7 @@ QUnit.test('Year buttons are disabled', function (assert) {
     assert.ok(!hasDidabledButtons, 'All buttons are enabled');
 
     // Click the year title to show the years menu.
-    menu.find('.year-title').trigger('click');
+    menu.find('.jump-years a').trigger('click');
 
     // Keeps clicking next years until we reach the disabled years.
     for (var i = 1; !buttons.is('.ui-button-disabled') && i <= 10; i++) {

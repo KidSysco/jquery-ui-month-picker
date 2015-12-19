@@ -21,17 +21,11 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
     position: absolute;
     z-index: 9999;
 }
-.month-picker .year-container-all {
-    cursor: pointer;
-}
 .month-picker-header {
     margin: 3px 3px 0px 3px;
 }
-.month-picker-year-table .year-container-all {
+.month-picker-year-table .jump-years {
     text-align: center;
-}
-.month-picker-year-table .year-container {
-    margin: 0 auto;
 }
 .month-picker-year-table a {
     border: 1px solid transparent;
@@ -49,9 +43,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
 .month-picker-year-table {
     width: 100%;
 }
-.month-picker-year-table .year-container {
-    width: 50px;
-}
+
 .month-picker-year-table .previous-year>a {
     /*
 	 In case the user's css reset the user agent stylesheet
@@ -77,17 +69,15 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
     text-align: center;
     cursor: pointer;
 }
-.year-container-all a {
+
+.jump-years a {
     width: 100%;
 }
 
-.month-picker-year-table .year-container-all span {
+.month-picker-year-table .jump-years span {
     padding: inherit;   /*padding-bottom: 0 inherit;*/
     }
 
-.month-picker-year-table .year-container {
-    text-align: center;
-}
 .month-picker-month-table td {
     padding: 0;
     height: 35px;

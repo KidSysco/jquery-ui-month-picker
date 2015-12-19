@@ -174,7 +174,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             '<table class="month-picker-year-table">' +
                 '<tr>' +
                     '<td class="previous-year"><a /></td>' +
-                    '<td class="year-container-all">' +
+                    '<td class="'+""/*year-container-all*/+'jump-years">' +
                     /*
                         '<div id="year-container">' +
                             '<span class="year-title" />' +
@@ -332,44 +332,43 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
 
             //$('.year-title', _menu).text(this._i18n('year'));
 
-            this._yearContainerAll =
-                $('.year-container-all', _menu)
+            var jumpYears =
+                $('.jump-years', _menu)
                 .attr('title', this._i18n('jumpYears'))
                 .click($proxy(this._showYearsClickHandler, this));
 
-                this._yearButton = this._yearContainerAll.find('a').css({'cursor': 'default','fontWeight':'bold'}).button().removeClass('ui-state-default');
+                this._jumpYearsButton = jumpYears.find('a').css({'cursor': 'default','fontWeight':'bold'}).button().removeClass('ui-state-default');
 
 
-                    var tOut = null, speed = 125, _yca = this._yearContainerAll[0];
+                    var tOut = null, speed = 125, _yca = jumpYears[0];
                     var _prevText;
+                    var that = this;
 /*_menu.find('.month-picker-year-table').*/$(_yca).mouseover(function(e) {
     var me = this;
-    if ($.contains(_yca, e.target)) {
+    //if ($.contains(_yca, e.target)) {
 tOut = setTimeout(function() {
 	tOut = null;
   /*$(".year-container-all span", me)*/$("span", me).animate({ opacity: .45 },{
   	duration: speed,
   	complete: function() {
       _prevText=$(/*".year-container-all*/"span", me).text();
-    	$(/*".year-container-all*/"span", me).animate({opacity: 1}, speed).text("Jump Years");
+    	$(/*".year-container-all*/"span", me).animate({opacity: 1}, speed).text(that._i18n('jumpYears'));
     }
   });
-}, 175); } else     $("a", me).addClass('ui-state-default')	;
+}, 175); //} else     $("a", me).addClass('ui-state-default')	;
 }).mouseout(function(e) {
 if (tOut) return clearTimeout(tOut);
 var me = this;
-if ($.contains(_yca, e.target)) {
+//if ($.contains(_yca, e.target)) {
   $(/*".year-container-all*/ "span", me).animate({ opacity: .45 },{
   	duration: speed,
   	complete: function() {
     	$("span", me).text(_prevText).animate({opacity: 1}, speed);
     }
-  }); } else $("a", me).removeClass('ui-state-default')	;
+  }); //} else $("a", me).removeClass('ui-state-default')	;
 });
 
             this._createValidationMessage();
-
-            this._yearContainer = $('.year', _menu);
 
             this._prevButton = $('.previous-year a', _menu);
             this._prevButton.button({ text: false }).removeClass('ui-state-default').css('cursor', 'default');
@@ -772,7 +771,7 @@ if ($.contains(_yca, e.target)) {
 
         _setPickerYear: function (year) {
             this._pickerYear = year || new Date().getFullYear();
-            this._yearButton.button({ label: this._i18n('year') + ' ' + this._pickerYear })
+            this._jumpYearsButton.button({ label: this._i18n('year') + ' ' + this._pickerYear })
             //this._yearContainer.text(year || new Date().getFullYear());
         },
 
@@ -816,8 +815,6 @@ if ($.contains(_yca, e.target)) {
                 .off(click)
                 .on(click, $proxy(this._addToYear, this, 1));
 
-            this._yearContainerAll.css('cursor', 'pointer');
-
             this._buttons.off(_eventsNs);
 
             var me = this, _onMonthClick = $proxy(me._onMonthClick, me);
@@ -860,7 +857,6 @@ if ($.contains(_yca, e.target)) {
                 .on(click, $proxy(this._addToYears, this, AMOUNT_TO_ADD))
                 .button('option', 'disabled', _maxYear && (_firstYear + 12) -1 > _maxYear);
 
-            this._yearContainerAll.css('cursor', 'default');
             this._buttons.off(_eventsNs);
 
             _setActive( this._selectedBtn, false );

@@ -153,6 +153,40 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
         return !elem.is('input');
     }
 
+    function _applyFadeShowYears(jumpYears) {
+        var tOut = null, speed = 125;
+        var _prevText;
+        var that = this;
+
+        jumpYears.mouseover(function(e) {
+            var me = this;
+            tOut = setTimeout(function() {
+            tOut = null;
+
+            $("span", me).animate({ opacity: .45 }, {
+                duration: speed,
+                complete: function() {
+                    _prevText=$("span", me).text();
+                    $("span", me).animate({opacity: 1}, speed).text(that._i18n('jumpYears'));
+                }
+              });
+            }, 175);
+        }).mouseout(function(e) {
+            if (tOut) {
+                return clearTimeout(tOut);
+            } else {
+                var me = this;
+
+                $("span", me).animate({ opacity: .45 },{
+                    duration: speed,
+                    complete: function() {
+                        $("span", me).text(_prevText).animate({opacity: 1}, speed);
+                    }
+                });
+            }
+        });
+    }
+
     $.MonthPicker = {
         VERSION: '3.0-alpha4', // Added in version 2.4;
         i18n: {
@@ -174,16 +208,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             '<table class="month-picker-year-table">' +
                 '<tr>' +
                     '<td class="previous-year"><a /></td>' +
-                    '<td class="'+""/*year-container-all*/+'jump-years">' +
-                    /*
-                        '<div id="year-container">' +
-                            '<span class="year-title" />' +
-                            '<span class="year" />' +
-                        '</div>' + */
-
-                        '<a />'+
-
-                    '</td>' +
+                    '<td class="jump-years"><a /></td>' +
                     '<td class="next-year"><a /></td>' +
                 '</tr>' +
             '</table>' +
@@ -330,43 +355,14 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             $(_markup).appendTo(_menu);
             (_menu).appendTo( isInline ? _el : document.body );
 
-            //$('.year-title', _menu).text(this._i18n('year'));
-
             var jumpYears =
                 $('.jump-years', _menu)
                 .attr('title', this._i18n('jumpYears'))
                 .click($proxy(this._showYearsClickHandler, this));
 
-                this._jumpYearsButton = jumpYears.find('a').css({'cursor': 'default','fontWeight':'bold'}).button().removeClass('ui-state-default');
+            this._jumpYearsButton = jumpYears.find('a').css({'cursor': 'default','fontWeight':'bold'}).button().removeClass('ui-state-default');
 
-
-                    var tOut = null, speed = 125, _yca = jumpYears[0];
-                    var _prevText;
-                    var that = this;
-/*_menu.find('.month-picker-year-table').*/$(_yca).mouseover(function(e) {
-    var me = this;
-    //if ($.contains(_yca, e.target)) {
-tOut = setTimeout(function() {
-	tOut = null;
-  /*$(".year-container-all span", me)*/$("span", me).animate({ opacity: .45 },{
-  	duration: speed,
-  	complete: function() {
-      _prevText=$(/*".year-container-all*/"span", me).text();
-    	$(/*".year-container-all*/"span", me).animate({opacity: 1}, speed).text(that._i18n('jumpYears'));
-    }
-  });
-}, 175); //} else     $("a", me).addClass('ui-state-default')	;
-}).mouseout(function(e) {
-if (tOut) return clearTimeout(tOut);
-var me = this;
-//if ($.contains(_yca, e.target)) {
-  $(/*".year-container-all*/ "span", me).animate({ opacity: .45 },{
-  	duration: speed,
-  	complete: function() {
-    	$("span", me).text(_prevText).animate({opacity: 1}, speed);
-    }
-  }); //} else $("a", me).removeClass('ui-state-default')	;
-});
+            _applyFadeShowYears.call(this, jumpYears);
 
             this._createValidationMessage();
 

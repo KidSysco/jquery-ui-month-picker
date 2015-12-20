@@ -404,7 +404,7 @@ QUnit.test('Inline menu', function(assert) {
 
 	assert.notOk($("#MonthPicker_Button_InlineMenuDiv").length, 'The default button was not created');
 
-	//field.MonthPicker('destroy');
+	field.MonthPicker('destroy');
 });
 
 QUnit.test('SelectedMonth option', function(assert) {

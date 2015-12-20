@@ -294,7 +294,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             }
 
             // Make sure the user passed in a valid Animation, ShowAnim and HideAnim options values.
-            if (key in _animVals && _animVals[key].indexOf(value) === -1) {
+            if (key in _animVals && $.inArray(value, _animVals[key]) === -1) {
                 alert(_badOptValErr.replace(/%/, key) + _animVals[key]);
                 return;
             }

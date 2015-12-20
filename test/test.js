@@ -87,13 +87,13 @@ QUnit.test('HTML 5 & Formatting Tests', function (assert) {
         ShowIcon: false,
         StartYear: 2027,
         OnAfterMenuOpen: function () {
-            assert.equal(_pickerMenu.css('display'), 'block', '#Html5 responded to a text input click event and showed the menu.');
+            assert.ok(_pickerMenu.is(':visible'), '#Html5 responded to a text input click event and showed the menu.');
             $('.button-1', _pickerMenu).trigger($.Event('click'));
             done();
             done = assert.async();
         },
         OnAfterMenuClose: function () {
-            assert.equal(_pickerMenu.css('display'), 'none', '#Html5 responded to a button click event by closing the menu.');
+            assert.notOk(_pickerMenu.is(':visible'), '#Html5 responded to a button click event by closing the menu.');
             assert.equal(_picker.MonthPicker('GetSelectedYear'), '2027', '#Html5 showed and selected the correct override start year of 2027.');
             assert.equal(_picker.MonthPicker('GetSelectedMonth'), '01', '#Html5 showed and selected the correct month of 01.');
             // destroy the monthpicker and re-create it so it doesnt fire anymore qunit events upon being used.
@@ -129,7 +129,7 @@ if ($.ui.position) {
                 var _meun = $(MonthPicker_PositionDemo);
                 var _lastPointFullyVisibleX = _windowWidth - _meun.width();
                 var _lastPointFullyVisibleY = _windowHeight - _pickerMenu.height();
-                assert.equal(_pickerMenu.css('display'), 'block', '#PositionDemo responded to a text input click event and showed the menu.');
+                assert.ok(_pickerMenu.is(":visible"), '#PositionDemo responded to a text input click event and showed the menu.');
                 assert.ok(_pickerMenu.position().left <= _lastPointFullyVisibleX, "#PositionDemo does not overlap the right window boundary on the X axis.");
                 assert.ok(_pickerMenu.position().left > 0, "#PositionDemo does not overlap the left window boundary on the X axis.");
                 assert.ok(_pickerMenu.position().top <= _lastPointFullyVisibleY, "#PositionDemo does not overlap the bottom window boundary on the Y axis.");
@@ -139,7 +139,7 @@ if ($.ui.position) {
                 done = assert.async();
             },
             OnAfterMenuClose: function () {
-                assert.equal(_pickerMenu.css('display'), 'none', '#PositionDemo responded to a button click event by closing the menu.');
+                assert.notOk(_pickerMenu.is(':visible'), '#PositionDemo responded to a button click event by closing the menu.');
                 // destroy the monthpicker and re-create it so it doesnt fire anymore qunit events upon being used.
                 $('#PositionDemo').MonthPicker('destroy');
                 assert.ok($('#MonthPicker_PositionDemo').length === 0, "#PositionDemo has been destroyed.");
@@ -168,7 +168,7 @@ QUnit.test('Override Start Year Tests', function (assert) {
         ShowIcon: false,
         StartYear: 2023,
         OnAfterMenuOpen: function () {
-            assert.equal(_pickerMenu.css('display'), 'block', '#OverrideStartYear responded to a text input click event and showed the menu.');
+            assert.ok(_pickerMenu.is(':visible'), '#OverrideStartYear responded to a text input click event and showed the menu.');
             $('.button-1', _pickerMenu).trigger($.Event('click'));
             done();
             done = assert.async();
@@ -187,7 +187,6 @@ QUnit.test('Override Start Year Tests', function (assert) {
         }
     });
 
-    assert.ok($('#MonthPicker_OverrideStartYear').length === 1, "#OverrideStartYear has been initialized for demo purposes.");
     var _pickerMenu = $('#MonthPicker_OverrideStartYear');
     _picker.trigger($.Event('click'));
     done = assert.async();
@@ -198,7 +197,7 @@ QUnit.test('Start Year Option Tests', function (assert) {
     var _picker = $('#StartYearDemo').MonthPicker({
         ShowIcon: false,
         OnAfterMenuOpen: function () {
-            assert.equal(_pickerMenu.css('display'), 'block', '#StartYearDemo responded to a text input click event and showed the menu.');
+            assert.ok(_pickerMenu.is(':visible'), '#StartYearDemo responded to a text input click event and showed the menu.');
             assert.equal(parseInt(_picker.MonthPicker('GetSelectedYear'), 10), 2025, '#StartYearDemo defaulted to 2025, the year specified in the textbox.');
             _picker.MonthPicker('option', 'StartYear', 2095);
             assert.equal(_getPickerYear(_pickerMenu), 2095, '#StartYearDemo switched the year to 2095 after init.');
@@ -208,23 +207,22 @@ QUnit.test('Start Year Option Tests', function (assert) {
             done = assert.async();
         },
         OnAfterMenuClose: function () {
-            assert.equal(_pickerMenu.css('display'), 'none', '#StartYearDemo responded to a button click event by closing the menu.');
+            assert.notOk(_pickerMenu.is(':visible'), '#StartYearDemo responded to a button click event by closing the menu.');
             $('#StartYearDemo').MonthPicker('destroy');
             assert.ok($('#MonthPicker_StartYearDemo').length === 0, "#StartYearDemo has been destroyed.");
             $('#StartYearDemo').val('1/2025').MonthPicker({
                 ShowIcon: false,
                 OnAfterMenuOpen: function () {
-
                     // get the picker menu again because it was removed from the dom upon destroying StartYearDemo.
                     _pickerMenu = $('#MonthPicker_StartYearDemo');
-                    assert.equal(_pickerMenu.css('display'), 'block', '#StartYearDemo responded to a text input click event and showed the menu.');
+                    assert.ok(_pickerMenu.is(':visible'), '#StartYearDemo responded to a text input click event and showed the menu.');
                     assert.equal(parseInt(_picker.MonthPicker('GetSelectedYear'), 10), 2025, '#StartYearDemo defaulted to 2025, the year specified in the textbox.');
                     _picker.MonthPicker('Close');
                     done();
                     done = assert.async();
                 },
                 OnAfterMenuClose: function () {
-                    assert.equal(_pickerMenu.css('display'), 'none', '#StartYearDemo responded to a button click event by closing the menu.');
+                    assert.notOk(_pickerMenu.is(':visible'), '#StartYearDemo responded to a button click event by closing the menu.');
                     _picker.MonthPicker('destroy');
                     // get the picker menu again because it was removed from the dom upon destroying StartYearDemo.
                     assert.ok($('#MonthPicker_StartYearDemo').length === 0, "#StartYearDemo has been destroyed again.");
@@ -310,7 +308,7 @@ QUnit.test('Digital Bush Tests', function (assert) {
     assert.equal($('#MonthPicker_Validation_DigitalBushBoth').css('display'), 'inline', '#DigitalBushBoth showed a validation message about a bad date.');
 
     $('#DigitalBushBoth').MonthPicker('Clear');
-    assert.equal($('#MonthPicker_Validation_DigitalBushBoth').css('display'), 'none', '#DigitalBushBoth cleared the validation error message using the Clear() API call.');
+    assert.ok($('#MonthPicker_Validation_DigitalBushBoth').is(':hidden'), '#DigitalBushBoth cleared the validation error message using the Clear() API call.');
 });
 
 QUnit.test('Only one open menu', function (assert) {

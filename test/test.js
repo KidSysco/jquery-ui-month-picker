@@ -223,6 +223,7 @@ QUnit.test('Start Year Option Tests', function (assert) {
                 },
                 OnAfterMenuClose: function () {
                     assert.notOk(_pickerMenu.is(':visible'), '#StartYearDemo responded to a button click event by closing the menu.');
+
                     _picker.MonthPicker('destroy');
                     // get the picker menu again because it was removed from the dom upon destroying StartYearDemo.
                     assert.ok($('#MonthPicker_StartYearDemo').length === 0, "#StartYearDemo has been destroyed again.");
@@ -322,6 +323,11 @@ QUnit.test('Only one open menu', function (assert) {
     assert.equal($('.month-picker').filter(':visible').length, 1, 'There is only one menu opened.');
 });
 
+// http://stackoverflow.com/a/20460414/1774484
+function zeroFill(n) {
+    return ('00' + n).slice(-2);
+}
+
 QUnit.test('Keydown handling', function (assert) {
     var field = $(EventsField).val('').MonthPicker({
 		Animation: 'none' // Disable animation to make sure opening and closing the menu is synchronous.
@@ -330,7 +336,8 @@ QUnit.test('Keydown handling', function (assert) {
 	field.MonthPicker('Open');
 
 	field.trigger($.Event('keydown', {keyCode: $.ui.keyCode.ENTER}));
-	assert.equal(field.val(), _today.getMonth()+1 + '/' + _today.getFullYear(), 'Pressing enter selected todays month');
+
+	assert.equal(field.val(), zeroFill(_today.getMonth() + 1) + '/' + _today.getFullYear(), 'Pressing enter selected todays month');
 
 	var menu = $(MonthPicker_EventsField);
 	assert.ok(!menu.is(':visible'), 'Pressing enter closed the menu');
@@ -480,6 +487,7 @@ QUnit.test('Events and context', function (assert) { // A.k.a duplicate code tes
 	});
 
 	var nextYearButton = menu.find('.next-year>a');
+
     nextYearButton.trigger('click');
     assert.ok(OnAfterNextYearTriggered, 'Clicking the next button triggered OnAfterNextYear');
 
@@ -491,6 +499,7 @@ QUnit.test('Events and context', function (assert) { // A.k.a duplicate code tes
 	});
 
 	var previousYearButton = menu.find('.previous-year>a');
+
 	previousYearButton.trigger('click');
 	assert.ok(OnAfterPreviousYearTriggerd, 'Clciking rhe previous button triggered OnAfterPreviousYear');
 
@@ -639,11 +648,10 @@ QUnit.test('Right to left', function (assert) {
     assert.ok(nextYearButton.find('span.ui-icon-circle-triangle-w').length, 'Next button is pointed west');
 
     // Make sure the menu opens to the right of the field.
-    //alert(field.position().left - menu.position().left);
     var opendToTheRight = (field.position().left - menu.position().left) > 5;
     assert.ok(opendToTheRight, 'The menu opened to the right of the field');
 
-    //field.MonthPicker('Close');
+    field.MonthPicker('Close');
 });
 
 QUnit.test('Toggle method', function (assert) {
@@ -950,7 +958,7 @@ QUnit.test('Month buttons are disabled', function (assert) {
 
 	// Try to click the disabled buttons.
 	var buttons = menu.find('.month-picker-month-table button');
-  $(buttons.slice(0, 8)).trigger('click');
+    $(buttons.slice(0, 8)).trigger('click');
 
 	assert.ok(previousYearButton.is('.ui-button-disabled'), 'The previous year button is disabled');
 
@@ -1227,6 +1235,7 @@ QUnit.test('Today and selected months are highlighted', function (assert) {
 	var buttons = menu.find('.month-picker-month-table button');
 
 	var todaysButton = $(buttons[new Date().getMonth()]);
+
 	var nextYearButton = menu.find('.next-year>a');
 	var previousYearButton = menu.find('.previous-year>a');
 
@@ -1260,7 +1269,9 @@ QUnit.test('Today and selected months are highlighted', function (assert) {
 	assert.equal( todayBtn.button( "option", "label" ), _today.getFullYear(), "Today's year is highlighted");
 
 	field.MonthPicker('Close');
-	field.MonthPicker({MinMonth: 1});
+
+    var _plusMonths = _today.getMonth() < 5 ? (5 - _today.getMonth()) : 1;
+	field.MonthPicker({ MinMonth: _plusMonths });
 
 	field.MonthPicker('Open');
 
@@ -1268,7 +1279,7 @@ QUnit.test('Today and selected months are highlighted', function (assert) {
 	assert.equal( selectedButton.length, 0, "Today is not highlighted because it's before the min month");
 
 	var selectedButton = buttons.filter('.ui-state-active');
-	assert.equal( selectedButton.length, 0, 'The selected mont is also not heighlighted');
+	assert.equal( selectedButton.length, 0, 'The selected monht is also not heighlighted');
 });
 
 QUnit.test('Number of months from today', function (assert) {
@@ -1288,6 +1299,7 @@ QUnit.test('Number of months from today', function (assert) {
 
     // Make sure we are in years view.
     var buttons = menu.find('.month-picker-month-table button');
+
     var nextYearButton = menu.find('.next-year>a');
     var previousYearButton = menu.find('.previous-year>a');
 

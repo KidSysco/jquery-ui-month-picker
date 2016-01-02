@@ -1,7 +1,7 @@
 /*
 https://github.com/KidSysco/jquery-ui-month-picker/
 
-Version 3.0-alpha4
+Version 3.0-alpha5
 
 This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
@@ -158,7 +158,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
         var _prevText;
         var that = this;
 
-        jumpYears.mouseover(function(e) {
+        jumpYears.on('mouseenter' + _eventsNs + '-j', function(e) {
             var me = this;
             tOut = setTimeout(function() {
             tOut = null;
@@ -171,7 +171,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
                 }
               });
             }, 175);
-        }).mouseout(function(e) {
+        }).on('mouseleave' + _eventsNs + '-j', function(e) {
             if (tOut) {
                 return clearTimeout(tOut);
             } else {
@@ -188,7 +188,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
     }
 
     $.MonthPicker = {
-        VERSION: '3.0-alpha4', // Added in version 2.4;
+        VERSION: '3.0-alpha5', // Added in version 2.4;
         i18n: {
             year: "Year",
             prevYear: "Previous Year",
@@ -362,7 +362,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
 
             this._jumpYearsButton = jumpYears.find('a').css({'cursor': 'default','fontWeight':'bold'}).button().removeClass('ui-state-default');
 
-            _applyFadeShowYears.call(this, jumpYears);
+            _applyFadeShowYears.call(this, this._jumpYearsButton);
 
             this._createValidationMessage();
 
@@ -780,17 +780,21 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
         },
 
         _chooseMonth: function (month) {
-            var date = new Date(this._getPickerYear(), month-1);
+            var _year = this._getPickerYear();
+            var date = new Date(_year, month-1);
             this.element.val(this._formatMonth( date )).blur();
             this._updateAlt(0, date);
 
             _setActive( this._selectedBtn, false );
             this._selectedBtn = _setActive( $(this._buttons[month-1]), true );
 
+            this._jumpYearsButton.button({label: 'Year ' + _year});
+
             _event('OnAfterChooseMonth', this)(date);
         },
 
         _chooseYear: function (year) {
+            this._backToYear = 0;
             this._setPickerYear(year);
             this._buttons.removeClass(_todayClass);
             this._showMonths();
@@ -827,7 +831,20 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             this._buttons.removeClass(_todayClass);
             this._showYears();
 
-            _event('OnAfterChooseYears', this)();
+            if (!this._backToYear) {
+                this._jumpYearsButton.off(_eventsNs + '-j');
+                this._jumpYearsButton/*.addClass('ui-state-hover')*/.button({label: 'Back to ' + this._getPickerYear()});
+
+                this._backToYear = this._getPickerYear();
+
+                _event('OnAfterChooseYears', this)();
+            } else {
+                //this._jumpYearsButton/*.addClass('ui-state-hover')*/.button({label: 'Year ' + this._getPickerYear()});
+                this._setPickerYear(this._backToYear);
+                _applyFadeShowYears.call(this, this._jumpYearsButton);
+                this._showMonths();
+                this._backToYear = 0;
+            }
         },
 
         _showYears: function () {
@@ -910,7 +927,8 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
         _addToYears: function(amount) {
             //var _year = this._yearContainer;
             //_year.text(parseInt(_year.text()) + amount, 10);
-            this._setPickerYear( this._getPickerYear() + amount );
+            //this._setPickerYear( this._getPickerYear() + amount );
+            this._pickerYear = this._getPickerYear() + amount;
             this._showYears();
             this.element.focus();
 

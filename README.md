@@ -1,15 +1,15 @@
-<h1>The jQuery UI Month Picker Version 3.0-alpha4</h1>
+<h1>The jQuery UI Month Picker Version 3.0-alpha5</h1>
 
 [![Build Status](https://travis-ci.org/benjamin-albert/jquery-ui-month-picker.svg?branch=3.0_prototype)](https://travis-ci.org/benjamin-albert/jquery-ui-month-picker)
 [![Built with Grunt](https://cdn.gruntjs.com/builtwith.png)](http://gruntjs.com/)
 
-<p>The jQuery UI Month Picker Plugin is designed to allow user input for only a month and year when only that input is 
-required. Clicking on the year, allows the user to jump ahead or back 5 years at a time. Clicking anywhere on the 
-page, except on the month picker menu itself, will cause the month picker to hide. The Month Picker has lots of options 
+<p>The jQuery UI Month Picker Plugin is designed to allow user input for only a month and year when only that input is
+required. Clicking on the year, allows the user to jump ahead or back 5 years at a time. Clicking anywhere on the
+page, except on the month picker menu itself, will cause the month picker to hide. The Month Picker has lots of options
 for date validation, setting the start year, using an icon button, input masking, internationalization and localization and more.</p>
- 
+
 -See a demo on jsFiddle at...
--http://jsfiddle.net/kidsysco/JeZap/ 
+-http://jsfiddle.net/kidsysco/JeZap/
 
 <h2>Prerequisites</h2>
 <p>This plugin has been tested using the following configuration.</p>
@@ -27,7 +27,7 @@ for date validation, setting the start year, using an icon button, input masking
 </ul>
 
 <h2>Installation</h2>
-<p>Attach all required css and js files to the web page as follows...</p> 
+<p>Attach all required css and js files to the web page as follows...</p>
 <pre>
 &lt;link href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" media="all" rel="stylesheet" type="text/css" />
 &lt;link href="css/MonthPicker.css" media="all" rel="stylesheet" type="text/css" />
@@ -39,7 +39,7 @@ for date validation, setting the start year, using an icon button, input masking
 </pre>
 
 <h2>Source Code Example</h2>
-<p>This plugin can only be called on the text or the HTML 5 Month Input Types as follows.</p> 
+<p>This plugin can only be called on the text or the HTML 5 Month Input Types as follows.</p>
 <pre>
 $('#TextBox1').MonthPicker({ StartYear: 2020, ShowIcon: false });
 $('input[type=month]').MonthPicker().css('backgroundColor', 'lightyellow');
@@ -72,7 +72,7 @@ You can create an inline month picker menu by calling the month picker function 
 $('div').MonthPicker({
 	SelectedMonth: '+1y -3M', // Set the selected month.
 	AltField: '#hiddenInput' // Populate a hidden field and send to send the selected value to the server.
-	
+
 	OnAfterChooseMonth: function(selectedDate) {
 		// Do something with selected JavaScript date.
         // console.log(selectedDate);
@@ -128,7 +128,7 @@ NOTE: This method is <b>not</b> affected by the <a href='#monthformat'>MonthForm
 The menu will immediately close itself, you can prevent the menu from closing using the
 <a href='#onbeforemenuclose'>OnBeforeMenuClose event</a> (example included) and calling <a href='http://api.jquery.com/event.preventdefault/'>event.preventDefault()</a> for the element triggering the event.
 
-<p><b>NOTE:</b> It might be possible to prevent the menu from closing by calling <a href='https://api.jquery.com/event.stoppropagation/'>event.stopPropagation()</a> in the click event that called the Open method. 
+<p><b>NOTE:</b> It might be possible to prevent the menu from closing by calling <a href='https://api.jquery.com/event.stoppropagation/'>event.stopPropagation()</a> in the click event that called the Open method.
 
 However this is <b>not supported</b> and might stop working in future releases if we change the way the plugin handles events.  To prevent the menu from hideing use the <a href='#onbeforemenuclose'>OnBeforeMenuClose event</a> (example included) and call <a href='http://api.jquery.com/event.preventdefault/'>event.preventDefault()</a> for the element triggering the event.
 
@@ -162,8 +162,8 @@ However this is <b>not supported</b> and might stop working in future releases i
 <p>
     Set the option upon init.
     <pre>$('.selector').MonthPicker({ Disabled: true });</pre>
-    
-    Get or set the option, after init. 
+
+    Get or set the option, after init.
 <pre>
 //getter
 var disabled = $('.selector').MonthPicker('option', 'Disabled');
@@ -193,8 +193,8 @@ $('.selector').MonthPicker('option', 'Disabled', true );
 <p>
     Disables past months upon init.
     <pre>$('.selector').MonthPicker({ MinMonth: 0 });</pre>
-    
-    Get or set the option, after init. 
+
+    Get or set the option, after init.
 <pre>
 //getter
 var minMonth = $('.selector').MonthPicker('option', 'MinMonth');
@@ -225,8 +225,8 @@ $('.selector').MonthPicker('option', 'MinMonth', '+1y +3m');
 <p>
     Disables future months upon init.
     <pre>$('.selector').MonthPicker({ MaxMonth: 0 });</pre>
-    
-    Get or set the option, after init. 
+
+    Get or set the option, after init.
 <pre>
 //getter
 var minMonth = $('.selector').MonthPicker('option', 'MaxMonth');
@@ -239,7 +239,7 @@ $('.selector').MonthPicker('option', 'MaxMonth', '+1y +3m');
 
 <p>
     <h3>Button</h3>
-    Types: 
+    Types:
     <ul>
     	<li>Function that returns jQuery</li>
     	<li>HTML string</li>
@@ -247,7 +247,7 @@ $('.selector').MonthPicker('option', 'MaxMonth', '+1y +3m');
     	<li>DOM element.</li>
 	</ul>
     Since: 2.5<br />
-    Default: 
+    Default:
     <pre>
 // Creates the default button.
 Button: function(options) {
@@ -272,14 +272,14 @@ If you just want to use a different <a href='http://api.jqueryui.com/theming/ico
 <p>
     Create a button similar to the default button created by jQuery UI Datepicker's <a href='http://api.jqueryui.com/datepicker/#option-showOn'>showOn:</a> 'both' option.
 <pre id='newelbtn'>
-$('.selector').MonthPicker({ 
+$('.selector').MonthPicker({
     Button: '&lt;button type="button" class="ui-datepicker-trigger">...&lt;/button>'
 });
 </pre>
 
     Create a button out of an image.
 <pre>
-$('.selector').MonthPicker({ 
+$('.selector').MonthPicker({
     Button: '&lt;img src="images/calendar.gif" title="Select date" />'
 });
 </pre>
@@ -300,7 +300,7 @@ $('.selector').MonthPicker({
 &lt;img src="images/{{ButtonIcon}}{{#if Disabled}}-disabled{{/if}}.gif" title="{{i18n.buttonText}}" />
 &lt;/script>
 &lt;script>
-$('.selector').MonthPicker({ 
+$('.selector').MonthPicker({
     Button: Handlebars.compile( $('#template').html() )
 });
 &lt;/script>
@@ -309,7 +309,7 @@ $('.selector').MonthPicker({
     Assign an existing element with a class of button that immediately follows
     the associated input field as a button.
 <pre id='existingelbtn'>
-$('.selector').MonthPicker({ 
+$('.selector').MonthPicker({
     Button: function() {
         return $(this).next('.button');
     }
@@ -318,12 +318,12 @@ $('.selector').MonthPicker({
 
     Assign a specific element with the class button.
 <pre>
-$('.selector').MonthPicker({ 
+$('.selector').MonthPicker({
     Button: '.button'
 });
 </pre>
 
-    Get or set the option, after init. 
+    Get or set the option, after init.
 <pre>
 //getter
 var button = $('.selector').MonthPicker('option', 'Button');
@@ -364,8 +364,8 @@ If the button is not one of the elements above then you have to disable the elem
 Set the option upon init.
 <p>
     <pre>$('.selector').MonthPicker({ SelectedMonth: 0 });</pre>
-    
-    Get or set the option, after init. 
+
+    Get or set the option, after init.
 <pre>
 //getter
 var minMonth = $('.selector').MonthPicker('option', 'SelectedMonth');
@@ -384,8 +384,8 @@ $('.selector').MonthPicker('option', 'SelectedMonth', '+1y -3m');
 <p>
     Set the option upon init.
     <pre>$('.selector').MonthPicker({ ShowIcon: true });</pre>
-    
-    Get or set the option, after init. 
+
+    Get or set the option, after init.
 <pre>
 //getter
 var disabled = $('.selector').MonthPicker('option', 'ShowIcon');
@@ -399,14 +399,14 @@ $('.selector').MonthPicker('option', 'ShowIcon', false );
     <h3>ButtonIcon</h3>
     Type: String<br />
     Default: ui-icon-calculator<br />
-    
+
     Allows setting a different primary <a href='http://api.jqueryui.com/theming/icons/'>icon class name</a> for the default icon. Feel free to use this option in your custom buttons as show in the <a href='#button'>Button option</a> examples.
 </p>
 <p>
     Set the option upon init.
     <pre>$('.selector').MonthPicker({ ButtonIcon: 'ui-icon-clock' });</pre>
-    
-    Get or set the option, after init. 
+
+    Get or set the option, after init.
 <pre>
 //getter
 var image = $('.selector').MonthPicker('option', 'ButtonIcon');
@@ -426,8 +426,8 @@ $('.selector').MonthPicker('option', 'ButtonIcon', false );
 <p>
     Set the option upon init.
     <pre>$('.selector').MonthPicker({ ShowOn: 'both' });</pre>
-    
-    Get or set the option, after init. 
+
+    Get or set the option, after init.
 <pre>
 //getter
 var ShowOn = $('.selector').MonthPicker('option', 'ShowOn');
@@ -451,8 +451,8 @@ $('.selector').MonthPicker('option', 'ShowOn', 'both' );
 <p>
     Set the option upon init.
     <pre>$('.selector').MonthPicker({ IsRTL: true });</pre>
-    
-    Get or set the option, after init. 
+
+    Get or set the option, after init.
 <pre>
 //getter
 var IsRTL = $('.selector').MonthPicker('option', 'IsRTL');
@@ -471,8 +471,8 @@ $('.selector').MonthPicker('option', 'IsRTL', true );
 <p>
     Set the option upon init.
     <pre>$('.selector').MonthPicker({ StartYear: 2023 });</pre>
-    
-    Get or set the option, after init. 
+
+    Get or set the option, after init.
 <pre>
 //getter
 var disabled = $('.selector').MonthPicker('option', 'StartYear');
@@ -491,8 +491,8 @@ $('.selector').MonthPicker('option', 'StartYear', false );
 <p>
     Set the option upon init.
     <pre>$('.selector').MonthPicker({ ValidationErrorMessage: 'Invalid Date!' });</pre>
-    
-    Get or set the option, after init. 
+
+    Get or set the option, after init.
 <pre>
 //getter
 var disabled = $('.selector').MonthPicker('option', 'ValidationErrorMessage');
@@ -511,11 +511,11 @@ $('.selector').MonthPicker('option', 'ValidationErrorMessage', null );
 </p>
 <p>
     Set the option upon init.
-    
+
     <pre>// Results in December, 2015
 $('.selector').MonthPicker({ MonthFormat: 'MM, yy' });</pre>
-    
-    Get or set the option, after init. 
+
+    Get or set the option, after init.
 <pre>
 //getter
 var disabled = $('.selector').MonthPicker('option', 'MonthFormat');
@@ -528,30 +528,30 @@ The following example shows how to use the popular <a href='http://momentjs.com'
 for parsing and formatting dates, but you can use any third party library you would like:
 <pre>
 $.widget('MyOrg.MomentMonthPicker', $.KidSysco.MonthPicker, {
-	
+
 	// Set the default format.
 	options: {
 		MonthFormat: 'MM/YYYY',
 	},
-	
+
 	// Set the format to use with the HTML 5 month input.
 	MonthInputFormat: 'YYYY-MM',
-	
+
     /**
      * @param str		{String} A string representing a date in the given format.
      * @param format	{String} The format used to parse the str argument.
-     * 
+     *
      * @returns	{Date}	 A JavaScript date.
      */
     ParseMonth: function(str, format) {
         var wrapper = moment(str, format);
         return wrapper.isValid() ? wrapper.toDate() : null;
     },
-    
+
     /**
      * @param date		{Date} A string representing a date in the given format.
      * @param format	{String} The format to use to convert the date to a string.
-     * 
+     *
      * @returns	{String}  A string representing a date in the given format.
      */
     FormatMonth: function(date, format) {
@@ -581,11 +581,11 @@ $('.selector').MomentMonthPicker({
 </p>
 <p>
     Set the option upon init.
-    
+
     <pre>
 $('.selector').MonthPicker({ AltField: '#field' });</pre>
-    
-    Get or set the option, after init. 
+
+    Get or set the option, after init.
 <pre>
 //getter
 var disabled = $('.selector').MonthPicker('option', 'AltField');
@@ -603,11 +603,11 @@ $('.selector').MonthPicker('option', 'AltField': '#OtherField' );
 </p>
 <p>
     Set the option upon init.
-    
+
     <pre>
 $('.selector').MonthPicker({ AltFormat: "yy-mm" });</pre>
-    
-    Get or set the option, after init. 
+
+    Get or set the option, after init.
 <pre>
 //getter
 var disabled = $('.selector').MonthPicker('option', 'AltFormat');
@@ -632,8 +632,8 @@ In version 2.4 and later the mask is constructed according to the <a href='#mont
 <p>
     Set the option upon init.
     <pre>$('.selector').MonthPicker({ UseInputMask: true });</pre>
-    
-    Get or set the option, after init. 
+
+    Get or set the option, after init.
 <pre>
 //getter
 var disabled = $('.selector').MonthPicker('option', 'UseInputMask');
@@ -659,8 +659,8 @@ $('.selector').MonthPicker('option', 'UseInputMask', false );
 <p>
     Set the option upon init.
     <pre>$('.selector').MonthPicker({ Animation: 'slideToggle' });</pre>
-    
-    Get or set the option, after init. 
+
+    Get or set the option, after init.
 <pre>
 //getter
 var Animation = $('.selector').MonthPicker('option', 'Animation');
@@ -685,14 +685,14 @@ $('.selector').MonthPicker('option', 'Animation', 'slideToggle' );
 	<li>fast 200ms</li>
 	<li>slow 600ms</li>
 	</ul>
-	
+
 	Or you can specify the speed in milliseconds by passing in a number.
 </p>
 <p>
     Set the option upon init.
     <pre>$('.selector').MonthPicker({ Duration: 'fast' });</pre>
-    
-    Get or set the option, after init. 
+
+    Get or set the option, after init.
 <pre>
 //getter
 var Duration = $('.selector').MonthPicker('option', 'Duration');
@@ -714,7 +714,7 @@ $('.selector').MonthPicker('option', 'Duration', 'fast' );
     If you want to have the same animation for both opening and closing the menu use
     the <a href='#animation'>Animation option</a> instead.
     </p>
-    
+
     <p>
     To set the animation for closing the menu see the <a href='#hideanim'>HideAnim option</a>.
     </p>
@@ -722,8 +722,8 @@ $('.selector').MonthPicker('option', 'Duration', 'fast' );
 <p>
     Set the option upon init.
     <pre>$('.selector').MonthPicker({ ShowAnim: 'slideDown' });</pre>
-    
-    Get or set the option, after init. 
+
+    Get or set the option, after init.
 <pre>
 //getter
 var ShowAnim = $('.selector').MonthPicker('option', 'ShowAnim');
@@ -745,7 +745,7 @@ $('.selector').MonthPicker('option', 'ShowAnim', 'slideDown' );
     If you want to have the same animation for both opening and closing the menu use
     the <a href='#animation'>Animation option</a> instead.
     </p>
-    
+
     <p>
     To set the animation for opening the menu see the <a href='#showanim'>ShowAnim option</a>.
     </p>
@@ -753,8 +753,8 @@ $('.selector').MonthPicker('option', 'ShowAnim', 'slideDown' );
 <p>
     Set the option upon init.
     <pre>$('.selector').MonthPicker({ HideAnim: 'slideUp' });</pre>
-    
-    Get or set the option, after init. 
+
+    Get or set the option, after init.
 <pre>
 //getter
 var HideAnim = $('.selector').MonthPicker('option', 'HideAnim');
@@ -791,8 +791,8 @@ $('.selector').MonthPicker({
  }
 });
 </pre>
-    
-    Get or set the option, after init. 
+
+    Get or set the option, after init.
 <pre>
 //getter
 var position = $('.selector').MonthPicker('option', 'Position');
@@ -822,8 +822,8 @@ $('.selector').MonthPicker({
 	}
 });
 </pre>
-    
-    Get or set the callback function, after init. 
+
+    Get or set the callback function, after init.
 <pre>
 //getter
 var callback = $('.selector').MonthPicker('option', 'OnBeforeMenuOpen');
@@ -842,8 +842,8 @@ $('.selector').MonthPicker('option', 'OnBeforeMenuOpen', function(){ ... } );
 <p>
     Supply a callback function to handle the event as an init option.
     <pre>$('.selector').MonthPicker({ OnAfterMenuOpen: function(){ ... } });</pre>
-    
-    Get or set the callback function, after init. 
+
+    Get or set the callback function, after init.
 <pre>
 //getter
 var disabled = $('.selector').MonthPicker('option', 'OnAfterMenuOpen');
@@ -864,10 +864,10 @@ $('.selector').MonthPicker('option', 'OnAfterMenuOpen', function(){ ... } );
     <pre>
 $('.selector').MonthPicker({
 	OnBeforeMenuClose: function(event){
-		// Prevent the menu from closing when clicking on 
+		// Prevent the menu from closing when clicking on
 		// the external button or one of it's child nodes.
 		//
-		// Note: The first argument of $.contains() must be a DOM element, 
+		// Note: The first argument of $.contains() must be a DOM element,
 		// not a jQuery object or plain JavaScript object.
 		if ( $.contains($('#extarnal_button')[0], event.target) ) {
 			event.preventDefault();
@@ -875,8 +875,8 @@ $('.selector').MonthPicker({
 	}
 });
 </pre>
-    
-    Get or set the callback function, after init. 
+
+    Get or set the callback function, after init.
 <pre>
 //getter
 var callback = $('.selector').MonthPicker('option', 'OnBeforeMenuClose');
@@ -895,8 +895,8 @@ $('.selector').MonthPicker('option', 'OnBeforeMenuClose', function(){ ... } );
 <p>
     Supply a callback function to handle the event as an init option.
     <pre>$('.selector').MonthPicker({ OnAfterMenuClose: function(){ ... } });</pre>
-    
-    Get or set the callback function, after init. 
+
+    Get or set the callback function, after init.
 <pre>
 //getter
 var disabled = $('.selector').MonthPicker('option', 'OnAfterMenuClose');
@@ -917,12 +917,12 @@ $('.selector').MonthPicker('option', 'OnAfterNextYear', function(){ ... } );
     <pre>
 $('.selector').MonthPicker({
 	OnAfterSetDisabled: function(isDisabled){
-		
+
 	}
 });
 </pre>
-    
-    Get or set the callback function, after init. 
+
+    Get or set the callback function, after init.
 <pre>
 //getter
 var callback = $('.selector').MonthPicker('option', 'OnAfterSetDisabled');
@@ -941,8 +941,8 @@ $('.selector').MonthPicker('option', 'OnAfterSetDisabled', function(){ ... } );
 <p>
     Supply a callback function to handle the event as an init option.
     <pre>$('.selector').MonthPicker({ OnAfterNextYear: function(){ ... } });</pre>
-    
-    Get or set the callback function, after init. 
+
+    Get or set the callback function, after init.
 <pre>
 //getter
 var disabled = $('.selector').MonthPicker('option', 'OnAfterNextYear');
@@ -961,8 +961,8 @@ $('.selector').MonthPicker('option', 'OnAfterNextYear', function(){ ... } );
 <p>
     Supply a callback function to handle the event as an init option.
     <pre>$('.selector').MonthPicker({ OnAfterNextYears: function(){ ... } });</pre>
-    
-    Get or set the callback function, after init. 
+
+    Get or set the callback function, after init.
 <pre>
 //getter
 var disabled = $('.selector').MonthPicker('option', 'OnAfterNextYears');
@@ -981,8 +981,8 @@ $('.selector').MonthPicker('option', 'OnAfterNextYears', function(){ ... } );
 <p>
     Supply a callback function to handle the event as an init option.
     <pre>$('.selector').MonthPicker({ OnAfterPreviousYear: function(){ ... } });</pre>
-    
-    Get or set the callback function, after init. 
+
+    Get or set the callback function, after init.
 <pre>
 //getter
 var disabled = $('.selector').MonthPicker('option', 'OnAfterPreviousYear');
@@ -1001,8 +1001,8 @@ $('.selector').MonthPicker('option', 'OnAfterPreviousYear', function(){ ... } );
 <p>
     Supply a callback function to handle the event as an init option.
     <pre>$('.selector').MonthPicker({ OnAfterPreviousYears: function(){ ... } });</pre>
-    
-    Get or set the callback function, after init. 
+
+    Get or set the callback function, after init.
 <pre>
 //getter
 var disabled = $('.selector').MonthPicker('option', 'OnAfterPreviousYears');
@@ -1021,8 +1021,8 @@ $('.selector').MonthPicker('option', 'OnAfterPreviousYears', function(){ ... } )
 <p>
     Supply a callback function to handle the event as an init option.
     <pre>$('.selector').MonthPicker({ OnAfterChooseMonth: function(){ ... } });</pre>
-    
-    Get or set the callback function, after init. 
+
+    Get or set the callback function, after init.
 <pre>
 //getter
 var disabled = $('.selector').MonthPicker('option', 'OnAfterChooseMonth');
@@ -1041,8 +1041,8 @@ $('.selector').MonthPicker('option', 'OnAfterChooseMonth', function(){ ... } );
 <p>
     Supply a callback function to handle the event as an init option.
     <pre>$('.selector').MonthPicker({ OnAfterChooseMonths: function(){ ... } });</pre>
-    
-    Get or set the callback function, after init. 
+
+    Get or set the callback function, after init.
 <pre>
 //getter
 var disabled = $('.selector').MonthPicker('option', 'OnAfterChooseMonths');
@@ -1061,8 +1061,8 @@ $('.selector').MonthPicker('option', 'OnAfterChooseMonths', function(){ ... } );
 <p>
     Supply a callback function to handle the event as an init option.
     <pre>$('.selector').MonthPicker({ OnAfterChooseYear: function(){ ... } });</pre>
-    
-    Get or set the callback function, after init. 
+
+    Get or set the callback function, after init.
 <pre>
 //getter
 var disabled = $('.selector').MonthPicker('option', 'OnAfterChooseYear');
@@ -1081,8 +1081,8 @@ $('.selector').MonthPicker('option', 'OnAfterChooseYear', function(){ ... } );
 <p>
     Supply a callback function to handle the event as an init option.
     <pre>$('.selector').MonthPicker({ OnAfterChooseYears: function(){ ... } });</pre>
-    
-    Get or set the callback function, after init. 
+
+    Get or set the callback function, after init.
     <pre>
 //getter
 var disabled = $('.selector').MonthPicker('option', 'OnAfterChooseYears');
@@ -1106,5 +1106,3 @@ If the value is undefined you are using an old version (2.3 and under).
 <p>npm install<br /> This command will install all required dependencies including all resources needed from Bower.</p>
 <p>grunt<br /> This command will re-compile minified versions of the .js and .css codes before running both through the QUnit tests tests in a headless <a href="http://phantomjs.org/">PhantomJS</a> instance.</p>
 <p>grunt test<br /> This command will simply re-run all QUnit tests in a headless <a href="http://phantomjs.org/">PhantomJS</a> instance.</p>
-
-

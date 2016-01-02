@@ -153,40 +153,6 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
         return !elem.is('input');
     }
 
-    function _applyFadeShowYears(jumpYears) {
-        var tOut = null, speed = 125;
-        var _prevText;
-        var that = this;
-
-        jumpYears.on('mouseenter' + _eventsNs + '-j', function(e) {
-            var me = this;
-            tOut = setTimeout(function() {
-            tOut = null;
-
-            $("span", me).animate({ opacity: .45 }, {
-                duration: speed,
-                complete: function() {
-                    _prevText=$("span", me).text();
-                    $("span", me).animate({opacity: 1}, speed).text(that._i18n('jumpYears'));
-                }
-              });
-            }, 175);
-        }).on('mouseleave' + _eventsNs + '-j', function(e) {
-            if (tOut) {
-                return clearTimeout(tOut);
-            } else {
-                var me = this;
-
-                $("span", me).animate({ opacity: .45 },{
-                    duration: speed,
-                    complete: function() {
-                        $("span", me).text(_prevText).animate({opacity: 1}, speed);
-                    }
-                });
-            }
-        });
-    }
-
     $.MonthPicker = {
         VERSION: '3.0-alpha5', // Added in version 2.4;
         i18n: {
@@ -362,7 +328,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
 
             this._jumpYearsButton = jumpYears.find('a').css({'cursor': 'default','fontWeight':'bold'}).button().removeClass('ui-state-default');
 
-            _applyFadeShowYears.call(this, this._jumpYearsButton);
+            this._applyFadeShowYears();
 
             this._createValidationMessage();
 
@@ -595,6 +561,43 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
 
             this._ajustYear(this.options);
             this._showMonths();
+        },
+
+        _applyFadeShowYears: function(jumpYears) {
+            var speed = 125;
+            var _prevText;
+            var that = this;
+
+            this._jumpYearsButton.on('mouseenter' + _eventsNs + '-j', function(e) {
+                var me = this;
+                that.tOut = setTimeout(function() {
+                that.tOut = null;
+
+                $("span", me).animate({ opacity: .45 }, {
+                    duration: speed,
+                    complete: function() {
+                        if (!that._backToYear) {
+                        _prevText=$("span", me).text();
+                        $("span", me).animate({opacity: 1}, speed).text(that._i18n('jumpYears'));
+                        }
+                    }
+
+                  });
+                }, 175);
+            }).on('mouseleave' + _eventsNs + '-j', function(e) {
+                if (that.tOut) {
+                    return clearTimeout(that.tOut);
+                } else {
+                    var me = this;
+
+                    $("span", me).animate({ opacity: .45 },{
+                        duration: speed,
+                        complete: function() {
+                            $("span", me).text(_prevText).animate({opacity: 1}, speed);
+                        }
+                    });
+                }
+            });
         },
 
         _i18n: function(str) {
@@ -832,8 +835,10 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             this._showYears();
 
             if (!this._backToYear) {
+                clearTimeout(this.tOut);
                 this._jumpYearsButton.off(_eventsNs + '-j');
                 this._jumpYearsButton/*.addClass('ui-state-hover')*/.button({label: 'Back to ' + this._getPickerYear()});
+                this._jumpYearsButton.find('span').stop().css({ opacity: 1 });
 
                 this._backToYear = this._getPickerYear();
 
@@ -841,7 +846,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             } else {
                 //this._jumpYearsButton/*.addClass('ui-state-hover')*/.button({label: 'Year ' + this._getPickerYear()});
                 this._setPickerYear(this._backToYear);
-                _applyFadeShowYears.call(this, this._jumpYearsButton);
+                this._applyFadeShowYears();
                 this._showMonths();
                 this._backToYear = 0;
             }

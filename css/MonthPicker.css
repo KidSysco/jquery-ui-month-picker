@@ -1,6 +1,6 @@
 /*
 
-The jQuery UI Month Picker Version 2.6
+The jQuery UI Month Picker Version 2.8.3
 
 https://github.com/KidSysco/jquery-ui-month-picker/
 
@@ -22,6 +22,12 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
     position: absolute;
     z-index: 9999;
 }
+
+.month-picker table {
+  border-collapse: separate;
+  border-spacing: 2px 2px;
+}
+
 .month-year-input {
     width: 60px;
 }
@@ -49,7 +55,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
 }
 .month-picker-year-table .previous-year {
     width: 35px;
-    /* 
+    /*
 	 In case the user's css reset the user agent stylesheet
 	 this is often done in RTL pages.
 	*/

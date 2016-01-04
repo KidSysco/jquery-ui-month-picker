@@ -1259,10 +1259,10 @@ QUnit.test('Today and selected months are highlighted', function (assert) {
 	menu.find('.year').trigger('click');
 
 	var selectdBtn = buttons.filter('.ui-state-active');
-	assert.equal( selectdBtn.button( "option", "label" ), _today.getFullYear(), 'The selected year is highlighted');
+	assert.equal( selectdBtn.jqueryUIButton( "option", "label" ), _today.getFullYear(), 'The selected year is highlighted');
 
 	var todayBtn = buttons.filter('.ui-state-highlight');
-	assert.equal( todayBtn.button( "option", "label" ), _today.getFullYear(), "Today's year is highlighted");
+	assert.equal( todayBtn.jqueryUIButton( "option", "label" ), _today.getFullYear(), "Today's year is highlighted");
 
 	field.MonthPicker('Close');
 

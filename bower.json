@@ -18,7 +18,10 @@
   ],
   "dependencies": {
     "jquery": "1.9.1",
-    "jquery-ui": "1.9.2",
-    "qunit": "1.19.0"
+    "jquery-ui": "1.9.2"
+  },
+  "devDependencies": {
+    "qunit": "1.19.0",
+    "bootstrap": "~3.3.6"
   }
 }

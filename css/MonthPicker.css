@@ -1,6 +1,5 @@
 /*
-
-The jQuery UI Month Picker Version 3.0-alpha4
+The jQuery UI Month Picker Version 3.0-alpha6
 
 https://github.com/KidSysco/jquery-ui-month-picker/
 
@@ -21,6 +20,12 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
     position: absolute;
     z-index: 9999;
 }
+
+.month-picker table {
+  border-collapse: separate;
+  border-spacing: 2px 2px;
+}
+
 .month-picker-header {
     margin: 3px 3px 0px 3px;
 }

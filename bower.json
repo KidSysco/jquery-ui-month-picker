@@ -1,6 +1,6 @@
 {
   "name": "jquery-ui-month-picker",
-  "version": "2.6.1",
+  "version": "2.8.3",
   "homepage": "https://github.com/KidSysco/jquery-ui-month-picker",
   "authors": [
     "Ryan Segura <kidsysco@gmail.com>",
@@ -18,7 +18,10 @@
   ],
   "dependencies": {
     "jquery": "1.9.1",
-    "jquery-ui": "1.9.2",
-    "qunit": "1.19.0"
+    "jquery-ui": "1.9.2"
+  },
+  "devDependencies": {
+    "qunit": "1.19.0",
+    "bootstrap": "~3.3.6"
   }
 }

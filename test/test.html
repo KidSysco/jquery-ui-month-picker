@@ -5,9 +5,7 @@
     <title>jQuery UI Month Picker tests</title>
     <!--flick smoothness-->
     <link rel="stylesheet" type="text/css" href="../bower_components/jquery-ui/themes/smoothness/jquery-ui.css">
-    
-    <link rel="stylesheet" type="text/css" href="../bower_components/jquery-ui/
-    themes/smoothness/jquery.ui.theme.css">
+    <link rel="stylesheet" type="text/css" href="../bower_components/bootstrap/dist/css/bootstrap.css" />
     <link rel="stylesheet" type="text/css" href="../css/MonthPicker.css" />
     <link rel="stylesheet" type="text/css" href="test.css" />
     <link rel="stylesheet" href="../bower_components/qunit/qunit/qunit.css" />
@@ -16,21 +14,22 @@
     <!-- Test against 1.9.1 -->
     <script src="../bower_components/jquery-ui/ui/jquery-ui.js"></script>
     <!-- Test against 1.9.2 -->
+    <script src="../bower_components/bootstrap/dist/js/bootstrap.js"></script>
     <script src="../bower_components/qunit/qunit/qunit.js"></script>
     <script>
         if (typeof $ === 'undefined' || !$.ui || typeof QUnit === 'undefnied') {
-				var message = 
-					"Welcome to the jQuery UI Month Picker project.\n" + 
-		            "\n" + 
+				var message =
+					"Welcome to the jQuery UI Month Picker project.\n" +
+		            "\n" +
 	                "jQuery UI and QUnit are required for testing.\n" +
-	                "Please download node.js, 'cd ./jquery-ui-month-picker' and run 'npm install'.\n" + 
-	                "\n" + 
+	                "Please download node.js, 'cd ./jquery-ui-month-picker' and run 'npm install'.\n" +
+	                "\n" +
 	                "Tests can be ran from the command line using the 'grunt test' command.";
-						
+
 				if (alert) {
 					alert(message);
 				}
-			
+
 				throw message;
 			}
     </script>
@@ -94,11 +93,11 @@
         <p class="demo"> <b>Right to left</b> Choose a Month:
             <input id="RTLField" />
         </p>
-        
+
         <p class="demo"> <b>Toggle method test</b> Choose a Month:
             <input id="ToggleField" />
         </p>
-        
+
         <p class="demo"> <b>Events</b> Choose a Month:
             <input id="EventsField" />
         </p>
@@ -106,11 +105,11 @@
         <p class="demo"> <b>Today is highlighted</b> Choose a Month:
             <input id="highlightedField" />
         </p>
-        
+
         <div class="demo"> <b>Inline menu:</b>
             <div id='InlineMenuDiv'></div>
         </div>
-        
+
         <div class="demo"> <b>AltField and AltFormat option test:</b>
             <input id='MainAltField' />
             <input id='SecondaryAltField' />

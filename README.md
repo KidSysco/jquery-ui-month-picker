@@ -1,4 +1,4 @@
-<h1>The jQuery UI Month Picker Version 3.0-alpha5</h1>
+<h1>The jQuery UI Month Picker Version 3.0-alpha6</h1>
 
 [![Build Status](https://travis-ci.org/benjamin-albert/jquery-ui-month-picker.svg?branch=3.0_prototype)](https://travis-ci.org/benjamin-albert/jquery-ui-month-picker)
 [![Built with Grunt](https://cdn.gruntjs.com/builtwith.png)](http://gruntjs.com/)

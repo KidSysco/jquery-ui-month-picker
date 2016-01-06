@@ -7,7 +7,10 @@
     "Benjamin Albert <benjamin_a5@yahoo.com>"
   ],
   "description": "jQuery UI Month Picker plugin",
-  "main": "MonthPicker.js",
+  "main": [
+    "MonthPicker.js",
+    "css/MonthPicker.css"
+  ],
   "license": "MIT",
   "ignore": [
     "**/.*",

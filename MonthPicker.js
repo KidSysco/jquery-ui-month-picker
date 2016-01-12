@@ -163,8 +163,8 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             year: "Year",
             prevYear: "Previous Year",
             nextYear: "Next Year",
-            next5Years: 'Jump Forward 5 Years',
-            prev5Years: 'Jump Back 5 Years',
+            next12Years: 'Jump Forward 12 Years',
+            prev12Years: 'Jump Back 12 Years',
             nextLabel: "Next",
             prevLabel: "Prev",
             buttonText: "Open Month Chooser",
@@ -868,13 +868,13 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             var _minYear = _minDate ? _toYear(_minDate) : 0;
             var _maxYear = _maxDate ? _toYear(_maxDate) : 0;
             this._prevButton
-                .attr('title', this._i18n('prev5Years'))
+                .attr('title', this._i18n('prev12Years'))
                 .off(click)
                 .on(click, $proxy(this._addToYears, this, -AMOUNT_TO_ADD))
                 .jqueryUIButton('option', 'disabled', _minYear && (_firstYear - 1) < _minYear);
 
             this._nextButton
-                .attr('title', this._i18n('next5Years'))
+                .attr('title', this._i18n('next12Years'))
                 .off(click)
                 .on(click, $proxy(this._addToYears, this, AMOUNT_TO_ADD))
                 .jqueryUIButton('option', 'disabled', _maxYear && (_firstYear + 12) -1 > _maxYear);

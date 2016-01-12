@@ -4,7 +4,7 @@
 [![Built with Grunt](https://cdn.gruntjs.com/builtwith.png)](http://gruntjs.com/)
 
 <p>The jQuery UI Month Picker Plugin is designed to allow user input for only a month and year when only that input is
-required. Clicking on the year, allows the user to jump ahead or back 5 years at a time. Clicking anywhere on the
+required. Clicking on the year, allows the user to jump ahead or back 12 years at a time. Clicking anywhere on the
 page, except on the month picker menu itself, will cause the month picker to hide. The Month Picker has lots of options
 for date validation, setting the start year, using an icon button, input masking, internationalization and localization and more.</p>
 

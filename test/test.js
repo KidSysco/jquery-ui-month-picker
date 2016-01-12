@@ -1428,11 +1428,11 @@ QUnit.test('JavaScript Date objects', function (assert) {
 QUnit.module('Version 3.0');
 
 QUnit.test('Title buttons', function (assert) {
-    var field = $(RistrictMonthField).MonthPicker({
+    var field = $("<input id='TitleButton' />").prependTo(document.body).MonthPicker({
       MaxMonth: '+2Y'
     });
 
-    var menu = $(MonthPicker_RistrictMonthField);
+    var menu = $(MonthPicker_TitleButton);
     var nextButton = menu.find('.next-year .ui-button');
     field.MonthPicker('Open');
 

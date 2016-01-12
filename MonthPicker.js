@@ -1,7 +1,7 @@
 /*
 https://github.com/KidSysco/jquery-ui-month-picker/
 
-Version 3.0-alpha6
+Version 3.0-beta1
 
 This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
@@ -158,7 +158,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
     }
 
     $.MonthPicker = {
-        VERSION: '3.0-alpha6', // Added in version 2.4;
+        VERSION: '3.0-beta1', // Added in version 2.4;
         i18n: {
             year: "Year",
             prevYear: "Previous Year",

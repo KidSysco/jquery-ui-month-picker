@@ -1058,6 +1058,8 @@ QUnit.test('Year buttons are disabled', function (assert) {
         .trigger('click')
         .is('.ui-button-disabled');
 
+    console.log(nextYearsButton[0].className);
+
     assert.ok(isDisabled, 'The next year button is disabled');
     var newFirstYrar = parseInt($(buttons[0]).text(), 10);
     assert.equal(newFirstYrar, firstVisibleYear, "Clicking next year didn't change the year");
@@ -1420,5 +1422,48 @@ QUnit.test('JavaScript Date objects', function (assert) {
 
     // Destroy the plugin so we can use the field over again
     // in another Min/MaxMonth test.
+    field.MonthPicker('destroy');
+});
+
+QUnit.module('Version 3.0');
+
+QUnit.test('Title buttons', function (assert) {
+    var field = $(RistrictMonthField).MonthPicker({
+      MaxMonth: '+2Y'
+    });
+
+    var menu = $(MonthPicker_RistrictMonthField);
+    var nextButton = menu.find('.next-year .ui-button');
+    field.MonthPicker('Open');
+
+    assert.notOk(nextButton.is('.ui-state-default'), "The next button doesn't have the .ui-state-default class");
+
+    nextButton.trigger('mouseover');
+    assert.ok(nextButton.is('.ui-state-hover'), 'The next button has the .ui-state-hover class');
+
+    nextButton.trigger('mousedown');
+    assert.ok(nextButton.is('.ui-state-active'), 'The next button has the .ui-state-active class');
+
+    nextButton.trigger('click');
+    nextButton.trigger('mouseup');
+    assert.notOk(nextButton.is('.ui-state-default'), "The next button doesn't have the .ui-state-default class after clicking it");
+    assert.notOk(nextButton.is('.ui-state-active'), "The next button doesn't have the .ui-state-active class after clicking it");
+    assert.ok(nextButton.is('.ui-state-hover'), 'The next button has the .ui-state-hover class after clicking it');
+
+    nextButton.trigger('mouseleave');
+    assert.notOk(nextButton.is('.ui-state-default'), "The next button doesn't have the .ui-state-default class after mouseleave");
+    assert.notOk(nextButton.is('.ui-state-hover'), "The next button doesn't have .ui-state-hover class after mouseleave");
+    assert.notOk(nextButton.is('.ui-state-active'), "The next button doesn't have the .ui-state-active class after mouseleave");
+
+    nextButton.trigger('mouseover');
+    assert.ok(nextButton.is('.ui-state-hover'), 'The next button has the .ui-state-hover class');
+
+    nextButton.trigger('click');
+    nextButton.trigger('mouseup');
+    assert.ok(nextButton.is('.ui-button-disabled'), 'Navigating to the last year allowd (+2Y) disabled the next button');
+    assert.notOk(nextButton.is('.ui-state-default'), "The next button doesn't have the .ui-state-default class when disabled");
+    assert.notOk(nextButton.is('.ui-state-hover'), "The next button doesn't have .ui-state-hover class when disabled");
+    assert.notOk(nextButton.is('.ui-state-active'), "The next button doesn't have the .ui-state-active class when disabled");
+
     field.MonthPicker('destroy');
 });

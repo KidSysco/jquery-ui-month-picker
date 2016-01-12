@@ -183,7 +183,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
                 '</tr>' +
             '</table>' +
         '</div>' +
-        '<div class="ui-widget">' +
+        '<div>' +
             '<table class="month-picker-month-table" />' +
         '</div>';
 
@@ -319,7 +319,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
                 _el.css('width', 'auto');
             }
 
-            var _menu = this._monthPickerMenu = $('<div id="MonthPicker_' + _el[0].id + '" class="month-picker ui-widget-content ui-corner-all"></div>').hide();
+            var _menu = this._monthPickerMenu = $('<div id="MonthPicker_' + _el[0].id + '" class="month-picker ui-widget ui-widget-content ui-corner-all"></div>').hide();
             var isInline = _isInline(_el);
 
             $(_markup).appendTo(_menu);
@@ -577,7 +577,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
                 that.tOut = setTimeout(function() {
                 that.tOut = null;
 
-                $("span", me).animate({ opacity: .45 }, {
+                $("span", me).animate({ opacity: 0.45 }, {
                     duration: speed,
                     complete: function() {
                         if (!that._backToYear) {
@@ -594,7 +594,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
                 } else {
                     var me = this;
 
-                    $("span", me).animate({ opacity: .45 },{
+                    $("span", me).animate({ opacity: 0.45 },{
                         duration: speed,
                         complete: function() {
                             $("span", me).text(_prevText).animate({opacity: 1}, speed);
@@ -921,12 +921,15 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             this._setPickerYear( this._getPickerYear() + amount );
             //_year.text(parseInt(_year.text()) + amount, 10);
             this.element.focus();
-
+            // var me = this;
+// var _btn = amount > 0 ? me._nextButton : me._prevButton;
+            // _btn.jqueryUIButton({label: ""});
+/*
             var me = this;
             setTimeout(function() {
                 var _btn = amount > 0 ? me._nextButton : me._prevButton;
                 _btn.addClass('ui-state-hover');
-            }, 1);
+            }, 1);*/
 
             this._decorateButtons();
 

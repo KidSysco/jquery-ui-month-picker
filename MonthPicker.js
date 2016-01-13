@@ -105,8 +105,8 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
         return _parsePeriod(_val);
     }
 
-    function _event(_event, _inst) {
-        return $proxy(_inst.options[_event] || $noop, _inst.element[0]);
+    function _event(_name, _inst) {
+        return $proxy(_inst.options[_name] || $noop, _inst.element[0]);
     }
 
     function _parsePeriod(_val, _initDate) {
@@ -259,6 +259,10 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             }
 
             this._validationMessage.remove();
+
+            if (_openedInstance === this) {
+              _openedInstance = null;
+            }
         },
 
         _setOption: function (key, value) {

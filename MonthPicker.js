@@ -569,6 +569,13 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
                     return;
                 }
 
+                // If the menu is closed while in jump years mode, bring back
+                // the jump years hint.
+                if (this._backToYear) {
+                  this._applyJumpYearsHint();
+                  this._backToYear = 0;
+                }
+
                 this._visible = false;
                 _openedInstance = null;
                 $(document).off('keydown' + _eventsNs + this.uuid)
@@ -857,13 +864,12 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
 
         _showYearsClickHandler: function () {
             this._buttons.removeClass(_todayClass);
-            this._showYears();
-
             if (!this._backToYear) {
-              var _label = this._i18n('backTo') + ' ' + this._getPickerYear();
-                this._jumpYearsButton.jqueryUIButton({ label: _label }).data( _clearHint )();
-
                 this._backToYear = this._getPickerYear();
+                this._showYears();
+
+                var _label = this._i18n('backTo') + ' ' + this._getPickerYear();
+                this._jumpYearsButton.jqueryUIButton({ label: _label }).data( _clearHint )();
 
                 _event('OnAfterChooseYears', this)();
             } else {

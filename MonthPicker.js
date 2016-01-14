@@ -707,8 +707,8 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
         },
 
         _setRTL: function(value) {
-            _applyArrowButton(this._prevButton, !value);
-            _applyArrowButton(this._nextButton, value);
+            _applyArrowButton( this._prevButton.css('float', value ? 'right' : 'left'), !value );
+            _applyArrowButton( this._nextButton.css('float', value ? 'left' : 'right'), value );
         },
 
         _keyDown: function (event) {
@@ -787,14 +787,12 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
         },
 
         _getPickerYear: function () {
-            //return parseInt(this._yearContainer.text(), 10);
             return this._pickerYear;
         },
 
         _setPickerYear: function (year) {
             this._pickerYear = year || new Date().getFullYear();
             this._jumpYearsButton[ _headerButton ]({ label: this._i18n('year') + ' ' + this._pickerYear });
-            //this._yearContainer.text(year || new Date().getFullYear());
         },
 
         _updateAlt: function (noop, date) {
@@ -813,8 +811,6 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
 
             _setActive( this._selectedBtn, false );
             this._selectedBtn = _setActive( $(this._buttons[month-1]), true );
-
-            this._jumpYearsButton[ _headerButton ]({label: 'Year ' + _year});
 
             _event('OnAfterChooseMonth', this)(date);
         },

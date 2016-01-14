@@ -640,8 +640,8 @@ QUnit.test('Right to left', function (assert) {
 
     var menu = $(MonthPicker_RTLField);
 
-    var nextYearButton = menu.find('.next-year>a');
-    var previousYearButton = menu.find('.previous-year>a');
+    var nextYearButton = menu.find('.next-year .ui-button');
+    var previousYearButton = menu.find('.previous-year .ui-button');
 
     // Make sure the buttons are pointing in the right (opposite) direction.
     assert.ok(previousYearButton.find('span.ui-icon-circle-triangle-e').length, 'Previous button is pointed east');
@@ -650,6 +650,9 @@ QUnit.test('Right to left', function (assert) {
     // Make sure the menu opens to the right of the field.
     var opendToTheRight = (field.position().left - menu.position().left) > 5;
     assert.ok(opendToTheRight, 'The menu opened to the right of the field');
+
+    assert.equal(nextYearButton.css('float'), 'left', 'The next year button has the expected alignment for RTL documents');
+    assert.equal(previousYearButton.css('float'), 'right', 'The previous year button has the expected alignment for RTL documents');
 
     field.MonthPicker('Close');
 });

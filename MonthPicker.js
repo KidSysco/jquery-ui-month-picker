@@ -33,6 +33,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
 
     var _speeds = $.fx.speeds;
     var _eventsNs = '.MonthPicker';
+    var _clearHint = 'month-picker-clear-hint';
     var _disabledClass = 'month-picker-disabled';
     var _todayClass = 'ui-state-highlight';
     var _selectedClass = 'ui-state-active';
@@ -205,6 +206,46 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
       }
     });
 
+    function _applyButtonHint(_button, _hintLabel) {
+      var _speed = 125, _currentLabel, _startTimeout, _labelElem = $();
+
+      function _fadeInHint() {
+        _currentLabel = _labelElem.text();
+        _labelElem.animate({ opacity: 1 }, _speed).text(_hintLabel);
+      }
+
+      function _fadeOutLabel() {
+        _startTimeout = null;
+        _labelElem = $("span", _button).animate({ opacity: 0.45 }, _speed, _fadeInHint);
+      }
+
+      function _prepareToStart() {
+        _startTimeout = setTimeout(_fadeOutLabel, 175);
+      }
+
+      function _fadeInLabel() {
+        _labelElem.text( _currentLabel ).animate({opacity: 1}, _speed);
+      }
+
+      function _fadeOutHint() {
+        if (_startTimeout) {
+          clearTimeout(_startTimeout);
+        } else {
+          _labelElem = $("span", _button).animate({ opacity: 0.45 }, _speed, _fadeInLabel);
+        }
+      }
+
+      _button.data(_clearHint, function() {
+        clearTimeout(_startTimeout);
+        _labelElem.stop().css({ opacity: 1 });
+        _button.off(_eventsNs + 'h');
+      });
+
+      _button
+        .on('mouseenter' + _eventsNs + 'h', _prepareToStart)
+        .on('mouseleave' + _eventsNs + 'h', _fadeOutHint);
+    }
+
     $.widget("KidSysco.MonthPicker", {
 
         /******* Properties *******/
@@ -353,7 +394,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
                 .click($proxy(this._showYearsClickHandler, this))
                 .find('a')[ _headerButton ]();
 
-            this._applyFadeShowYears();
+            this._applyJumpYearsHint();
             this._createValidationMessage();
 
             this._prevButton = $('.previous-year a', _menu)[ _headerButton ]({ text: false });
@@ -586,41 +627,8 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             this._showMonths();
         },
 
-        _applyFadeShowYears: function(jumpYears) {
-            var speed = 125;
-            var _prevText;
-            var that = this;
-
-            this._jumpYearsButton.on('mouseenter' + _eventsNs + '-j', function(e) {
-                var me = this;
-                that.tOut = setTimeout(function() {
-                that.tOut = null;
-
-                $("span", me).animate({ opacity: 0.45 }, {
-                    duration: speed,
-                    complete: function() {
-                        if (!that._backToYear) {
-                        _prevText=$("span", me).text();
-                        $("span", me).animate({opacity: 1}, speed).text(that._i18n('jumpYears'));
-                        }
-                    }
-
-                  });
-                }, 175);
-            }).on('mouseleave' + _eventsNs + '-j', function(e) {
-                if (that.tOut) {
-                    return clearTimeout(that.tOut);
-                } else {
-                    var me = this;
-
-                    $("span", me).animate({ opacity: 0.45 },{
-                        duration: speed,
-                        complete: function() {
-                            $("span", me).text(_prevText).animate({opacity: 1}, speed);
-                        }
-                    });
-                }
-            });
+        _applyJumpYearsHint: function() {
+          _applyButtonHint(this._jumpYearsButton, this._i18n('jumpYears'));
         },
 
         _i18n: function(str) {
@@ -855,19 +863,15 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             this._showYears();
 
             if (!this._backToYear) {
-                clearTimeout(this.tOut);
-                this._jumpYearsButton.off(_eventsNs + '-j');
-                this._jumpYearsButton[ _headerButton ]({
-                  label: this._i18n('backTo') + ' ' + this._getPickerYear()
-                });
-                this._jumpYearsButton.find('span').stop().css({ opacity: 1 });
+              var _label = this._i18n('backTo') + ' ' + this._getPickerYear();
+                this._jumpYearsButton[ _headerButton ]({ label: _label }).data( _clearHint )();
 
                 this._backToYear = this._getPickerYear();
 
                 _event('OnAfterChooseYears', this)();
             } else {
                 this._setPickerYear(this._backToYear);
-                this._applyFadeShowYears();
+                this._applyJumpYearsHint();
                 this._showMonths();
                 this._backToYear = 0;
             }

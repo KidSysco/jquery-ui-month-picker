@@ -113,7 +113,7 @@ in response to the slightly bigger buttons in the Jump years menu.
  */
 .month-picker-month-table button {
     width: 4.3em;
-    margin: 3px;
+    margin: .2em;
 }
 
 .month-picker-open-button {

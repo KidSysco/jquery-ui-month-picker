@@ -398,6 +398,11 @@ QUnit.test('Inline menu', function(assert) {
 	});
 
 	var menu = $(MonthPicker_InlineMenuDiv);
+  var nextYearButton = menu.find('.next-year .ui-button');
+  var previousYearButton = menu.find('.previous-year .ui-button');
+
+  assert.equal(nextYearButton.css('float'), 'right', 'The next year button has the expected alignment for RTL documents');
+  assert.equal(previousYearButton.css('float'), 'left', 'The previous year button has the expected alignment for RTL documents');
 
 	assert.ok(menu.width() <= 200, 'The menu is visible and has the expected width');
 
@@ -633,7 +638,20 @@ QUnit.test('Right to left', function (assert) {
     var field = $(RTLField).MonthPicker({
         Animation: 'none', // Disable animation to make sure opening and closing the menu is synchronous.
         Position: {collision: 'none'}, // Ensure the menu opens to the right.
-        IsRTL: true
+        IsRTL: true,
+        i18n: {
+            year: 'שנת',
+            buttonText: 'פתח תפריט',
+            prevYear: "שנה קודמת",
+            nextYear: "שנה הבאה",
+            next12Years: 'עבור 12 שנים קדימה',
+            prev12Years: 'עבור 12 שנים אחורה',
+            nextLabel: "הבא",
+            prevLabel: "הקודם",
+            jumpYears: "בכר שנה",
+            backTo: "חזור ל",
+            months: ["ינו'", "פבר'", "מרץ", "אפר'", "מאי", "יוני", "יולי", "אוג'", "ספט'", "אוק'", "נוב'", "דצמ'"]
+        }
     });
 
     field.MonthPicker('Open');

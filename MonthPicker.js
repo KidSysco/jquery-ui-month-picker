@@ -664,7 +664,8 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             var _btnOpt = _opts.ShowIcon ? _opts.Button : false;
 
             if ($.isFunction(_btnOpt)) {
-                _btnOpt = _btnOpt.call(_elem[0], $.extend(true, {i18n: $.MonthPicker.i18n}, this.options));
+                var _params = $.extend(true, {i18n: $.extend(true, $.MonthPicker.i18n)}, this.options);
+                _btnOpt = _btnOpt.call(_elem[0], _params);
             }
 
             var _removeOldBtn = false;
@@ -865,7 +866,6 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
 
                 _event('OnAfterChooseYears', this)();
             } else {
-                //this._jumpYearsButton/*.addClass('ui-state-hover')*/.button({label: 'Year ' + this._getPickerYear()});
                 this._setPickerYear(this._backToYear);
                 this._applyFadeShowYears();
                 this._showMonths();

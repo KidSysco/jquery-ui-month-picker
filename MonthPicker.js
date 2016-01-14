@@ -34,9 +34,11 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
     var _speeds = $.fx.speeds;
     var _eventsNs = '.MonthPicker';
     var _clearHint = 'month-picker-clear-hint';
+    var _iconClass = '.ui-button-icon-primary';
     var _disabledClass = 'month-picker-disabled';
     var _todayClass = 'ui-state-highlight';
     var _selectedClass = 'ui-state-active';
+    var _defaultClass = 'ui-state-default';
     var _defaultPos = { my: 'left top+1', at: 'left bottom' };
     var _RTL_defaultPos = { my: 'right top+1', at: 'right bottom' };
     var _posErr = _setupErr + 'The jQuery UI position plug-in must be loaded.';
@@ -147,7 +149,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
     }
 
     function _applyArrowButton($el, dir) {
-        $el[ _headerButton ]('option', {
+        $el.jqueryUIButton('option', {
             icons: {
                 primary: 'ui-icon-circle-triangle-' + (dir ? 'w' : 'e')
             }
@@ -189,23 +191,6 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             '<table class="month-picker-month-table" />' +
         '</div>';
 
-    var _headerButton = Date();
-    $.widget("KidSysco." + _headerButton, $.ui.button, {
-      _create: function() {
-        this.widgetFullName = 'ui-button';
-        this._superApply(arguments);
-        this.element.removeClass('ui-state-default');
-      },
-
-      _setOption: function(key, value) {
-        if (key === 'disabled' && this.options[key] === value) {
-            return;
-        }
-
-        this._super(key, value);
-      }
-    });
-
     function _applyButtonHint(_button, _hintLabel) {
       var _speed = 125, _currentLabel, _startTimeout, _labelElem = $();
 
@@ -246,6 +231,13 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
         .on('mouseleave' + _eventsNs + 'h', _fadeOutHint);
     }
 
+    function _setDisabled(_button, _value) {
+      var _btnWidget = _button.data('ui-button');
+      if (_btnWidget.option('disabled') !== _value) {
+        _btnWidget.option('disabled', _value);
+      }
+    }
+
     $.widget("KidSysco.MonthPicker", {
 
         /******* Properties *******/
@@ -272,9 +264,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
         },
 
         _monthPickerButton: $(),
-
         _validationMessage: $(),
-
         _selectedBtn: $(),
 
         /******* jQuery UI Widget Factory Overrides ********/
@@ -318,6 +308,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
                         alert(_posErr);
                         return;
                     }
+                    break;
                 case 'MonthFormat':
                     var date = this.GetSelectedDate();
                     if (date) {
@@ -386,23 +377,28 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             var isInline = _isInline(_el);
 
             $(_markup).appendTo(_menu);
-            (_menu).appendTo( isInline ? _el : document.body );
+            _menu.appendTo( isInline ? _el : document.body );
 
             this._jumpYearsButton =
                 $('.jump-years', _menu)
                 .attr('title', this._i18n('jumpYears'))
                 .click($proxy(this._showYearsClickHandler, this))
-                .find('a')[ _headerButton ]();
+                .find('a').jqueryUIButton()
+                .removeClass(_defaultClass);
 
             this._applyJumpYearsHint();
             this._createValidationMessage();
 
-            this._prevButton = $('.previous-year a', _menu)[ _headerButton ]({ text: false });
-            this._nextButton = $('.next-year a', _menu)[ _headerButton ]({ text: false });
+            this._prevButton = $('.previous-year a', _menu)
+              .jqueryUIButton({ text: false })
+              .removeClass(_defaultClass);
+
+            this._nextButton = $('.next-year a', _menu)
+              .jqueryUIButton({ text: false })
+              .removeClass(_defaultClass);
 
             this._setRTL(_opts.IsRTL); //Assigns icons to the next/prev buttons.
 
-            var _iconClass = '.ui-button-icon-primary';
             $(_iconClass, this._nextButton).text(this._i18n('nextLabel'));
             $(_iconClass, this._prevButton).text(this._i18n('prevLabel'));
 
@@ -801,7 +797,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
 
         _setPickerYear: function (year) {
             this._pickerYear = year || new Date().getFullYear();
-            this._jumpYearsButton[ _headerButton ]({ label: this._i18n('year') + ' ' + this._pickerYear });
+            this._jumpYearsButton.jqueryUIButton({ label: this._i18n('year') + ' ' + this._pickerYear });
         },
 
         _updateAlt: function (noop, date) {
@@ -864,7 +860,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
 
             if (!this._backToYear) {
               var _label = this._i18n('backTo') + ' ' + this._getPickerYear();
-                this._jumpYearsButton[ _headerButton ]({ label: _label }).data( _clearHint )();
+                this._jumpYearsButton.jqueryUIButton({ label: _label }).data( _clearHint )();
 
                 this._backToYear = this._getPickerYear();
 
@@ -891,14 +887,15 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             this._prevButton
                 .attr('title', this._i18n('prev12Years'))
                 .off(click)
-                .on(click, $proxy(this._addToYears, this, -AMOUNT_TO_ADD))
-                [ _headerButton ]('option', 'disabled', _minYear && (_firstYear - 1) < _minYear);
+                .on(click, $proxy(this._addToYears, this, -AMOUNT_TO_ADD));
 
             this._nextButton
                 .attr('title', this._i18n('next12Years'))
                 .off(click)
-                .on(click, $proxy(this._addToYears, this, AMOUNT_TO_ADD))
-                [ _headerButton ]('option', 'disabled', _maxYear && (_firstYear + 12) -1 > _maxYear);
+                .on(click, $proxy(this._addToYears, this, AMOUNT_TO_ADD));
+
+            _setDisabled(this._prevButton, _minYear && (_firstYear - 1) < _minYear);
+            _setDisabled(this._nextButton, _maxYear && (_firstYear + 12) -1 > _maxYear);
 
             this._buttons.off(_eventsNs);
 
@@ -979,8 +976,8 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             }
 
             // Disable the next/prev button if we've reached the min/max year.
-            this._prevButton[ _headerButton ]('option', 'disabled', _minDate && _curYear == _toYear(_minDate));
-            this._nextButton[ _headerButton ]('option', 'disabled', _maxDate && _curYear == _toYear(_maxDate));
+            _setDisabled(this._prevButton,  _minDate && _curYear == _toYear(_minDate));
+            _setDisabled(this._nextButton,  _maxDate && _curYear == _toYear(_maxDate));
 
             for (var i = 0; i < 12; i++) {
                 // Disable the button if the month is not between the

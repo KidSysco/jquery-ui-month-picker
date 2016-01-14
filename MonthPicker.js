@@ -192,44 +192,62 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             '<table class="month-picker-month-table" />' +
         '</div>';
 
-    function _applyButtonHint(_button, _hintLabel) {
+    // Groups state and functionallity to fade in the jump years hint
+    // when the user mouses over the Year 2016 text.
+    // NOTE: An invocation of this function:
+    // 1: Is an independent instance with it's own unique state.
+    // 2: Assumes that there is no previous hint applied to the
+    //    button (it dosen't the existing hint).
+    function _applyButtonHint(_button, _hintText) {
       var _speed = 125, _currentLabel, _startTimeout, _labelElem = $();
 
-      function _fadeInHint() {
-        _currentLabel = _labelElem.text();
-        _labelElem.animate({ opacity: 1 }, _speed).text(_hintLabel);
+      _button.on('mouseenter' + _eventsNs + 'h', _prepareToStart);
+
+      // Setp 1: Wait to make sure the user isn't just mousing over and
+      // away from the button.
+      // NOTE: If _fadeOutHint() is triggered on mouseleave before the
+      // timeout is triggered the animation is canceled.
+      function _prepareToStart() {
+        _startTimeout = setTimeout(_fadeOutLabel, 175);
       }
 
+      // Setp 2: Fade out the label (Year 2016) text to 45%.
       function _fadeOutLabel() {
         _startTimeout = null;
         _labelElem = $('span', _button).animate({ opacity: 0.45 }, _speed, _fadeInHint);
       }
 
-      function _prepareToStart() {
-        _startTimeout = setTimeout(_fadeOutLabel, 175);
+      // Setp 3: Fade in the hint text (Jump years).
+      function _fadeInHint() {
+        _currentLabel = _labelElem.text();
+        _labelElem.animate({ opacity: 1 }, _speed).text(_hintText);
       }
 
-      function _fadeInLabel() {
-        _labelElem.text( _currentLabel ).animate({opacity: 1}, _speed);
-      }
+      _button.on('mouseleave' + _eventsNs + 'h', _fadeOutHint);
 
       function _fadeOutHint() {
         if (_startTimeout) {
+          // If the user is just moving over and away from the button, cancel
+          // the animation completely.
           clearTimeout(_startTimeout);
         } else {
+          // Setp 4: Fade out the hint text (Jump years) to 45%.
           _labelElem = $('span', _button).animate({ opacity: 0.45 }, _speed, _fadeInLabel);
         }
       }
 
+      // Setp 5: Fade in the label (Year 2016) text.
+      function _fadeInLabel() {
+        _labelElem.text( _currentLabel ).animate({opacity: 1}, _speed);
+      }
+
+      // Adds a function to the button elemene which is called when the
+      // user clicks the button (the hint needs to be removed).
       _button.data(_clearHint, function() {
         clearTimeout(_startTimeout);
         _labelElem.stop().css({ opacity: 1 });
         _button.off(_eventsNs + 'h');
       });
-
-      _button
-        .on('mouseenter' + _eventsNs + 'h', _prepareToStart)
-        .on('mouseleave' + _eventsNs + 'h', _fadeOutHint);
     }
 
     function _setDisabled(_button, _value) {

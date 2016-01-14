@@ -160,15 +160,16 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
     $.MonthPicker = {
         VERSION: '3.0-beta1', // Added in version 2.4;
         i18n: {
-            year: "Year",
-            prevYear: "Previous Year",
-            nextYear: "Next Year",
+            year: 'Year',
+            prevYear: 'Previous Year',
+            nextYear: 'Next Year',
             next12Years: 'Jump Forward 12 Years',
             prev12Years: 'Jump Back 12 Years',
-            nextLabel: "Next",
-            prevLabel: "Prev",
-            buttonText: "Open Month Chooser",
-            jumpYears: "Jump Years",
+            nextLabel: 'Next',
+            prevLabel: 'Prev',
+            buttonText: 'Open Month Chooser',
+            jumpYears: 'Jump Years',
+            backTo: 'Back to',
             months: ['Jan.', 'Feb.', 'Mar.', 'Apr.', 'May', 'June', 'July', 'Aug.', 'Sep.', 'Oct.', 'Nov.', 'Dec.']
         }
     };
@@ -859,7 +860,9 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             if (!this._backToYear) {
                 clearTimeout(this.tOut);
                 this._jumpYearsButton.off(_eventsNs + '-j');
-                this._jumpYearsButton[ _headerButton ]({label: 'Back to ' + this._getPickerYear()});
+                this._jumpYearsButton[ _headerButton ]({
+                  label: this._i18n('backTo') + ' ' + this._getPickerYear()
+                });
                 this._jumpYearsButton.find('span').stop().css({ opacity: 1 });
 
                 this._backToYear = this._getPickerYear();

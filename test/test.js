@@ -1467,3 +1467,71 @@ QUnit.test('Title buttons', function (assert) {
 
     field.MonthPicker('destroy');
 });
+
+/*
+Here we make sure that clicling the jump years button
+when in jump years mode will return the user to the year
+they were when they clicked Jump years.
+*/
+QUnit.test('Back to 2015 button', function (assert) {
+    var field = $(RistrictMonthField).val('').MonthPicker({
+      Animation: 'none' // Disable animation to make sure opening and closing the menu is synchronous.
+    });
+
+    field.MonthPicker('Open');
+    var menu = $(MonthPicker_RistrictMonthField);
+    var titleButton = menu.find('.jump-years .ui-button');
+    var nextButton = menu.find('.next-year .ui-button');
+    var backButton = menu.find('.previous-year .ui-button');
+
+    nextButton.trigger('click');
+    var nextYear = _today.getFullYear() + 1;
+    assert.equal(_getPickerYear(menu), nextYear, 'Clicking next took us to the next year (' + nextYear + ')');
+
+    titleButton.trigger('click');
+    var expectedTitle = $.MonthPicker.i18n.backTo + ' ' + nextYear;
+
+    assert.equal( $('.jump-years span', menu).text(), expectedTitle, 'The title button has the expected label' );
+
+    /*
+    Here we simulate the user jumping back and forth in
+    the jump years menu.
+    The point is to make sure the button will still return
+    the user to the expected year.
+    */
+
+    // Keep clicking next until today's year is not visible.
+    // We count to 10 to avoid an infinite loop in case there's
+    // a bug where the next button is not going to the next year.
+    var buttons = menu.find('.month-picker-month-table button');
+    var hasNext = buttons.is('.ui-state-highlight');
+    assert.ok( hasNext, "Today's year is highlighted" );
+    var i = 0;
+    for (; hasNext && i < 10; i++) {
+      nextButton.trigger('click');
+      hasNext = buttons.is('.ui-state-highlight');
+    }
+    var nextClickCount = i;
+
+    assert.notOk( hasNext, "Today's year is not visible after clicking next" );
+    assert.equal( $('.jump-years span', menu).text(), expectedTitle, 'Clicking next did not change the button label' );
+
+    for (var p = 0; p < nextClickCount * 2; p++) {
+      backButton.trigger('click');
+    }
+
+    hasNext = buttons.is('.ui-state-highlight');
+    assert.notOk( hasNext, "Today's year is not visible after clicking previous" );
+    assert.equal( $('.jump-years span', menu).text(), expectedTitle, 'Clicking previous did not change the button label' );
+
+    // Click the title button and make sure it returnd us to the expected year.
+    titleButton.trigger('click');
+    assert.equal(_getPickerYear(menu), nextYear, 'Clicking next took us to the next year (' + nextYear + ')');
+
+    $(buttons[0]).trigger('click');
+    var selectedDate = field.MonthPicker('GetSelectedDate');
+    assert.equal( selectedDate.getFullYear(), nextYear, 'Clicking the first month selected the expected year' );
+    assert.equal( selectedDate.getMonth() + 1, 1, 'Clicking the first month selected the expected month' );
+
+    field.MonthPicker('Destroy');
+});

@@ -33,6 +33,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
 
     var _speeds = $.fx.speeds;
     var _eventsNs = '.MonthPicker';
+    var _textfieldClass = 'month-year-input';
     var _clearHint = 'month-picker-clear-hint';
     var _iconClass = '.ui-button-icon-primary';
     var _disabledClass = 'month-picker-disabled';
@@ -201,7 +202,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
 
       function _fadeOutLabel() {
         _startTimeout = null;
-        _labelElem = $("span", _button).animate({ opacity: 0.45 }, _speed, _fadeInHint);
+        _labelElem = $('span', _button).animate({ opacity: 0.45 }, _speed, _fadeInHint);
       }
 
       function _prepareToStart() {
@@ -216,7 +217,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
         if (_startTimeout) {
           clearTimeout(_startTimeout);
         } else {
-          _labelElem = $("span", _button).animate({ opacity: 0.45 }, _speed, _fadeInLabel);
+          _labelElem = $('span', _button).animate({ opacity: 0.45 }, _speed, _fadeInLabel);
         }
       }
 
@@ -271,7 +272,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
 
         _destroy: function () {
             var _elem = this.element;
-            if (jQuery.mask && this.options.UseInputMask) {
+            if ($.mask && this.options.UseInputMask) {
                 _elem.unmask();
 
                 if (!this.GetSelectedDate()) {
@@ -279,7 +280,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
                 }
             }
 
-            _elem.removeClass('month-year-input').off(_eventsNs);
+            _elem.removeClass(_textfieldClass).off(_eventsNs);
 
             $(document).off(_eventsNs + this.uuid);
 
@@ -444,7 +445,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             } else {
                // Update the alt field if the user manually changes
                // the input field.
-               _el.addClass('month-year-input');
+               _el.addClass(_textfieldClass);
                _el.change($proxy(this._updateAlt, this));
             }
         },

@@ -45,6 +45,15 @@ See: .month-picker-month-table button { width: 4.3em; }
 
 .month-picker-year-table {
     width: 100%;
+    /*
+    Makes sure the next/previous/jump years buttons are not unnecessarily
+    selected if the user clicks them a couple of times fast.
+    */
+    -ms-user-select: none; /* IE 10+ */
+    -moz-user-select: -moz-none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
 }
 .month-picker-year-table .jump-years {
     text-align: center;

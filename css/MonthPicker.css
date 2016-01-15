@@ -94,6 +94,8 @@ and removes the pointer cursor from the buttons in the heading (year-table).
 }
 
 .month-picker-year-table .jump-years .ui-button {
+    font-size: 1em;
+    padding: .1em 0;
     width: 100%;
     font-weight: bold;
 }

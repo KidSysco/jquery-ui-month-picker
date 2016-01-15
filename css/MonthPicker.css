@@ -55,6 +55,7 @@ See: .month-picker-month-table button { width: 4.3em; }
     -webkit-user-select: none;
     user-select: none;
 }
+
 .month-picker-year-table .jump-years {
     text-align: center;
 }
@@ -84,14 +85,15 @@ Sets the size of the next/previous buttons,
 and makes the buttons in the heading (year-table) sligtly bigger,
 and removes the pointer cursor from the buttons in the heading (year-table).
 */
-.month-picker-year-table a.ui-button {
+.month-picker-year-table .ui-button {
     font-size: 1.1em;
     width: 1.5em;
     height: 1.5em;
     cursor: default;
+    margin: 0;
 }
 
-.month-picker-year-table .jump-years a.ui-button {
+.month-picker-year-table .jump-years .ui-button {
     width: 100%;
     font-weight: bold;
 }

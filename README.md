@@ -27,10 +27,10 @@ for date validation, setting the start year, using an icon button, input masking
 </ul>
 
 <h2>Installation</h2>
-<p>Attach all required css and js files to the web page as follows...</p>
+<p>Attach all required CSS and JS files to the web page as follows...</p>
 <pre>
 &lt;link href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" media="all" rel="stylesheet" type="text/css" />
-&lt;link href="css/MonthPicker.css" media="all" rel="stylesheet" type="text/css" />
+&lt;link href="css/MonthPicker.min.css" media="all" rel="stylesheet" type="text/css" />
 
 &lt;script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js" type="text/javascript">&lt;/script>
 &lt;script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js" type="text/javascript">&lt;/script>

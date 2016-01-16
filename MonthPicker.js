@@ -182,9 +182,9 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
         '<div class="ui-widget-header month-picker-header ui-corner-all">' +
             '<table class="month-picker-year-table">' +
                 '<tr>' +
-                    '<td class="previous-year"><a /></td>' +
-                    '<td class="jump-years"><a /></td>' +
-                    '<td class="next-year"><a /></td>' +
+                    '<td class="month-picker-previous"><a /></td>' +
+                    '<td class="month-picker-title"><a /></td>' +
+                    '<td class="month-picker-next"><a /></td>' +
                 '</tr>' +
             '</table>' +
         '</div>' +
@@ -399,7 +399,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             _menu.appendTo( isInline ? _el : document.body );
 
             this._jumpYearsButton =
-                $('.jump-years', _menu)
+                $('.month-picker-title', _menu)
                 .click($proxy(this._showYearsClickHandler, this))
                 .find('a').jqueryUIButton()
                 .removeClass(_defaultClass);
@@ -407,11 +407,11 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             this._applyJumpYearsHint();
             this._createValidationMessage();
 
-            this._prevButton = $('.previous-year a', _menu)
+            this._prevButton = $('.month-picker-previous>a', _menu)
               .jqueryUIButton({ text: false })
               .removeClass(_defaultClass);
 
-            this._nextButton = $('.next-year a', _menu)
+            this._nextButton = $('.month-picker-next>a', _menu)
               .jqueryUIButton({ text: false })
               .removeClass(_defaultClass);
 

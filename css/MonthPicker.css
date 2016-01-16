@@ -56,10 +56,6 @@ See: .month-picker-month-table button { width: 4.3em; }
     user-select: none;
 }
 
-.month-picker-year-table .jump-years {
-    text-align: center;
-}
-
 /*
 The plugin uses buttons with a transparent background in the year-table
 (aka header) in order to look consistent with jQuery UI datepicker and to
@@ -93,7 +89,11 @@ and removes the pointer cursor from the buttons in the heading (year-table).
     margin: 0;
 }
 
-.month-picker-year-table .jump-years .ui-button {
+.month-picker-year-table .month-picker-title {
+    text-align: center;
+}
+
+.month-picker-year-table .month-picker-title .ui-button {
     font-size: 1em;
     padding: .1em 0;
     width: 100%;

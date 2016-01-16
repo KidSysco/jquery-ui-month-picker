@@ -17,7 +17,7 @@ var _today = new Date();
 $.KidSysco.MonthPicker.prototype.options.Duration = 1;
 
 function _getPickerYear(_pickerMenu) {
-  return parseInt($('.jump-years span', _pickerMenu).text().replace(/\D/g, ''), 10);
+  return parseInt($('.month-picker-title span', _pickerMenu).text().replace(/\D/g, ''), 10);
 }
 
 QUnit.module("Installation");
@@ -398,11 +398,11 @@ QUnit.test('Inline menu', function(assert) {
 	});
 
 	var menu = $(MonthPicker_InlineMenuDiv);
-  var nextYearButton = menu.find('.next-year .ui-button');
-  var previousYearButton = menu.find('.previous-year .ui-button');
+    var nextYearButton = menu.find('.month-picker-next .ui-button');
+    var previousYearButton = menu.find('.month-picker-previous .ui-button');
 
-  assert.equal(nextYearButton.css('float'), 'right', 'The next year button has the expected alignment for RTL documents');
-  assert.equal(previousYearButton.css('float'), 'left', 'The previous year button has the expected alignment for RTL documents');
+    assert.equal(nextYearButton.css('float'), 'right', 'The next year button has the expected alignment for RTL documents');
+    assert.equal(previousYearButton.css('float'), 'left', 'The previous year button has the expected alignment for RTL documents');
 
 	assert.ok(menu.width() <= 200, 'The menu is visible and has the expected width');
 
@@ -491,7 +491,7 @@ QUnit.test('Events and context', function (assert) { // A.k.a duplicate code tes
 		assert.equal( this, EventsField, 'OnAfterNextYear was called in the right context' );
 	});
 
-	var nextYearButton = menu.find('.next-year>a');
+	var nextYearButton = menu.find('.month-picker-next>a');
 
     nextYearButton.trigger('click');
     assert.ok(OnAfterNextYearTriggered, 'Clicking the next button triggered OnAfterNextYear');
@@ -503,7 +503,7 @@ QUnit.test('Events and context', function (assert) { // A.k.a duplicate code tes
 		assert.equal( this, EventsField, 'OnAfterPreviousYear was called in the right context' );
 	});
 
-	var previousYearButton = menu.find('.previous-year>a');
+	var previousYearButton = menu.find('.month-picker-previous>a');
 
 	previousYearButton.trigger('click');
 	assert.ok(OnAfterPreviousYearTriggerd, 'Clciking rhe previous button triggered OnAfterPreviousYear');
@@ -514,7 +514,7 @@ QUnit.test('Events and context', function (assert) { // A.k.a duplicate code tes
 		assert.equal( this, EventsField, 'OnAfterChooseYears was called in the right context' );
 	});
 
-	var showYearsButton = menu.find('.jump-years a');
+	var showYearsButton = menu.find('.month-picker-title a');
 	showYearsButton.trigger('click');
 
 	assert.ok(OnAfterChooseYearsTriggerd, 'Clicking the show years button triggered OnAfterChooseYears');
@@ -658,8 +658,8 @@ QUnit.test('Right to left', function (assert) {
 
     var menu = $(MonthPicker_RTLField);
 
-    var nextYearButton = menu.find('.next-year .ui-button');
-    var previousYearButton = menu.find('.previous-year .ui-button');
+    var nextYearButton = menu.find('.month-picker-next .ui-button');
+    var previousYearButton = menu.find('.month-picker-previous .ui-button');
 
     // Make sure the buttons are pointing in the right (opposite) direction.
     assert.ok(previousYearButton.find('span.ui-icon-circle-triangle-e').length, 'Previous button is pointed east');
@@ -985,8 +985,8 @@ QUnit.test('Month buttons are disabled', function (assert) {
 	field.MonthPicker('Open');
 
 	var menu = $(MonthPicker_RistrictMonthField);
-	var previousYearButton = menu.find('.previous-year>a');
-	var nextYearButton = menu.find('.next-year>a');
+	var previousYearButton = menu.find('.month-picker-previous>a');
+	var nextYearButton = menu.find('.month-picker-next>a');
 
 	// Try to click the disabled buttons.
 	var buttons = menu.find('.month-picker-month-table button');
@@ -1063,7 +1063,7 @@ QUnit.test('Year buttons are disabled', function (assert) {
     var menu = $(MonthPicker_RistrictMonthField);
 
     // Click the year title to show the years.
-    menu.find('.jump-years a').trigger('click');
+    menu.find('.month-picker-title a').trigger('click');
 
     // Make sure we are in years view.
     var buttons = menu.find('.month-picker-month-table button');
@@ -1085,7 +1085,7 @@ QUnit.test('Year buttons are disabled', function (assert) {
     assert.ok(firstVisibleYear, "Clciking the disabled buttons didn't take us to month view");
 
     // Make sure the next years button is disabled.
-    var nextYearsButton = menu.find('.next-year>a');
+    var nextYearsButton = menu.find('.month-picker-next>a');
     var isDisabled = nextYearsButton
         .trigger('click')
         .is('.ui-button-disabled');
@@ -1094,7 +1094,7 @@ QUnit.test('Year buttons are disabled', function (assert) {
     var newFirstYrar = parseInt($(buttons[0]).text(), 10);
     assert.equal(newFirstYrar, firstVisibleYear, "Clicking next year didn't change the year");
 
-    var previousYearsButton = menu.find('.previous-year>a');
+    var previousYearsButton = menu.find('.month-picker-previous>a');
     // Keep going back until there are no disabled buttons.
     // We count to 10 to avoid an infinite loop in case there's
     // a bug where we are going back in time but the the buttons stay disabled.
@@ -1145,7 +1145,7 @@ QUnit.test('Year buttons are disabled', function (assert) {
     assert.ok(!hasDidabledButtons, 'All buttons are enabled');
 
     // Click the year title to show the years menu.
-    menu.find('.jump-years a').trigger('click');
+    menu.find('.month-picker-title a').trigger('click');
 
     // Keeps clicking next years until we reach the disabled years.
     for (var i = 1; !buttons.is('.ui-button-disabled') && i <= 10; i++) {
@@ -1268,8 +1268,8 @@ QUnit.test('Today and selected months are highlighted', function (assert) {
 
 	var todaysButton = $(buttons[new Date().getMonth()]);
 
-	var nextYearButton = menu.find('.next-year>a');
-	var previousYearButton = menu.find('.previous-year>a');
+	var nextYearButton = menu.find('.month-picker-next>a');
+	var previousYearButton = menu.find('.month-picker-previous>a');
 
 	assert.ok(todaysButton.is('.ui-state-highlight'), "Today's month is highlighted");
 
@@ -1292,7 +1292,7 @@ QUnit.test('Today and selected months are highlighted', function (assert) {
 	assert.equal( selectedButton.length, 1, 'There is one selected button');
 	assert.equal( selectedButton[0], buttons[4], 'The selected month is highlighted');
 
-	menu.find('.jump-years a').trigger('click');
+	menu.find('.month-picker-title a').trigger('click');
 
 	var selectdBtn = buttons.filter('.ui-state-active');
 	assert.equal( selectdBtn.jqueryUIButton( "option", "label" ), _today.getFullYear(), 'The selected year is highlighted');
@@ -1332,8 +1332,8 @@ QUnit.test('Number of months from today', function (assert) {
     // Make sure we are in years view.
     var buttons = menu.find('.month-picker-month-table button');
 
-    var nextYearButton = menu.find('.next-year>a');
-    var previousYearButton = menu.find('.previous-year>a');
+    var nextYearButton = menu.find('.month-picker-next>a');
+    var previousYearButton = menu.find('.month-picker-previous>a');
 
     var enabledMonths = 0;
 
@@ -1388,8 +1388,8 @@ QUnit.test('Relative month periods', function (assert) {
 
     // Make sure we are in years view.
     var buttons = menu.find('.month-picker-month-table button');
-    var nextYearButton = menu.find('.next-year>a');
-    var previousYearButton = menu.find('.previous-year>a');
+    var nextYearButton = menu.find('.month-picker-next>a');
+    var previousYearButton = menu.find('.month-picker-previous>a');
     var enabledMonths = 0;
 
     // Make sure that 18 buttons + 1 for today are disabled.
@@ -1464,7 +1464,7 @@ QUnit.test('Title buttons', function (assert) {
     });
 
     var menu = $(MonthPicker_RistrictMonthField);
-    var nextButton = menu.find('.next-year .ui-button');
+    var nextButton = menu.find('.month-picker-next .ui-button');
     field.MonthPicker('Open');
 
     assert.notOk(nextButton.is('.ui-state-default'), "The next button doesn't have the .ui-state-default class");
@@ -1512,9 +1512,9 @@ QUnit.test('Back to 2015 button', function (assert) {
 
     field.MonthPicker('Open');
     var menu = $(MonthPicker_RistrictMonthField);
-    var titleButton = menu.find('.jump-years .ui-button');
-    var nextButton = menu.find('.next-year .ui-button');
-    var backButton = menu.find('.previous-year .ui-button');
+    var titleButton = menu.find('.month-picker-title .ui-button');
+    var nextButton = menu.find('.month-picker-next .ui-button');
+    var backButton = menu.find('.month-picker-previous .ui-button');
 
     nextButton.trigger('click');
     var nextYear = _today.getFullYear() + 1;
@@ -1523,7 +1523,7 @@ QUnit.test('Back to 2015 button', function (assert) {
     titleButton.trigger('click');
     var expectedTitle = $.MonthPicker.i18n.backTo + ' ' + nextYear;
 
-    assert.equal( $('.jump-years span', menu).text(), expectedTitle, 'The title button has the expected label' );
+    assert.equal( $('.month-picker-title span', menu).text(), expectedTitle, 'The title button has the expected label' );
 
     /*
     Here we simulate the user jumping back and forth in
@@ -1546,7 +1546,7 @@ QUnit.test('Back to 2015 button', function (assert) {
     var nextClickCount = i;
 
     assert.notOk( hasNext, "Today's year is not visible after clicking next" );
-    assert.equal( $('.jump-years span', menu).text(), expectedTitle, 'Clicking next did not change the button label' );
+    assert.equal( $('.month-picker-title span', menu).text(), expectedTitle, 'Clicking next did not change the button label' );
 
     for (var p = 0; p < nextClickCount * 2; p++) {
       backButton.trigger('click');
@@ -1554,7 +1554,7 @@ QUnit.test('Back to 2015 button', function (assert) {
 
     hasNext = buttons.is('.ui-state-highlight');
     assert.notOk( hasNext, "Today's year is not visible after clicking previous" );
-    assert.equal( $('.jump-years span', menu).text(), expectedTitle, 'Clicking previous did not change the button label' );
+    assert.equal( $('.month-picker-title span', menu).text(), expectedTitle, 'Clicking previous did not change the button label' );
 
     // Click the title button and make sure it returnd us to the expected year.
     titleButton.trigger('click');

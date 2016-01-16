@@ -197,7 +197,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
     // NOTE: An invocation of this function:
     // 1: Is an independent instance with it's own unique state.
     // 2: Assumes that there is no previous hint applied to the
-    //    button (it dosen't the existing hint).
+    //    button (it dosen't remove the existing hint).
     function _applyButtonHint(_button, _hintText) {
       var _speed = 125, _currentLabel, _startTimeout, _labelElem = $();
 
@@ -248,7 +248,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
         _labelElem.stop().css({ opacity: 1 });
         _button.off(_eventsNs + 'h');
       });
-    }
+    } // End _applyButtonHint()
 
     function _setDisabled(_button, _value) {
       var _btnWidget = _button.data('ui-button');
@@ -400,7 +400,6 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
 
             this._jumpYearsButton =
                 $('.jump-years', _menu)
-                .attr('title', this._i18n('jumpYears'))
                 .click($proxy(this._showYearsClickHandler, this))
                 .find('a').jqueryUIButton()
                 .removeClass(_defaultClass);
@@ -694,7 +693,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             var _btnOpt = _opts.ShowIcon ? _opts.Button : false;
 
             if ($.isFunction(_btnOpt)) {
-                var _params = $.extend(true, {i18n: $.extend(true, $.MonthPicker.i18n)}, this.options);
+                var _params = $.extend(true, {i18n: $.extend(true, {}, $.MonthPicker.i18n)}, this.options);
                 _btnOpt = _btnOpt.call(_elem[0], _params);
             }
 

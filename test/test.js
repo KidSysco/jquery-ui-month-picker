@@ -962,6 +962,17 @@ QUnit.test('ShowOn both', function (assert) {
     assert.notOk(menu.is(':visible'), 'The menu was closed by pressing tab');
 });
 
+QUnit.test('i18n', function (assert) {
+    assert.expect(2);
+
+    $("<input />").MonthPicker({
+        Button: function(options) {
+            assert.ok(options.i18n.buttonText, 'The button callback received the buttonText i18n property');
+            assert.ok(options.i18n.nextYear, 'The button callback received the nextYear i18n property');
+        }
+    }).MonthPicker('destroy');
+});
+
 QUnit.module("Min/MaxMonth");
 
 QUnit.test('Month buttons are disabled', function (assert) {

@@ -20,7 +20,7 @@ new *Back to 2016* button when the user enters the Jump Year menu.
 ##  CSS changes
 Version 3.x uses `em` instead of `px` units.
 This means that the menu determines it's size according to the
-`body` element's `font-size`.
+`body` element's `font-size`, instead of having a fixed width of `200px`.
 
 If you need to resize the menu, add this rule to your CSS:
 ```
@@ -29,6 +29,17 @@ If you need to resize the menu, add this rule to your CSS:
   font-size: 1.2em;
 }
 ```
+
+Version 3.x removes:
+```
+.month-year-input {
+    width: 60px;
+}
+```
+
+If you still want the plugin to implicitly resize the input fields it's applied to you must add this rule to your own CSS.
+
+If you explicitly defined a rule that reverts the effects of this rule, it's no longer necessary and it can be deleted.
 
 ##  Markup changes
 If you've applied custom CSS to the Month Picker menu, please note that:

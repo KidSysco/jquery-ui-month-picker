@@ -398,7 +398,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             $(_markup).appendTo(_menu);
             _menu.appendTo( isInline ? _el : document.body );
 
-            this._jumpYearsButton =
+            this._titleButton =
                 $('.month-picker-title', _menu)
                 .click($proxy(this._showYearsClickHandler, this))
                 .find('a').jqueryUIButton()
@@ -649,7 +649,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
         },
 
         _applyJumpYearsHint: function() {
-          _applyButtonHint(this._jumpYearsButton, this._i18n('jumpYears'));
+          _applyButtonHint(this._titleButton, this._i18n('jumpYears'));
         },
 
         _i18n: function(str) {
@@ -822,7 +822,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
 
         _setPickerYear: function (year) {
             this._pickerYear = year || new Date().getFullYear();
-            this._jumpYearsButton.jqueryUIButton({ label: this._i18n('year') + ' ' + this._pickerYear });
+            this._titleButton.jqueryUIButton({ label: this._i18n('year') + ' ' + this._pickerYear });
         },
 
         _updateAlt: function (noop, date) {
@@ -886,7 +886,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
                 this._showYears();
 
                 var _label = this._i18n('backTo') + ' ' + this._getPickerYear();
-                this._jumpYearsButton.jqueryUIButton({ label: _label }).data( _clearHint )();
+                this._titleButton.jqueryUIButton({ label: _label }).data( _clearHint )();
 
                 _event('OnAfterChooseYears', this)();
             } else {

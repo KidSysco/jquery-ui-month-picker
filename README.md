@@ -11,6 +11,11 @@ for date validation, setting the start year, using an icon button, input masking
 -See a demo on jsFiddle at...
 -http://jsfiddle.net/kidsysco/JeZap/
 
+<h2>Upgrading from version 2.x.x?</h2>
+<p>
+Please read the <a href='UPGRADE.md'>3.x Upgrade Guide</a>
+</p>
+
 <h2>Prerequisites</h2>
 <p>This plugin has been tested using the following configuration.</p>
 <ul>

@@ -1,6 +1,6 @@
 /******* ***************** ********/
 
-/* Unit Testing CSS */
+/* Unit Testing and demo aon JSFiddle CSS */
 
 /******* ***************** ********/
  body {
@@ -30,7 +30,7 @@
 .option-type {
     margin: 0 25px;
 }
-.demo {	
+.demo {
     background-color: #e1e1e1;
     padding: 8px;
     border: solid 1px Gray;
@@ -43,6 +43,5 @@
     width:100%;
 }
 .text-right{
-    text-align: right;   
+    text-align: right;
 }
-

@@ -1,0 +1,78 @@
+<!-- Enjoy my clean well factored code :) -->
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>jQuery UI Month Picker tests</title>
+    <!--flick smoothness-->
+    <link rel="stylesheet" type="text/css" href="../bower_components/jquery-ui/themes/smoothness/jquery-ui.css">
+    
+    <link rel="stylesheet" type="text/css" href="../bower_components/jquery-ui/
+    themes/smoothness/jquery.ui.theme.css">
+    <link rel="stylesheet" type="text/css" href="../css/MonthPicker.css" />
+    <link rel="stylesheet" type="text/css" href="test.css" />
+    <link rel="stylesheet" href="../bower_components/qunit/qunit/qunit.css" />
+
+    <script src="../bower_components/jquery/jquery.js"></script>
+    <!-- Test against 1.9.1 -->
+    <script src="../bower_components/jquery-ui/ui/jquery-ui.js"></script>
+    <!-- Test against 1.9.2 -->
+    <script src="../bower_components/qunit/qunit/qunit.js"></script>
+    <script>
+        if (typeof $ === 'undefined' || !$.ui || typeof QUnit === 'undefnied') {
+				var message = 
+					"Welcome to the jQuery UI Month Picker project.\n" + 
+		            "\n" + 
+	                "jQuery UI and QUnit are required for testing.\n" +
+	                "Please download node.js, 'cd ./jquery-ui-month-picker' and run 'npm install'.\n" + 
+	                "\n" + 
+	                "Tests can be ran from the command line using the 'grunt test' command.";
+						
+				if (alert) {
+					alert(message);
+				}
+			
+				throw message;
+			}
+    </script>
+    <script src="jquery.maskedinput.min.js"></script>
+    <script src="../MonthPicker.js"></script>
+    <script>
+        // TODO: Refactor!
+        $(function() {
+            // output of: ls | tr '\n' ' ' > themes.txt
+            var themes = 'black-tie blitzer cupertino dark-hive dot-luv eggplant excite-bike flick hot-sneaks humanity le-frog mint-choc overcast pepper-grinder redmond smoothness south-street start sunny swanky-purse trontastic ui-darkness ui-lightness vader'.split(" ");
+            
+            var sel = $("select").change(function() {
+                var selVal =  $(this).val();
+                var replaceWith = 'themes/' + selVal + '/';
+                $("link").each(function() {
+                    var href =  $(this).attr("href");
+                    $(this).attr("href", href.replace(/themes\/.+\//, replaceWith));
+                });
+            });
+            
+            $.each(themes, function(i, theme) {
+                sel.append($("<option>" + theme  + "</option>").prop('selected', theme == 'smoothness'));
+            });
+            
+            var invert = false;
+            $(invertCb).click(function() {
+               $(document.body).css('background-color', (invert = !invert) ? '#555':'#fff');
+            });
+             
+            $("div, #field").MonthPicker();
+        });
+    </script>
+</head>
+
+<body>
+    Theme: <select></select><br>
+    <label>Invert background: <input id='invertCb' type='checkbox'></input></label>
+    <p>
+    <div>
+    </div><p>
+    Example: <br><input id='field'></input>
+</body>
+
+</html>

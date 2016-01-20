@@ -16,6 +16,10 @@ var _today = new Date();
 // the tests.
 $.KidSysco.MonthPicker.prototype.options.Duration = 1;
 
+function _getPickerYear(_pickerMenu) {
+  return parseInt($('.month-picker-title span', _pickerMenu).text().replace(/\D/g, ''), 10);
+}
+
 QUnit.module("Installation");
 
 /***** Test basic the installation for the pre-requisite objects and namespaces *****/
@@ -83,13 +87,13 @@ QUnit.test('HTML 5 & Formatting Tests', function (assert) {
         ShowIcon: false,
         StartYear: 2027,
         OnAfterMenuOpen: function () {
-            assert.equal(_pickerMenu.css('display'), 'block', '#Html5 responded to a text input click event and showed the menu.');
+            assert.ok(_pickerMenu.is(':visible'), '#Html5 responded to a text input click event and showed the menu.');
             $('.button-1', _pickerMenu).trigger($.Event('click'));
             done();
             done = assert.async();
         },
         OnAfterMenuClose: function () {
-            assert.equal(_pickerMenu.css('display'), 'none', '#Html5 responded to a button click event by closing the menu.');
+            assert.notOk(_pickerMenu.is(':visible'), '#Html5 responded to a button click event by closing the menu.');
             assert.equal(_picker.MonthPicker('GetSelectedYear'), '2027', '#Html5 showed and selected the correct override start year of 2027.');
             assert.equal(_picker.MonthPicker('GetSelectedMonth'), '01', '#Html5 showed and selected the correct month of 01.');
             // destroy the monthpicker and re-create it so it doesnt fire anymore qunit events upon being used.
@@ -122,9 +126,10 @@ if ($.ui.position) {
                 collision: 'fit flip'
             },
             OnAfterMenuOpen: function () {
-                var _lastPointFullyVisibleX = _windowWidth - 200;
+                var _meun = $(MonthPicker_PositionDemo);
+                var _lastPointFullyVisibleX = _windowWidth - _meun.width();
                 var _lastPointFullyVisibleY = _windowHeight - _pickerMenu.height();
-                assert.equal(_pickerMenu.css('display'), 'block', '#PositionDemo responded to a text input click event and showed the menu.');
+                assert.ok(_pickerMenu.is(":visible"), '#PositionDemo responded to a text input click event and showed the menu.');
                 assert.ok(_pickerMenu.position().left <= _lastPointFullyVisibleX, "#PositionDemo does not overlap the right window boundary on the X axis.");
                 assert.ok(_pickerMenu.position().left > 0, "#PositionDemo does not overlap the left window boundary on the X axis.");
                 assert.ok(_pickerMenu.position().top <= _lastPointFullyVisibleY, "#PositionDemo does not overlap the bottom window boundary on the Y axis.");
@@ -134,7 +139,7 @@ if ($.ui.position) {
                 done = assert.async();
             },
             OnAfterMenuClose: function () {
-                assert.equal(_pickerMenu.css('display'), 'none', '#PositionDemo responded to a button click event by closing the menu.');
+                assert.notOk(_pickerMenu.is(':visible'), '#PositionDemo responded to a button click event by closing the menu.');
                 // destroy the monthpicker and re-create it so it doesnt fire anymore qunit events upon being used.
                 $('#PositionDemo').MonthPicker('destroy');
                 assert.ok($('#MonthPicker_PositionDemo').length === 0, "#PositionDemo has been destroyed.");
@@ -163,7 +168,7 @@ QUnit.test('Override Start Year Tests', function (assert) {
         ShowIcon: false,
         StartYear: 2023,
         OnAfterMenuOpen: function () {
-            assert.equal(_pickerMenu.css('display'), 'block', '#OverrideStartYear responded to a text input click event and showed the menu.');
+            assert.ok(_pickerMenu.is(':visible'), '#OverrideStartYear responded to a text input click event and showed the menu.');
             $('.button-1', _pickerMenu).trigger($.Event('click'));
             done();
             done = assert.async();
@@ -182,7 +187,6 @@ QUnit.test('Override Start Year Tests', function (assert) {
         }
     });
 
-    assert.ok($('#MonthPicker_OverrideStartYear').length === 1, "#OverrideStartYear has been initialized for demo purposes.");
     var _pickerMenu = $('#MonthPicker_OverrideStartYear');
     _picker.trigger($.Event('click'));
     done = assert.async();
@@ -193,34 +197,33 @@ QUnit.test('Start Year Option Tests', function (assert) {
     var _picker = $('#StartYearDemo').MonthPicker({
         ShowIcon: false,
         OnAfterMenuOpen: function () {
-            assert.equal(_pickerMenu.css('display'), 'block', '#StartYearDemo responded to a text input click event and showed the menu.');
+            assert.ok(_pickerMenu.is(':visible'), '#StartYearDemo responded to a text input click event and showed the menu.');
             assert.equal(parseInt(_picker.MonthPicker('GetSelectedYear'), 10), 2025, '#StartYearDemo defaulted to 2025, the year specified in the textbox.');
             _picker.MonthPicker('option', 'StartYear', 2095);
-            assert.equal(parseInt($('.year', _pickerMenu).text(), 10), 2095, '#StartYearDemo switched the year to 2095 after init.');
+            assert.equal(_getPickerYear(_pickerMenu), 2095, '#StartYearDemo switched the year to 2095 after init.');
             $('.button-1', _pickerMenu).trigger($.Event('click'));
             assert.equal(parseInt(_picker.MonthPicker('GetSelectedYear'), 10), 2095, '#StartYearDemo selected the correct year, 2095, upon choosing a month.');
             done();
             done = assert.async();
         },
         OnAfterMenuClose: function () {
-            assert.equal(_pickerMenu.css('display'), 'none', '#StartYearDemo responded to a button click event by closing the menu.');
+            assert.notOk(_pickerMenu.is(':visible'), '#StartYearDemo responded to a button click event by closing the menu.');
             $('#StartYearDemo').MonthPicker('destroy');
             assert.ok($('#MonthPicker_StartYearDemo').length === 0, "#StartYearDemo has been destroyed.");
             $('#StartYearDemo').val('1/2025').MonthPicker({
                 ShowIcon: false,
                 OnAfterMenuOpen: function () {
-
                     // get the picker menu again because it was removed from the dom upon destroying StartYearDemo.
                     _pickerMenu = $('#MonthPicker_StartYearDemo');
-                    assert.equal(_pickerMenu.css('display'), 'block', '#StartYearDemo responded to a text input click event and showed the menu.');
+                    assert.ok(_pickerMenu.is(':visible'), '#StartYearDemo responded to a text input click event and showed the menu.');
                     assert.equal(parseInt(_picker.MonthPicker('GetSelectedYear'), 10), 2025, '#StartYearDemo defaulted to 2025, the year specified in the textbox.');
-                    $(document).trigger($.Event('click'));
+                    _picker.MonthPicker('Close');
                     done();
                     done = assert.async();
                 },
                 OnAfterMenuClose: function () {
+                    assert.notOk(_pickerMenu.is(':visible'), '#StartYearDemo responded to a button click event by closing the menu.');
 
-                    assert.equal(_pickerMenu.css('display'), 'none', '#StartYearDemo responded to a button click event by closing the menu.');
                     _picker.MonthPicker('destroy');
                     // get the picker menu again because it was removed from the dom upon destroying StartYearDemo.
                     assert.ok($('#MonthPicker_StartYearDemo').length === 0, "#StartYearDemo has been destroyed again.");
@@ -240,15 +243,14 @@ QUnit.test('Start Year Option Tests', function (assert) {
             done();
             done = assert.async();
 
-            _picker.trigger($.Event('click'));
+            _picker.MonthPicker('Open');
         }
     });
 
     var _pickerMenu = $('#MonthPicker_StartYearDemo');
     assert.equal(_pickerMenu.length, 1, '#StartYearDemo month picker menu exists in the DOM.');
     done = assert.async();
-    _picker.trigger($.Event('click'));
-
+    _picker.MonthPicker('Open');
 });
 
 QUnit.test('API Tests', function (assert) {
@@ -307,7 +309,7 @@ QUnit.test('Digital Bush Tests', function (assert) {
     assert.equal($('#MonthPicker_Validation_DigitalBushBoth').css('display'), 'inline', '#DigitalBushBoth showed a validation message about a bad date.');
 
     $('#DigitalBushBoth').MonthPicker('Clear');
-    assert.equal($('#MonthPicker_Validation_DigitalBushBoth').css('display'), 'none', '#DigitalBushBoth cleared the validation error message using the Clear() API call.');
+    assert.ok($('#MonthPicker_Validation_DigitalBushBoth').is(':hidden'), '#DigitalBushBoth cleared the validation error message using the Clear() API call.');
 });
 
 QUnit.test('Only one open menu', function (assert) {
@@ -334,6 +336,7 @@ QUnit.test('Keydown handling', function (assert) {
 	field.MonthPicker('Open');
 
 	field.trigger($.Event('keydown', {keyCode: $.ui.keyCode.ENTER}));
+
 	assert.equal(field.val(), zeroFill(_today.getMonth() + 1) + '/' + _today.getFullYear(), 'Pressing enter selected todays month');
 
 	var menu = $(MonthPicker_EventsField);
@@ -395,15 +398,18 @@ QUnit.test('Inline menu', function(assert) {
 	});
 
 	var menu = $(MonthPicker_InlineMenuDiv);
+    var nextYearButton = menu.find('.month-picker-next .ui-button');
+    var previousYearButton = menu.find('.month-picker-previous .ui-button');
 
-	assert.ok(menu.is(':visible'), 'The menu is visible without having to call the Open method');
+    assert.equal(nextYearButton.css('float'), 'right', 'The next year button has the expected alignment for RTL documents');
+    assert.equal(previousYearButton.css('float'), 'left', 'The previous year button has the expected alignment for RTL documents');
 
+	assert.ok(menu.width() <= 200, 'The menu is visible and has the expected width');
 
 	$(document.body).trigger('click');
 
 	assert.ok(menu.is(':visible'), 'The menu is still visible after clicking outside the menu');
 
-	//var buttons = menu.find('.month-picker-month-table button');
 	menu.find('.button-1').trigger('click');
 
 	assert.ok(menu.is(':visible'), 'The menu is still visible after choosing a month');
@@ -485,7 +491,8 @@ QUnit.test('Events and context', function (assert) { // A.k.a duplicate code tes
 		assert.equal( this, EventsField, 'OnAfterNextYear was called in the right context' );
 	});
 
-	var nextYearButton = menu.find('.next-year>button');
+	var nextYearButton = menu.find('.month-picker-next>a');
+
     nextYearButton.trigger('click');
     assert.ok(OnAfterNextYearTriggered, 'Clicking the next button triggered OnAfterNextYear');
 
@@ -496,7 +503,8 @@ QUnit.test('Events and context', function (assert) { // A.k.a duplicate code tes
 		assert.equal( this, EventsField, 'OnAfterPreviousYear was called in the right context' );
 	});
 
-	var previousYearButton = menu.find('.previous-year>button');
+	var previousYearButton = menu.find('.month-picker-previous>a');
+
 	previousYearButton.trigger('click');
 	assert.ok(OnAfterPreviousYearTriggerd, 'Clciking rhe previous button triggered OnAfterPreviousYear');
 
@@ -506,7 +514,7 @@ QUnit.test('Events and context', function (assert) { // A.k.a duplicate code tes
 		assert.equal( this, EventsField, 'OnAfterChooseYears was called in the right context' );
 	});
 
-	var showYearsButton = menu.find('.year-container-all');
+	var showYearsButton = menu.find('.month-picker-title a');
 	showYearsButton.trigger('click');
 
 	assert.ok(OnAfterChooseYearsTriggerd, 'Clicking the show years button triggered OnAfterChooseYears');
@@ -630,23 +638,39 @@ QUnit.test('Right to left', function (assert) {
     var field = $(RTLField).MonthPicker({
         Animation: 'none', // Disable animation to make sure opening and closing the menu is synchronous.
         Position: {collision: 'none'}, // Ensure the menu opens to the right.
-        IsRTL: true
+        IsRTL: true,
+        i18n: {
+            year: 'שנת',
+            buttonText: 'פתח תפריט',
+            prevYear: "שנה קודמת",
+            nextYear: "שנה הבאה",
+            next12Years: 'עבור 12 שנים קדימה',
+            prev12Years: 'עבור 12 שנים אחורה',
+            nextLabel: "הבא",
+            prevLabel: "הקודם",
+            jumpYears: "בכר שנה",
+            backTo: "חזור ל",
+            months: ["ינו'", "פבר'", "מרץ", "אפר'", "מאי", "יוני", "יולי", "אוג'", "ספט'", "אוק'", "נוב'", "דצמ'"]
+        }
     });
 
     field.MonthPicker('Open');
 
     var menu = $(MonthPicker_RTLField);
 
-    var nextYearButton = menu.find('.next-year>button');
-    var previousYearButton = menu.find('.previous-year>button');
+    var nextYearButton = menu.find('.month-picker-next .ui-button');
+    var previousYearButton = menu.find('.month-picker-previous .ui-button');
 
     // Make sure the buttons are pointing in the right (opposite) direction.
     assert.ok(previousYearButton.find('span.ui-icon-circle-triangle-e').length, 'Previous button is pointed east');
     assert.ok(nextYearButton.find('span.ui-icon-circle-triangle-w').length, 'Next button is pointed west');
 
     // Make sure the menu opens to the right of the field.
-    var opendToTheRight = (field.position().left - menu.position().left) > 100;
-    assert.ok(opendToTheRight, 'The menu opened to the right of rhe field');
+    var opendToTheRight = (field.position().left - menu.position().left) > 5;
+    assert.ok(opendToTheRight, 'The menu opened to the right of the field');
+
+    assert.equal(nextYearButton.css('float'), 'left', 'The next year button has the expected alignment for RTL documents');
+    assert.equal(previousYearButton.css('float'), 'right', 'The previous year button has the expected alignment for RTL documents');
 
     field.MonthPicker('Close');
 });
@@ -938,6 +962,17 @@ QUnit.test('ShowOn both', function (assert) {
     assert.notOk(menu.is(':visible'), 'The menu was closed by pressing tab');
 });
 
+QUnit.test('i18n', function (assert) {
+    assert.expect(2);
+
+    $("<input />").MonthPicker({
+        Button: function(options) {
+            assert.ok(options.i18n.buttonText, 'The button callback received the buttonText i18n property');
+            assert.ok(options.i18n.nextYear, 'The button callback received the nextYear i18n property');
+        }
+    }).MonthPicker('destroy');
+});
+
 QUnit.module("Min/MaxMonth");
 
 QUnit.test('Month buttons are disabled', function (assert) {
@@ -950,8 +985,8 @@ QUnit.test('Month buttons are disabled', function (assert) {
 	field.MonthPicker('Open');
 
 	var menu = $(MonthPicker_RistrictMonthField);
-	var previousYearButton = menu.find('.previous-year>button');
-	var nextYearButton = menu.find('.next-year>button');
+	var previousYearButton = menu.find('.month-picker-previous>a');
+	var nextYearButton = menu.find('.month-picker-next>a');
 
 	// Try to click the disabled buttons.
 	var buttons = menu.find('.month-picker-month-table button');
@@ -968,7 +1003,7 @@ QUnit.test('Month buttons are disabled', function (assert) {
 
 	// Make sure we can still go to the next year.
 	nextYearButton.trigger('click');
-	var pickerYear = parseInt(menu.find('.year').text(), 10);
+	var pickerYear = _getPickerYear(menu);
 	assert.equal(pickerYear, 2016, 'Clicking next year changed the year to 2016');
 
 	// Make none of the buttons are disabled.
@@ -985,7 +1020,7 @@ QUnit.test('Month buttons are disabled', function (assert) {
 	previousYearButton.trigger('click');
 	previousYearButton.trigger('click');
 
-	var pickerYear = parseInt(menu.find('.year').text(), 10);
+	var pickerYear = _getPickerYear(menu);
 	assert.equal(pickerYear, 2015, 'clicking previous year tweice keept the year at 2015');
 
 	// Make sure that month buttons before October (the minimum month)
@@ -1028,7 +1063,7 @@ QUnit.test('Year buttons are disabled', function (assert) {
     var menu = $(MonthPicker_RistrictMonthField);
 
     // Click the year title to show the years.
-    menu.find('.year-title').trigger('click');
+    menu.find('.month-picker-title a').trigger('click');
 
     // Make sure we are in years view.
     var buttons = menu.find('.month-picker-month-table button');
@@ -1050,7 +1085,7 @@ QUnit.test('Year buttons are disabled', function (assert) {
     assert.ok(firstVisibleYear, "Clciking the disabled buttons didn't take us to month view");
 
     // Make sure the next years button is disabled.
-    var nextYearsButton = menu.find('.next-year>button');
+    var nextYearsButton = menu.find('.month-picker-next>a');
     var isDisabled = nextYearsButton
         .trigger('click')
         .is('.ui-button-disabled');
@@ -1059,7 +1094,7 @@ QUnit.test('Year buttons are disabled', function (assert) {
     var newFirstYrar = parseInt($(buttons[0]).text(), 10);
     assert.equal(newFirstYrar, firstVisibleYear, "Clicking next year didn't change the year");
 
-    var previousYearsButton = menu.find('.previous-year>button');
+    var previousYearsButton = menu.find('.month-picker-previous>a');
     // Keep going back until there are no disabled buttons.
     // We count to 10 to avoid an infinite loop in case there's
     // a bug where we are going back in time but the the buttons stay disabled.
@@ -1110,7 +1145,7 @@ QUnit.test('Year buttons are disabled', function (assert) {
     assert.ok(!hasDidabledButtons, 'All buttons are enabled');
 
     // Click the year title to show the years menu.
-    menu.find('.year-title').trigger('click');
+    menu.find('.month-picker-title a').trigger('click');
 
     // Keeps clicking next years until we reach the disabled years.
     for (var i = 1; !buttons.is('.ui-button-disabled') && i <= 10; i++) {
@@ -1168,7 +1203,7 @@ QUnit.test('Menu opens within range', function (assert) {
     field.val('02/2010');
     field.MonthPicker('Open');
 
-    assert.equal(menu.find('.year').text(), 2013, 'The menu opend at the minimum year (2013) and not 2010' );
+    assert.equal(_getPickerYear(menu), 2013, 'The menu opend at the minimum year (2013) and not 2010' );
 
     field.MonthPicker('Close');
 
@@ -1177,7 +1212,7 @@ QUnit.test('Menu opens within range', function (assert) {
     field.val('12/2020');
     field.MonthPicker('Open');
 
-    assert.equal(menu.find('.year').text(), 2016, 'The menu opend at the maximum year (2016) and not 2020' );
+    assert.equal(_getPickerYear(menu), 2016, 'The menu opend at the maximum year (2016) and not 2020' );
 
     field.MonthPicker('Close');
 
@@ -1186,7 +1221,7 @@ QUnit.test('Menu opens within range', function (assert) {
     field.MonthPicker('option', 'MaxMonth', '12/2018');
     field.MonthPicker('Open');
 
-    assert.equal(menu.find('.year').text(), 2018, 'The menu opend at the year 2018 after changing the MaxMonth option' );
+    assert.equal(_getPickerYear(menu), 2018, 'The menu opend at the year 2018 after changing the MaxMonth option' );
 
     field.MonthPicker('Close');
 
@@ -1195,7 +1230,7 @@ QUnit.test('Menu opens within range', function (assert) {
     field.MonthPicker('option', 'MaxMonth', new Date(2021, 12 - 1));
     field.MonthPicker('Open');
 
-    assert.equal(menu.find('.year').text(), 2020, 'The menu opend at the the selected year 2020 after' );
+    assert.equal(_getPickerYear(menu), 2020, 'The menu opend at the the selected year 2020 after' );
 
     field.MonthPicker('Close');
 
@@ -1203,7 +1238,7 @@ QUnit.test('Menu opens within range', function (assert) {
     field.val('02/2009');
     field.MonthPicker('Open');
 
-    assert.equal(menu.find('.year').text(), 2010, 'The menu opend at the year 2010 after chagnig the MinMonth option' );
+    assert.equal(_getPickerYear(menu), 2010, 'The menu opend at the year 2010 after chagnig the MinMonth option' );
 
     field.MonthPicker('Close');
 
@@ -1212,7 +1247,7 @@ QUnit.test('Menu opens within range', function (assert) {
     field.MonthPicker('option', 'MinMonth', new Date(2008, 04));
     field.MonthPicker('Open');
 
-    assert.equal(menu.find('.year').text(), 2009, 'The menu opend at the selected year after changing the MinMonth option again' );
+    assert.equal(_getPickerYear(menu), 2009, 'The menu opend at the selected year after changing the MinMonth option again' );
 
     // Destroy the plugin so we can use the field over again
     // in another Min/MaxMonth test.
@@ -1232,8 +1267,9 @@ QUnit.test('Today and selected months are highlighted', function (assert) {
 	var buttons = menu.find('.month-picker-month-table button');
 
 	var todaysButton = $(buttons[new Date().getMonth()]);
-	var nextYearButton = menu.find('.next-year>button');
-	var previousYearButton = menu.find('.previous-year>button');
+
+	var nextYearButton = menu.find('.month-picker-next>a');
+	var previousYearButton = menu.find('.month-picker-previous>a');
 
 	assert.ok(todaysButton.is('.ui-state-highlight'), "Today's month is highlighted");
 
@@ -1256,7 +1292,7 @@ QUnit.test('Today and selected months are highlighted', function (assert) {
 	assert.equal( selectedButton.length, 1, 'There is one selected button');
 	assert.equal( selectedButton[0], buttons[4], 'The selected month is highlighted');
 
-	menu.find('.year').trigger('click');
+	menu.find('.month-picker-title a').trigger('click');
 
 	var selectdBtn = buttons.filter('.ui-state-active');
 	assert.equal( selectdBtn.jqueryUIButton( "option", "label" ), _today.getFullYear(), 'The selected year is highlighted');
@@ -1295,8 +1331,9 @@ QUnit.test('Number of months from today', function (assert) {
 
     // Make sure we are in years view.
     var buttons = menu.find('.month-picker-month-table button');
-    var nextYearButton = menu.find('.next-year>button');
-    var previousYearButton = menu.find('.previous-year>button');
+
+    var nextYearButton = menu.find('.month-picker-next>a');
+    var previousYearButton = menu.find('.month-picker-previous>a');
 
     var enabledMonths = 0;
 
@@ -1351,8 +1388,8 @@ QUnit.test('Relative month periods', function (assert) {
 
     // Make sure we are in years view.
     var buttons = menu.find('.month-picker-month-table button');
-    var nextYearButton = menu.find('.next-year>button');
-    var previousYearButton = menu.find('.previous-year>button');
+    var nextYearButton = menu.find('.month-picker-next>a');
+    var previousYearButton = menu.find('.month-picker-previous>a');
     var enabledMonths = 0;
 
     // Make sure that 18 buttons + 1 for today are disabled.
@@ -1410,10 +1447,123 @@ QUnit.test('JavaScript Date objects', function (assert) {
     field.MonthPicker('option', 'MaxMonth', new Date(2016, 6 - 1));
 
     field.MonthPicker('Open');
-    assert.equal(menu.find('.year').text(), 2016, 'The menu opend at the expected year 2015');
+    assert.equal(_getPickerYear(menu), 2016, 'The menu opend at the expected year 2015');
     assert.equal(buttons.not('.ui-button-disabled').length, 6, '12 month buttons are enabled');
 
     // Destroy the plugin so we can use the field over again
     // in another Min/MaxMonth test.
     field.MonthPicker('destroy');
+});
+
+QUnit.module('Version 3.0');
+
+QUnit.test('Title buttons', function (assert) {
+    var field = $(RistrictMonthField).val('').MonthPicker({
+      Animation: 'none', // Disable animation to make sure opening and closing the menu is synchronous.
+      MaxMonth: '+2Y'
+    });
+
+    var menu = $(MonthPicker_RistrictMonthField);
+    var nextButton = menu.find('.month-picker-next .ui-button');
+    field.MonthPicker('Open');
+
+    assert.notOk(nextButton.is('.ui-state-default'), "The next button doesn't have the .ui-state-default class");
+
+    nextButton.trigger('mouseover');
+    assert.ok(nextButton.is('.ui-state-hover'), 'The next button has the .ui-state-hover class');
+
+    nextButton.trigger('mousedown');
+    assert.ok(nextButton.is('.ui-state-active'), 'The next button has the .ui-state-active class');
+
+    nextButton.trigger('click');
+    nextButton.trigger('mouseup');
+    assert.notOk(nextButton.is('.ui-state-default'), "The next button doesn't have the .ui-state-default class after clicking it");
+    assert.notOk(nextButton.is('.ui-state-active'), "The next button doesn't have the .ui-state-active class after clicking it");
+    assert.ok(nextButton.is('.ui-state-hover'), 'The next button has the .ui-state-hover class after clicking it');
+
+    nextButton.trigger('mouseleave');
+    assert.notOk(nextButton.is('.ui-state-default'), "The next button doesn't have the .ui-state-default class after mouseleave");
+    assert.notOk(nextButton.is('.ui-state-hover'), "The next button doesn't have .ui-state-hover class after mouseleave");
+    assert.notOk(nextButton.is('.ui-state-active'), "The next button doesn't have the .ui-state-active class after mouseleave");
+
+    nextButton.trigger('mouseover');
+    assert.ok(nextButton.is('.ui-state-hover'), 'The next button has the .ui-state-hover class');
+
+    nextButton.trigger('click');
+    nextButton.trigger('mouseup');
+
+    assert.ok(nextButton.is('.ui-button-disabled'), 'Navigating to the last year allowd (+2Y) disabled the next button');
+    assert.notOk(nextButton.is('.ui-state-default'), "The next button doesn't have the .ui-state-default class when disabled");
+    assert.notOk(nextButton.is('.ui-state-hover'), "The next button doesn't have .ui-state-hover class when disabled");
+    assert.notOk(nextButton.is('.ui-state-active'), "The next button doesn't have the .ui-state-active class when disabled");
+
+    field.MonthPicker('destroy');
+});
+
+/*
+Here we make sure that clicling the jump years button
+when in jump years mode will return the user to the year
+they were when they clicked Jump years.
+*/
+QUnit.test('Back to 2015 button', function (assert) {
+    var field = $(RistrictMonthField).val('').MonthPicker({
+      Animation: 'none' // Disable animation to make sure opening and closing the menu is synchronous.
+    });
+
+    field.MonthPicker('Open');
+    var menu = $(MonthPicker_RistrictMonthField);
+    var titleButton = menu.find('.month-picker-title .ui-button');
+    var nextButton = menu.find('.month-picker-next .ui-button');
+    var backButton = menu.find('.month-picker-previous .ui-button');
+
+    nextButton.trigger('click');
+    var nextYear = _today.getFullYear() + 1;
+    assert.equal(_getPickerYear(menu), nextYear, 'Clicking next took us to the next year (' + nextYear + ')');
+
+    titleButton.trigger('click');
+    var expectedTitle = $.MonthPicker.i18n.backTo + ' ' + nextYear;
+
+    assert.equal( $('.month-picker-title span', menu).text(), expectedTitle, 'The title button has the expected label' );
+
+    /*
+    Here we simulate the user jumping back and forth in
+    the jump years menu.
+    The point is to make sure the button will still return
+    the user to the expected year.
+    */
+
+    // Keep clicking next until today's year is not visible.
+    // We count to 10 to avoid an infinite loop in case there's
+    // a bug where the next button is not going to the next year.
+    var buttons = menu.find('.month-picker-month-table button');
+    var hasNext = buttons.is('.ui-state-highlight');
+    assert.ok( hasNext, "Today's year is highlighted" );
+    var i = 0;
+    for (; hasNext && i < 10; i++) {
+      nextButton.trigger('click');
+      hasNext = buttons.is('.ui-state-highlight');
+    }
+    var nextClickCount = i;
+
+    assert.notOk( hasNext, "Today's year is not visible after clicking next" );
+    assert.equal( $('.month-picker-title span', menu).text(), expectedTitle, 'Clicking next did not change the button label' );
+
+    for (var p = 0; p < nextClickCount * 2; p++) {
+      backButton.trigger('click');
+    }
+
+    hasNext = buttons.is('.ui-state-highlight');
+    assert.notOk( hasNext, "Today's year is not visible after clicking previous" );
+    assert.equal( $('.month-picker-title span', menu).text(), expectedTitle, 'Clicking previous did not change the button label' );
+
+    // Click the title button and make sure it returnd us to the expected year.
+    titleButton.trigger('click');
+    assert.equal(_getPickerYear(menu), nextYear, 'Clicking next took us to the next year (' + nextYear + ')');
+
+    $(buttons[0]).trigger('click');
+    var selectedDate = field.MonthPicker('GetSelectedDate');
+    assert.equal( selectedDate.getFullYear(), nextYear, 'Clicking the first month selected the expected year' );
+    assert.equal( selectedDate.getMonth() + 1, 1, 'Clicking the first month selected the expected month' );
+
+    field.MonthPicker('Destroy');
 });

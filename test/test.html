@@ -3,7 +3,11 @@
 
 <head>
     <title>jQuery UI Month Picker tests</title>
+    <meta charset="UTF-8">
+
+    <!--flick smoothness-->
     <link rel="stylesheet" type="text/css" href="../bower_components/jquery-ui/themes/smoothness/jquery-ui.css">
+    <!-- Make sure the plugin can handle  Bootstrap's CSS (#35) -->
     <link rel="stylesheet" type="text/css" href="../bower_components/bootstrap/dist/css/bootstrap.css" />
     <link rel="stylesheet" type="text/css" href="../css/MonthPicker.css" />
     <link rel="stylesheet" type="text/css" href="test.css" />
@@ -13,6 +17,7 @@
     <!-- Test against 1.9.1 -->
     <script src="../bower_components/jquery-ui/ui/jquery-ui.js"></script>
     <!-- Test against 1.9.2 -->
+    <!-- Make sure the plugin can handle  Bootstrap's JS (#35) -->
     <script src="../bower_components/bootstrap/dist/js/bootstrap.js"></script>
     <script src="../bower_components/qunit/qunit/qunit.js"></script>
     <script>
@@ -21,7 +26,7 @@
 					"Welcome to the jQuery UI Month Picker project.\n" +
 		            "\n" +
 	                "jQuery UI and QUnit are required for testing.\n" +
-	                "Please download node.js, 'cd /jquery-ui-month-picker' and run 'npm install'.\n" +
+	                "Please download node.js, 'cd ./jquery-ui-month-picker' and run 'npm install'.\n" +
 	                "\n" +
 	                "Tests can be ran from the command line using the 'grunt test' command.";
 

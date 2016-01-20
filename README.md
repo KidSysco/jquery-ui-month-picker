@@ -1,11 +1,20 @@
-<h1>The jQuery UI Month Picker Version 2.8.3</h1>
+<h1>The jQuery UI Month Picker Version 3.0-beta1</h1>
+
+[![Build Status](https://travis-ci.org/benjamin-albert/jquery-ui-month-picker.svg?branch=3.0_prototype)](https://travis-ci.org/benjamin-albert/jquery-ui-month-picker)
+[![Built with Grunt](https://cdn.gruntjs.com/builtwith.png)](http://gruntjs.com/)
+
 <p>The jQuery UI Month Picker Plugin is designed to allow user input for only a month and year when only that input is
-required. Clicking on the year, allows the user to jump ahead or back 5 years at a time. Clicking anywhere on the
+required. Clicking on the year, allows the user to jump ahead or back 12 years at a time. Clicking anywhere on the
 page, except on the month picker menu itself, will cause the month picker to hide. The Month Picker has lots of options
 for date validation, setting the start year, using an icon button, input masking, internationalization and localization and more.</p>
 
 -See a demo on jsFiddle at...
 -http://jsfiddle.net/kidsysco/JeZap/
+
+<h2>Upgrading from version 2.x.x?</h2>
+<p>
+Please read the <a href='UPGRADE.md'>3.x Upgrade Guide</a>
+</p>
 
 <h2>Prerequisites</h2>
 <p>This plugin has been tested using the following configuration.</p>
@@ -23,10 +32,10 @@ for date validation, setting the start year, using an icon button, input masking
 </ul>
 
 <h2>Installation</h2>
-<p>Attach all required css and js files to the web page as follows...</p>
+<p>Attach all required CSS and JS files to the web page as follows...</p>
 <pre>
 &lt;link href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" media="all" rel="stylesheet" type="text/css" />
-&lt;link href="css/MonthPicker.css" media="all" rel="stylesheet" type="text/css" />
+&lt;link href="css/MonthPicker.min.css" media="all" rel="stylesheet" type="text/css" />
 
 &lt;script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js" type="text/javascript">&lt;/script>
 &lt;script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js" type="text/javascript">&lt;/script>

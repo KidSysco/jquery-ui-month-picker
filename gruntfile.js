@@ -7,25 +7,26 @@ module.exports = function (grunt) {
     qunit: {
     	all: ['test/test.html']
   	},
-    
+
     uglify: {
       production: {
         files: {
           'MonthPicker.min.js': 'MonthPicker.js'
         }
       },
-      
+
       demo: {
 	    files: {
 	      'demo/Demo.min.js': ['test/jquery.maskedinput.min.js', 'MonthPicker.js']
 	    }
       }
     },
-    
+
     cssmin: {
 	  demo: {
 	     files: {
-		   'demo/Demo.min.css': ['css/MonthPicker.css', 'test/test.css']
+		   'demo/Demo.min.css': ['css/MonthPicker.css', 'test/test.css'],
+           'css/MonthPicker.min.css': ['css/MonthPicker.css']
 	     }
 	  }
   	}

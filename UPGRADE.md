@@ -9,6 +9,8 @@ the Jump Years menu when they mouse over it.
 
 See it for yourself at the [demo on JSFiddle](http://jsfiddle.net/kidsysco/JeZap/).
 
+An upgrade from an older version is simple, and in many cases only requires a new download.
+
 ##  i18n property name changes
 If you changed out the buttons, labels or other text using the
 i18n support you should rename and translate `next5Years` to `next12Years`

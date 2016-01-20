@@ -1,6 +1,6 @@
 <h1>The jQuery UI Month Picker Version 3.0-beta1</h1>
 
-[![Build Status](https://travis-ci.org/benjamin-albert/jquery-ui-month-picker.svg?branch=3.0_prototype)](https://travis-ci.org/benjamin-albert/jquery-ui-month-picker)
+[![Build Status](https://travis-ci.org/KidSysco/jquery-ui-month-picker.svg?branch=master)](https://travis-ci.org/KidSysco/jquery-ui-month-picker.svg?branch=master)
 [![Built with Grunt](https://cdn.gruntjs.com/builtwith.png)](http://gruntjs.com/)
 
 <p>The jQuery UI Month Picker Plugin is designed to allow user input for only a month and year when only that input is

@@ -26,7 +26,6 @@ time, mark, audio, video {
   padding: 0;
   border: 0;
   font: inherit;
-  vertical-align: baseline;
 }
 
 /* HTML5 display-role reset for older browsers */
@@ -49,21 +48,19 @@ Theme Styles
 *******************************************************************************/
 
 body {
-  box-sizing: border-box;
+
   color:#373737;
   background: #212121;
   font-size: 16px;
   font-family: 'Myriad Pro', Calibri, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
   -webkit-font-smoothing: antialiased;
 }
 
 h1, h2, h3, h4, h5, h6 {
-  margin: 10px 0;
+  margin: 0;
   font-weight: 700;
   color:#222222;
   font-family: 'Lucida Grande', 'Calibri', Helvetica, Arial, sans-serif;
-  letter-spacing: -1px;
 }
 
 h1 {
@@ -94,7 +91,7 @@ h6 {
 }
 
 p {
-  margin: 10px 0 15px 0;
+  margin: 0 0 35px 0;
 }
 
 footer p {
@@ -233,23 +230,6 @@ hr {
   background: url('../images/bg_hr.png') repeat-x center;
 }
 
-table {
-  border: 1px solid #373737;
-  margin-bottom: 20px;
-  text-align: left;
- }
-
-th {
-  font-family: 'Lucida Grande', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  padding: 10px;
-  background: #373737;
-  color: #fff;
- }
-
-td {
-  padding: 10px;
-  border: 1px solid #373737;
- }
 
 form {
   background: #f2f2f2;

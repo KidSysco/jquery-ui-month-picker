@@ -88,7 +88,7 @@ $('div').MonthPicker({
 
 <h2>HTML 5 Month Input Support</h2>
 <p>Calling the MonthPicker on HTML 5 Month Input types is currently working. The latest version of Chrome shows some nice examples of how this plugin works with the HTML 5 Month Input Type but we still feel that our UI is better than what Chrome offers... Wow, did I just say that? The jQuery UI month picker UI allows the user to choose any month of the year in a single click, while the Chrome version requires more tinkering. The HTML 5 support in Chrome appears to make input masking and validation obsolete, so those should be turned off when using this plugin on an HTML 5 Month Input Type. The HTML 5 Month Input Type is the reccomended element to call this plugin on but it is not required.</p>
-<p><img src="https://cloud.githubusercontent.com/assets/2731230/3907006/f117cf7c-22f7-11e4-9958-4cd246c0acb6.gif" /></p>
+<p><img src="https://kidsysco.github.io/jquery-ui-month-picker/images/jquery-ui-month-picker-01.png" alt="Month Picker Demo Image" /></p>
 <p>W3C Month Input Type Documentation: http://www.w3.org/TR/html-markup/input.month.html</p>
 
 <h2>API Methods</h2>

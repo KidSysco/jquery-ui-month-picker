@@ -351,14 +351,18 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
         },
 
         _create: function () {
-            var _el = this.element, _opts = this.options;
+            var _el = this.element, _opts = this.options, _type = _el.attr('type');
             // According to http://www.w3.org/TR/html-markup/input.html#input
             // An input element with no type attribute specified represents the same thing as an
             // input element with its type attribute set to "text".
             // TLDR:
             // http://www.w3.org/TR/html5/forms.html#the-input-element
             // https://api.jquery.com/text-selector/
-            if (!_el.is('input,div,span') || $.inArray(_el.attr('type'), ['text', 'month', void 0]) === -1) {
+            
+            // inArray() bug in IE8, only noticable in the real version of IE8, emulated versions
+            // from the dev tools in modern browsers do not suffer the issue.
+            // if (!_el.is('input,div,span') || $.inArray(_el.attr('type'), ['text', 'month', void 0]) === -1) {
+		    if (!_el.is('input,div,span') || (_type !== 'text' && _type !== 'month' && _type !==  void 0)) {
                 var error = _setupErr + 'MonthPicker can only be called on text or month inputs.';
                 // Call alert first so that IE<10 won't trip over console.log and swallow all errors.
                 alert(error + ' \n\nSee (developer tools) for more details.');

@@ -359,10 +359,11 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             // http://www.w3.org/TR/html5/forms.html#the-input-element
             // https://api.jquery.com/text-selector/
             
-            // inArray() bug in IE8, only noticable in the real version of IE8, emulated versions
-            // from the dev tools in modern browsers do not suffer the issue.
+            // $.inArray(void 0, ['text', 'month', void 0]) returns -1 when searching for undefined in IE8.
+            // This is only noticable in the real version of IE8, emulated versions
+            // from the dev tools in modern browsers do not suffer from this issue.
             // if (!_el.is('input,div,span') || $.inArray(_el.attr('type'), ['text', 'month', void 0]) === -1) {
-		    if (!_el.is('input,div,span') || (_type !== 'text' && _type !== 'month' && _type !==  void 0)) {
+            if (!_el.is('input,div,span') || (_type !== 'text' && _type !== 'month' && _type !==  void 0)) {
                 var error = _setupErr + 'MonthPicker can only be called on text or month inputs.';
                 // Call alert first so that IE<10 won't trip over console.log and swallow all errors.
                 alert(error + ' \n\nSee (developer tools) for more details.');

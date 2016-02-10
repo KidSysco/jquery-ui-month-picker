@@ -359,7 +359,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             // http://www.w3.org/TR/html5/forms.html#the-input-element
             // https://api.jquery.com/text-selector/
             
-            // $.inArray(void 0, ['text', 'month', void 0]) returns -1 when searching for undefined in IE8.
+            // $.inArray(void 0, ['text', 'month', void 0]) returns -1 when searching for undefined in IE8 (#45)
             // This is only noticable in the real version of IE8, emulated versions
             // from the dev tools in modern browsers do not suffer from this issue.
             // if (!_el.is('input,div,span') || $.inArray(_el.attr('type'), ['text', 'month', void 0]) === -1) {
@@ -776,10 +776,12 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             function($menu) {
                 var _defauts = this.options.IsRTL ? _RTL_defaultPos : _defaultPos;
                 var _posOpts = $.extend(_defauts, this.options.Position);
-
+                
+                // Only in IE and jQuery 1.12.0 or 2.2.0, .position() will add scrollTop to the top coordinate (#40)
                 return $menu.position($.extend({of: this.element}, _posOpts));
             } :
             function($menu) {
+                // Only in IE and jQuery 1.12.0 or 2.2.0, .offset() will add scrollTop to the top coordinate (#40)
                 var _el = this.element,
                     _css = { top: (_el.offset().top + _el.height() + 7) + 'px' };
 

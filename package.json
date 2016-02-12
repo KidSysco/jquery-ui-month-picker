@@ -1,9 +1,10 @@
 {
   "name": "jquery-ui-month-picker",
   "description": "jQuery UI Month Picker Plugin",
-  "version": "3.0.0-beta1",  
+  "version": "3.0.0-beta2",
 
   "scripts": {
+    "test": "grunt test",
     "postinstall" : "bower install"
   },
 

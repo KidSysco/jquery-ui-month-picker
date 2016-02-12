@@ -25,6 +25,7 @@
   },
   "devDependencies": {
     "qunit": "1.19.0",
-    "bootstrap": "~3.3.6"
+    "bootstrap": "~3.3.6",
+    "jquery.maskedinput": "~1.4.1"
   }
 }

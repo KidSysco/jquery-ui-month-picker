@@ -5,28 +5,21 @@ module.exports = function (grunt) {
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
     qunit: {
-    	all: ['test/test.html']
-  	},
+      all: ['test/test.html']
+    },
 
     uglify: {
-      production: {
-        files: {
-          'MonthPicker.min.js': 'MonthPicker.js'
-        }
-      },
-
       demo: {
-	    files: {
-	      'demo/Demo.min.js': ['test/jquery.maskedinput.min.js', 'MonthPicker.js']
-	    }
+        files: {
+          'demo/MonthPicker.min.js': 'src/MonthPicker.js'
+        }
       }
     },
 
     cssmin: {
 	  demo: {
 	     files: {
-		   'demo/Demo.min.css': ['css/MonthPicker.css', 'test/test.css'],
-           'css/MonthPicker.min.css': ['css/MonthPicker.css']
+           'demo/MonthPicker.min.css': 'src/MonthPicker.css'
 	     }
 	  }
   	}

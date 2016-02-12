@@ -1,3 +1,8 @@
+body {
+    font-size: 12px;
+    font-family: Verdana, Arial, sans-serif;
+}
+
 .icon {
     vertical-align: bottom;
     margin-top: 2px;
@@ -14,8 +19,7 @@
     line-height: 0.8;
 }
 
-input[type='text'] {
+.month-year-input {
   width: 60px;
   margin-right: 2px;
 }
-

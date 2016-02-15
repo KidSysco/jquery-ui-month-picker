@@ -1,0 +1,25 @@
+body {
+    font-size: 12px;
+    font-family: Verdana, Arial, sans-serif;
+}
+
+.icon {
+    vertical-align: bottom;
+    margin-top: 2px;
+    margin-bottom: 3px;
+    cursor: pointer;
+}
+
+.icon:active {
+    opacity: .5;
+}
+
+.ui-button-text {
+    padding: .4em .6em;
+    line-height: 0.8;
+}
+
+.month-year-input {
+  width: 60px;
+  margin-right: 2px;
+}

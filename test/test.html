@@ -9,7 +9,7 @@
     <link rel="stylesheet" type="text/css" href="../bower_components/jquery-ui/themes/smoothness/jquery-ui.css">
     <!-- Make sure the plugin can handle  Bootstrap's CSS (#35) -->
     <link rel="stylesheet" type="text/css" href="../bower_components/bootstrap/dist/css/bootstrap.css" />
-    <link rel="stylesheet" type="text/css" href="../css/MonthPicker.css" />
+    <link rel="stylesheet" type="text/css" href="../src/MonthPicker.css" />
     <link rel="stylesheet" type="text/css" href="test.css" />
     <link rel="stylesheet" href="../bower_components/qunit/qunit/qunit.css" />
 
@@ -37,8 +37,8 @@
 				throw message;
 			}
     </script>
-    <script src="jquery.maskedinput.min.js"></script>
-    <script src="../MonthPicker.js"></script>
+    <script src="../bower_components/jquery.maskedinput/dist/jquery.maskedinput.min.js"></script>
+    <script src="../src/MonthPicker.js"></script>
     <script>
         $(function() {
 		       $(apiVersion).html("Version " + $.MonthPicker.VERSION);

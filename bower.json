@@ -11,6 +11,17 @@
     "src/MonthPicker.js",
     "src/MonthPicker.css"
   ],
+  "moduleType": [
+    "globals"
+  ],
+  "keywords": [
+    "jQuery UI",
+    "Month",
+    "Picker",
+    "MonthYear",
+    "MonthPicker",
+    "Month Picker"
+  ],
   "license": "LGPL-2.1",
   "ignore": [
     "**/.*",

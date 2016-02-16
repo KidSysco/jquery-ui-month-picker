@@ -1,6 +1,6 @@
 {
   "name": "jquery-ui-month-picker",
-  "version": "3.0-beta2",
+  "version": "3.0.0-beta2",
   "homepage": "https://github.com/KidSysco/jquery-ui-month-picker",
   "authors": [
     "Ryan Segura <kidsysco@gmail.com>",
@@ -11,7 +11,7 @@
     "src/MonthPicker.js",
     "src/MonthPicker.css"
   ],
-  "license": "MIT",
+  "license": "LGPL-2.1",
   "ignore": [
     "**/.*",
     "node_modules",
@@ -20,10 +20,12 @@
     "tests"
   ],
   "dependencies": {
-    "jquery": "1.9.1",
-    "jquery-ui": "1.9.2"
+     "jquery-ui": ">=1.9.1",
+     "jquery": ">=1.9.1"
   },
   "devDependencies": {
+    "jquery": "1.9.1",
+    "jquery-ui": "1.9.2",
     "qunit": "1.19.0",
     "bootstrap": "~3.3.6",
     "jquery.maskedinput": "~1.4.1"

@@ -1,7 +1,7 @@
 {
   "name": "jquery-ui-month-picker",
   "description": "jQuery UI Month Picker Plugin",
-  "version": "3.0.0-beta2",
+  "version": "3.0.0-beta3",
   "license": "LGPL-2.1",
   "repository": "https://github.com/KidSysco/jquery-ui-month-picker.git",
   "scripts": {

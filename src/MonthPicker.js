@@ -358,7 +358,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             // TLDR:
             // http://www.w3.org/TR/html5/forms.html#the-input-element
             // https://api.jquery.com/text-selector/
-            
+
             // $.inArray(void 0, ['text', 'month', void 0]) returns -1 when searching for undefined in IE8 (#45)
             // This is only noticable in the real version of IE8, emulated versions
             // from the dev tools in modern browsers do not suffer from this issue.
@@ -428,10 +428,13 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             var $table = $('.month-picker-month-table', _menu);
             for (var i = 0; i < 12; i++) {
                 var $tr = !(i % 3) ? $('<tr />').appendTo($table) : $tr;
-                $tr.append('<td><button class="button-' + (i + 1) + '" /></td>');
+
+                // Use <a> tag instead of <button> to avoid issues
+                // only with Google Chrome (#50).
+                $tr.append('<td><a class="button-' + (i + 1) + '" /></td>');
             }
 
-            this._buttons = $('button', $table).jqueryUIButton();
+            this._buttons = $('a', $table).jqueryUIButton();
 
             _menu.on(click, function (event) {
                 return false;
@@ -776,7 +779,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             function($menu) {
                 var _defauts = this.options.IsRTL ? _RTL_defaultPos : _defaultPos;
                 var _posOpts = $.extend(_defauts, this.options.Position);
-                
+
                 // Only in IE and jQuery 1.12.0 or 2.2.0, .position() will add scrollTop to the top coordinate (#40)
                 return $menu.position($.extend({of: this.element}, _posOpts));
             } :

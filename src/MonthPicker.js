@@ -428,10 +428,13 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
             var $table = $('.month-picker-month-table', _menu);
             for (var i = 0; i < 12; i++) {
                 var $tr = !(i % 3) ? $('<tr />').appendTo($table) : $tr;
-                $tr.append('<td><button class="button-' + (i + 1) + '" /></td>');
+
+                // Use <a> tag instead of <button> to avoid issues
+                // only with Google Chrome (#50).
+                $tr.append('<td><a class="button-' + (i + 1) + '" /></td>');
             }
 
-            this._buttons = $('button', $table).jqueryUIButton();
+            this._buttons = $('a', $table).jqueryUIButton();
 
             _menu.on(click, function (event) {
                 return false;

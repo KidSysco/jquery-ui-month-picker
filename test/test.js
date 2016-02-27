@@ -985,11 +985,11 @@ QUnit.test('Month buttons are disabled', function (assert) {
 	field.MonthPicker('Open');
 
 	var menu = $(MonthPicker_RistrictMonthField);
-	var previousYearButton = menu.find('.month-picker-previous>a');
-	var nextYearButton = menu.find('.month-picker-next>a');
+	var previousYearButton = menu.find('.month-picker-previous>.ui-button');
+	var nextYearButton = menu.find('.month-picker-next>.ui-button');
 
 	// Try to click the disabled buttons.
-	var buttons = menu.find('.month-picker-month-table button');
+	var buttons = menu.find('.month-picker-month-table .ui-button');
     $(buttons.slice(0, 8)).trigger('click');
 
 	assert.ok(previousYearButton.is('.ui-button-disabled'), 'The previous year button is disabled');
@@ -1066,7 +1066,7 @@ QUnit.test('Year buttons are disabled', function (assert) {
     menu.find('.month-picker-title a').trigger('click');
 
     // Make sure we are in years view.
-    var buttons = menu.find('.month-picker-month-table button');
+    var buttons = menu.find('.month-picker-month-table .ui-button');
     var firstVisibleYear = parseInt($(buttons[0]).text(), 10);
     assert.ok(firstVisibleYear, 'The menu is showing the year table');
 
@@ -1085,7 +1085,7 @@ QUnit.test('Year buttons are disabled', function (assert) {
     assert.ok(firstVisibleYear, "Clciking the disabled buttons didn't take us to month view");
 
     // Make sure the next years button is disabled.
-    var nextYearsButton = menu.find('.month-picker-next>a');
+    var nextYearsButton = menu.find('.month-picker-next>.ui-button');
     var isDisabled = nextYearsButton
         .trigger('click')
         .is('.ui-button-disabled');
@@ -1094,7 +1094,7 @@ QUnit.test('Year buttons are disabled', function (assert) {
     var newFirstYrar = parseInt($(buttons[0]).text(), 10);
     assert.equal(newFirstYrar, firstVisibleYear, "Clicking next year didn't change the year");
 
-    var previousYearsButton = menu.find('.month-picker-previous>a');
+    var previousYearsButton = menu.find('.month-picker-previous>.ui-button');
     // Keep going back until there are no disabled buttons.
     // We count to 10 to avoid an infinite loop in case there's
     // a bug where we are going back in time but the the buttons stay disabled.
@@ -1264,12 +1264,12 @@ QUnit.test('Today and selected months are highlighted', function (assert) {
 	field.MonthPicker('Open');
 	var menu = $(MonthPicker_highlightedField);
 
-	var buttons = menu.find('.month-picker-month-table button');
+	var buttons = menu.find('.month-picker-month-table .ui-button');
 
 	var todaysButton = $(buttons[new Date().getMonth()]);
 
-	var nextYearButton = menu.find('.month-picker-next>a');
-	var previousYearButton = menu.find('.month-picker-previous>a');
+	var nextYearButton = menu.find('.month-picker-next>.ui-button');
+	var previousYearButton = menu.find('.month-picker-previous>.ui-button');
 
 	assert.ok(todaysButton.is('.ui-state-highlight'), "Today's month is highlighted");
 
@@ -1292,7 +1292,7 @@ QUnit.test('Today and selected months are highlighted', function (assert) {
 	assert.equal( selectedButton.length, 1, 'There is one selected button');
 	assert.equal( selectedButton[0], buttons[4], 'The selected month is highlighted');
 
-	menu.find('.month-picker-title a').trigger('click');
+	menu.find('.month-picker-title .ui-button').trigger('click');
 
 	var selectdBtn = buttons.filter('.ui-state-active');
 	assert.equal( selectdBtn.jqueryUIButton( "option", "label" ), _today.getFullYear(), 'The selected year is highlighted');
@@ -1330,10 +1330,10 @@ QUnit.test('Number of months from today', function (assert) {
     var menu = $(MonthPicker_RistrictMonthField);
 
     // Make sure we are in years view.
-    var buttons = menu.find('.month-picker-month-table button');
+    var buttons = menu.find('.month-picker-month-table .ui-button');
 
-    var nextYearButton = menu.find('.month-picker-next>a');
-    var previousYearButton = menu.find('.month-picker-previous>a');
+    var nextYearButton = menu.find('.month-picker-next>.ui-button');
+    var previousYearButton = menu.find('.month-picker-previous>.ui-button');
 
     var enabledMonths = 0;
 
@@ -1387,9 +1387,9 @@ QUnit.test('Relative month periods', function (assert) {
     var menu = $(MonthPicker_RistrictMonthField);
 
     // Make sure we are in years view.
-    var buttons = menu.find('.month-picker-month-table button');
-    var nextYearButton = menu.find('.month-picker-next>a');
-    var previousYearButton = menu.find('.month-picker-previous>a');
+    var buttons = menu.find('.month-picker-month-table .ui-button');
+    var nextYearButton = menu.find('.month-picker-next>.ui-button');
+    var previousYearButton = menu.find('.month-picker-previous>.ui-button');
     var enabledMonths = 0;
 
     // Make sure that 18 buttons + 1 for today are disabled.
@@ -1437,7 +1437,7 @@ QUnit.test('JavaScript Date objects', function (assert) {
     field.val('05/2015');
 
     var menu = $(MonthPicker_RistrictMonthField);
-    var buttons = menu.find('.month-picker-month-table button');
+    var buttons = menu.find('.month-picker-month-table .ui-button');
 
     field.MonthPicker('Open');
     assert.equal(buttons.not('.ui-button-disabled').length, 10, '10 month buttons are enabled');
@@ -1535,7 +1535,7 @@ QUnit.test('Back to 2015 button', function (assert) {
     // Keep clicking next until today's year is not visible.
     // We count to 10 to avoid an infinite loop in case there's
     // a bug where the next button is not going to the next year.
-    var buttons = menu.find('.month-picker-month-table button');
+    var buttons = menu.find('.month-picker-month-table .ui-button');
     var hasNext = buttons.is('.ui-state-highlight');
     assert.ok( hasNext, "Today's year is highlighted" );
     var i = 0;

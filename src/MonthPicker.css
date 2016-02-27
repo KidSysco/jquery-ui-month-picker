@@ -124,8 +124,8 @@ to the Jump years menu.
 this also ensures that the entire menu dosen't resize itself
 in response to the slightly bigger buttons in the Jump years menu.
  */
-.month-picker-month-table button {
-    width: 4.3em;
+.month-picker-month-table .ui-button {
+    width: 4.2em;
     margin: .2em;
 }
 

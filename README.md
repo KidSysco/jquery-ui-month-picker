@@ -1,6 +1,7 @@
 <h1>The jQuery UI Month Picker</h1>
 
 [![Build Status](https://travis-ci.org/KidSysco/jquery-ui-month-picker.svg?branch=master)](https://travis-ci.org/KidSysco/jquery-ui-month-picker)
+[![Bower](https://img.shields.io/bower/v/jquery-ui-month-picker.svg)](https://github.com/KidSysco/jquery-ui-month-picker/wiki#installation)
 [![Built with Grunt](https://cdn.gruntjs.com/builtwith.png)](http://gruntjs.com/)
 
 <p>

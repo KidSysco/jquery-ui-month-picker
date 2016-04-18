@@ -1,19 +1,23 @@
 /*
+The jQuery UI Month Picker Version 3.0.1
 https://github.com/KidSysco/jquery-ui-month-picker/
 
-Version 3.0.1
+Copyright (C) 2007 Free Software Foundation, Inc. <http://fsf.org/>
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
 
-This library is free software; you can redistribute it and/or
-modify it under the terms of the GNU Lesser General Public
-License as published by the Free Software Foundation;
-version 3.0. This library is distributed in the hope that it will be useful,
+This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
-Lesser General Public License for more details.
-You should have received a copy of the GNU Lesser General Public
-License along with this library; if not, visit
-http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see
+<http://www.gnu.org/licenses/gpl-3.0.txt>.
 */
+
 (function ($, window, document, Date) {
     'use strict';
 

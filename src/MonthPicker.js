@@ -436,8 +436,8 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
 
             this._buttons = $('a', $table).jqueryUIButton();
 
-            _menu.on(click, function (event) {
-                return false;
+            _menu.on('mousedown' + _eventsNs, function (event) {
+                event.preventDefault();
             });
 
             // Checks and initailizes Min/MaxMonth properties
@@ -537,7 +537,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
                 // Allow the user to prevent opening the menu.
                 event = event || $.Event();
                 if (_event('OnBeforeMenuOpen', this)(event) === false || event.isDefaultPrevented()) {
-                    return false;
+                    return;
                 }
 
                 this._visible = true;
@@ -556,8 +556,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
                     }
 
                     _openedInstance = this;
-
-                    $(document).on(click + this.uuid, $proxy(this.Close, this))
+                    $(document).on('mousedown' + _eventsNs + this.uuid, $proxy(this.Close, this))
                                .on('keydown' + _eventsNs + this.uuid, $proxy(this._keyDown, this));
 
                     // Trun off validation so that clicking one of the months
@@ -579,8 +578,6 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
                     });
                 }
             }
-
-            return false;
         },
 
         Close: function (event) {
@@ -604,7 +601,7 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
                 this._visible = false;
                 _openedInstance = null;
                 $(document).off('keydown' + _eventsNs + this.uuid)
-                           .off(click + this.uuid);
+                           .off('mousedown' + _eventsNs + this.uuid);
 
                 this.Validate();
                 _elem.on('blur' + _eventsNs, $proxy(this.Validate, this));
@@ -713,7 +710,10 @@ http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt.
                         $(this).insertAfter(_elem);
                     }
                 })
-                .on(click, $proxy(this.Toggle, this));
+                .on(click, $proxy(this.Toggle, this))
+                .on('mousedown' + _eventsNs, function(r) {
+                  r.preventDefault();
+                });
 
             if (this._removeOldBtn) {
                 _oldButton.remove();

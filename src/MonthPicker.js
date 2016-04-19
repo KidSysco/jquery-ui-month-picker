@@ -1,5 +1,5 @@
 /*
-The jQuery UI Month Picker Version 3.0.0
+The jQuery UI Month Picker Version 3.0.1
 https://github.com/KidSysco/jquery-ui-month-picker/
 
 Copyright (C) 2007 Free Software Foundation, Inc. <http://fsf.org/>
@@ -14,9 +14,8 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
-along with this program.  If not, see 
+along with this program.  If not, see
 <http://www.gnu.org/licenses/gpl-3.0.txt>.
-
 */
 
 (function ($, window, document, Date) {
@@ -167,7 +166,7 @@ along with this program.  If not, see
     }
 
     $.MonthPicker = {
-        VERSION: '3.0.0', // Added in version 2.4;
+        VERSION: '3.0.1', // Added in version 2.4;
         i18n: {
             year: 'Year',
             prevYear: 'Previous Year',
@@ -441,8 +440,8 @@ along with this program.  If not, see
 
             this._buttons = $('a', $table).jqueryUIButton();
 
-            _menu.on(click, function (event) {
-                return false;
+            _menu.on('mousedown' + _eventsNs, function (event) {
+                event.preventDefault();
             });
 
             // Checks and initailizes Min/MaxMonth properties
@@ -542,7 +541,7 @@ along with this program.  If not, see
                 // Allow the user to prevent opening the menu.
                 event = event || $.Event();
                 if (_event('OnBeforeMenuOpen', this)(event) === false || event.isDefaultPrevented()) {
-                    return false;
+                    return;
                 }
 
                 this._visible = true;
@@ -561,8 +560,7 @@ along with this program.  If not, see
                     }
 
                     _openedInstance = this;
-
-                    $(document).on(click + this.uuid, $proxy(this.Close, this))
+                    $(document).on('mousedown' + _eventsNs + this.uuid, $proxy(this.Close, this))
                                .on('keydown' + _eventsNs + this.uuid, $proxy(this._keyDown, this));
 
                     // Trun off validation so that clicking one of the months
@@ -584,8 +582,6 @@ along with this program.  If not, see
                     });
                 }
             }
-
-            return false;
         },
 
         Close: function (event) {
@@ -609,7 +605,7 @@ along with this program.  If not, see
                 this._visible = false;
                 _openedInstance = null;
                 $(document).off('keydown' + _eventsNs + this.uuid)
-                           .off(click + this.uuid);
+                           .off('mousedown' + _eventsNs + this.uuid);
 
                 this.Validate();
                 _elem.on('blur' + _eventsNs, $proxy(this.Validate, this));
@@ -718,7 +714,10 @@ along with this program.  If not, see
                         $(this).insertAfter(_elem);
                     }
                 })
-                .on(click, $proxy(this.Toggle, this));
+                .on(click, $proxy(this.Toggle, this))
+                .on('mousedown' + _eventsNs, function(r) {
+                  r.preventDefault();
+                });
 
             if (this._removeOldBtn) {
                 _oldButton.remove();

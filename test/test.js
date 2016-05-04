@@ -632,6 +632,14 @@ QUnit.test('AltField and AltFormat tests', function( assert ) {
 	field.val('11/2015').trigger('change');
 
 	assert.equal( $(SecondaryAltField).val(), '11/2015', 'Triggering a change event on the main field updated the secondary field');
+    
+    field.MonthPicker('Clear');
+    
+    assert.equal(field.val(), '', "The main field was cleared.");
+    
+    assert.equal($(SecondaryAltField).val(), '', "The secondary field was cleared.");
+    
+    
 });
 
 QUnit.test('Right to left', function (assert) {
@@ -1501,7 +1509,7 @@ QUnit.test('Title buttons', function (assert) {
 });
 
 /*
-Here we make sure that clicling the jump years button
+Here we make sure that clicking the jump years button
 when in jump years mode will return the user to the year
 they were when they clicked Jump years.
 */

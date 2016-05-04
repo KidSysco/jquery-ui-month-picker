@@ -1,5 +1,5 @@
 /*
-The jQuery UI Month Picker Version 3.0.1
+The jQuery UI Month Picker Version 3.0.2
 https://github.com/KidSysco/jquery-ui-month-picker/
 
 Copyright (C) 2007 Free Software Foundation, Inc. <http://fsf.org/>
@@ -528,6 +528,7 @@ along with this program.  If not, see
 
         Clear: function () {
             this.element.val('');
+            this._updateAlt(0, '');
             this._validationMessage.hide();
         },
 

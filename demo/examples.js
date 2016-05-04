@@ -94,6 +94,20 @@ $(document).ready(function() {
         title: 'MonthPicker Dialog Test',
         modal: true
     });
+    
+    $('#AltMonthField').MonthPicker({
+        SelectedMonth: 'Jan, 2016',
+        MonthFormat: 'M, yy', // Short month name, Full year.
+        AltFormat: '@', // Unix time stamp.
+        AltField: '#serverValue' // Selector for hidden input.
+    });
+
+    $('#AltMonthField2').MonthPicker({
+        SelectedMonth: 'Jan, 2016',
+        MonthFormat: 'M, yy', // Short month name, Full year.
+        AltFormat: 'yy-dd-mm', // ODBC time stamp.
+        AltField: '#serverValue2' // Selector for hidden input.
+    });
 
     $("h1").text( $("h1").text().replace('@VERSION', $.MonthPicker.VERSION) );
 });

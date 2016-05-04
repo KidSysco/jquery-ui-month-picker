@@ -188,11 +188,42 @@
                     <option value="MM &apos;in the year&apos; yy">With text - MM 'in the year' yy</option>
                 </select>
             </p>
-
-            <h3>Inline Menu Demonstration</h3>
+            
+            <h3>Alternate Field/Format Demonstration</h3>
             <p>
-                This demonstrates the Month Picker menu inlined in a div tag.
-                <div id='InlineMenu'></div>
+                This demonstrates how the <a href='https://github.com/KidSysco/jquery-ui-month-picker/wiki/AltField-Option' target="_blank">AltField</a> and 
+                <a href='https://github.com/KidSysco/jquery-ui-month-picker/wiki/AltFormat-Option' target="_blank">AltFormat</a> options work so that values shown to the user can be different than what is submitted to the server.
+            <table style="margin-top: -25px;">
+            <tr>
+                <td>Value shown to user:</td>
+                <td>&nbsp; &nbsp; </td>
+                <td>Unix Date value sent to server:</td>
+            </tr>
+            <tr>
+                <td><input id="AltMonthField" style='width:100px;' /></td>
+                <td>&nbsp; &nbsp; </td>
+                <td><input name='selectedMonth' id="serverValue" />
+                    <!-- This could be a hidden input, I made it a text so you cen see what gets sent to the server -->
+                </td>
+            </tr>
+            <tr>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+            </tr>
+            <tr>
+                <td>Value shown to user:</td>
+                <td>&nbsp; &nbsp; </td>
+                <td>ODBC Date value sent to server:</td>
+            </tr>
+            <tr>
+                <td><input id="AltMonthField2" style='width:100px;' /></td>
+                <td>&nbsp; &nbsp; </td>
+                <td><input name='selectedMonth2' id="serverValue2" />
+                    <!-- This could be a hidden input, I made it a text so you cen see what gets sent to the server -->
+                </td>
+            </tr>
+            </table>
             </p>
 
             <h3>jQuery UI Dialog Integration Demonstration</h3>
@@ -201,6 +232,12 @@
                 <br />
                 <br />
                 <button type="button" id="LaunchDialog" onclick="$('#Modal').dialog('open');">Launch Dialog</button>
+            </p>
+            
+            <h3>Inline Menu Demonstration</h3>
+            <p>
+                This demonstrates the Month Picker menu inlined in a div tag.
+                <div id='InlineMenu'></div>
             </p>
 
             <h3>HTML 5 Month Input Type Support</h3>

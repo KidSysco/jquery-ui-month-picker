@@ -528,7 +528,7 @@ along with this program.  If not, see
 
         Clear: function () {
             this.element.val('');
-            this._updateAlt(0, '');
+            $(this.options.AltField).val('');
             this._validationMessage.hide();
         },
 
@@ -648,10 +648,14 @@ along with this program.  If not, see
         _setSelectedMonth: function (_selMonth) {
             var month = _encodeMonth(this, _selMonth), _el = this.element;
 
-            if (!month) {
-                _el.val( '' );
+            if (month) {
+                var date = new Date( _toYear(month), month % 12, 1 );
+                _el.val( this._formatMonth( date ) );
+
+                this._updateAlt(0, date);
+                this._validationMessage.hide();
             } else {
-                _el.val( this._formatMonth( new Date( _toYear(month), month % 12, 1)) );
+                this.Clear();
             }
 
             this._ajustYear(this.options);
@@ -840,11 +844,15 @@ along with this program.  If not, see
             this._titleButton.jqueryUIButton({ label: this._i18n('year') + ' ' + this._pickerYear });
         },
 
+        // When calling this method with a falsy (undefined) date
+        // value, this.element.val() is used as the date value.
+        //
+        // Therefore it's important to update the input field
+        // before calling this method.
         _updateAlt: function (noop, date) {
-            // False means use the fields value.
             var _field = $(this.options.AltField);
             if (_field.length) {
-                _field.val(this._formatMonth(date, this.options.AltFormat));
+                _field.val( this._formatMonth(date, this.options.AltFormat) );
             }
         },
 

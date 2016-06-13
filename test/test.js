@@ -649,6 +649,12 @@ QUnit.test('AltField and AltFormat tests', function( assert ) {
     
     assert.equal(field.val(), '', 'The main field was cleared by passing null to the SelectedMonth option.');
     assert.equal($(SecondaryAltField).val(), '', "The secondary field was cleared by passing null to the SelectedMonth option..");
+    
+    var selectedVal = field.MonthPicker('Validate');
+
+    assert.equal($('#MonthPicker_Validation_MainAltField').css('display'), 'inline', 'A Validate API call showed a validation message about a bad date on #MainAltField.');
+
+    assert.equal(selectedVal, null, 'Validate API call returned null when there was no date selected as expected.');
 
     assert.equal(field.MonthPicker('GetSelectedMonthYear'), null, 'GetSelectedMonthYear API call returned null when there was no date selected as expected.');
     

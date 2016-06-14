@@ -608,6 +608,7 @@ QUnit.test('AltField and AltFormat tests', function( assert ) {
 	   SelectedMonth: '05/2010',
 	   Animation: 'none', // Disable animation to make sure opening and closing the menu is synchronous.
 	   AltField: hiddenField,
+       ValidationErrorMessage: 'Invalid Date!',
 	   AltFormat: 'yy-mm'
     });
 
@@ -639,6 +640,29 @@ QUnit.test('AltField and AltFormat tests', function( assert ) {
     
     assert.equal($(SecondaryAltField).val(), '', "The secondary field was cleared.");
     
+    field.MonthPicker('option', 'SelectedMonth', '06/2016');
+    
+    assert.equal(field.val(), '06/2016', 'The main field was populated correctly using the SelectedMonth option.');
+    assert.equal($(SecondaryAltField).val(), '06/2016', "The secondary field was populated correctly using the SelectedMonth option.");
+    
+    field.MonthPicker('option', 'SelectedMonth', null);
+    
+    assert.equal(field.val(), '', 'The main field was cleared by passing null to the SelectedMonth option.');
+    assert.equal($(SecondaryAltField).val(), '', "The secondary field was cleared by passing null to the SelectedMonth option..");
+    
+    var selectedVal = field.MonthPicker('Validate');
+
+    assert.equal($('#MonthPicker_Validation_MainAltField').css('display'), 'inline', 'A Validate API call showed a validation message about a bad date on #MainAltField.');
+
+    assert.equal(selectedVal, null, 'Validate API call returned null when there was no date selected as expected.');
+
+    assert.equal(field.MonthPicker('GetSelectedMonthYear'), null, 'GetSelectedMonthYear API call returned null when there was no date selected as expected.');
+    
+    assert.equal($('#MonthPicker_Validation_MainAltField').css('display'), 'inline', '#MainAltField showed a validation message about a bad date.');
+    
+    field.MonthPicker('option', 'SelectedMonth', '06/2016');
+
+    assert.ok($('#MonthPicker_Validation_MainAltField').is(':hidden'), '#MainAltField cleared the validation error message by setting the SelectedMonth option.');
     
 });
 

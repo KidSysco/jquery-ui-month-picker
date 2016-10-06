@@ -667,7 +667,13 @@ along with this program.  If not, see
         },
 
         _i18n: function(str) {
-            return this.options.i18n[str] || $.MonthPicker.i18n[str];
+          var _trans = this.options.i18n[str];
+
+          if (typeof _trans === 'undefined') {
+            return $.MonthPicker.i18n[str];
+          } else {
+            return _trans;
+          }
         },
 
         _parseMonth: function (str, format) {

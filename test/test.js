@@ -633,23 +633,23 @@ QUnit.test('AltField and AltFormat tests', function( assert ) {
 	field.val('11/2015').trigger('change');
 
 	assert.equal( $(SecondaryAltField).val(), '11/2015', 'Triggering a change event on the main field updated the secondary field');
-    
+
     field.MonthPicker('Clear');
-    
+
     assert.equal(field.val(), '', "The main field was cleared.");
-    
+
     assert.equal($(SecondaryAltField).val(), '', "The secondary field was cleared.");
-    
+
     field.MonthPicker('option', 'SelectedMonth', '06/2016');
-    
+
     assert.equal(field.val(), '06/2016', 'The main field was populated correctly using the SelectedMonth option.');
     assert.equal($(SecondaryAltField).val(), '06/2016', "The secondary field was populated correctly using the SelectedMonth option.");
-    
+
     field.MonthPicker('option', 'SelectedMonth', null);
-    
+
     assert.equal(field.val(), '', 'The main field was cleared by passing null to the SelectedMonth option.');
     assert.equal($(SecondaryAltField).val(), '', "The secondary field was cleared by passing null to the SelectedMonth option..");
-    
+
     var selectedVal = field.MonthPicker('Validate');
 
     assert.equal($('#MonthPicker_Validation_MainAltField').css('display'), 'inline', 'A Validate API call showed a validation message about a bad date on #MainAltField.');
@@ -657,13 +657,13 @@ QUnit.test('AltField and AltFormat tests', function( assert ) {
     assert.equal(selectedVal, null, 'Validate API call returned null when there was no date selected as expected.');
 
     assert.equal(field.MonthPicker('GetSelectedMonthYear'), null, 'GetSelectedMonthYear API call returned null when there was no date selected as expected.');
-    
+
     assert.equal($('#MonthPicker_Validation_MainAltField').css('display'), 'inline', '#MainAltField showed a validation message about a bad date.');
-    
+
     field.MonthPicker('option', 'SelectedMonth', '06/2016');
 
     assert.ok($('#MonthPicker_Validation_MainAltField').is(':hidden'), '#MainAltField cleared the validation error message by setting the SelectedMonth option.');
-    
+
 });
 
 QUnit.test('Right to left', function (assert) {
@@ -994,7 +994,9 @@ QUnit.test('ShowOn both', function (assert) {
     assert.notOk(menu.is(':visible'), 'The menu was closed by pressing tab');
 });
 
-QUnit.test('i18n', function (assert) {
+QUnit.module("i18n");
+
+QUnit.test('button', function (assert) {
     assert.expect(2);
 
     $("<input />").MonthPicker({
@@ -1003,6 +1005,22 @@ QUnit.test('i18n', function (assert) {
             assert.ok(options.i18n.nextYear, 'The button callback received the nextYear i18n property');
         }
     }).MonthPicker('destroy');
+});
+
+QUnit.test('empty text translation', function (assert) {
+  assert.expect(1);
+
+  var field = $("<input id='i18nField' />").MonthPicker({
+    i18n: { year: '' }
+  });
+
+  field.MonthPicker('Open');
+
+  var menu = $(MonthPicker_i18nField);
+
+  assert.equal(menu.find('.month-picker-title').text(), new Date().getFullYear(), 'We are NOT using the default text when passing in an empty string');
+
+  field.MonthPicker('destroy');
 });
 
 QUnit.module("Min/MaxMonth");

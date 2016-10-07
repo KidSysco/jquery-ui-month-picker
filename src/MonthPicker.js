@@ -1,5 +1,5 @@
 /*
-The jQuery UI Month Picker Version 3.0.3
+The jQuery UI Month Picker Version 3.0.4
 https://github.com/KidSysco/jquery-ui-month-picker/
 
 Copyright (C) 2007 Free Software Foundation, Inc. <http://fsf.org/>
@@ -166,7 +166,7 @@ along with this program.  If not, see
     }
 
     $.MonthPicker = {
-        VERSION: '3.0.3', // Added in version 2.4;
+        VERSION: '3.0.4', // Added in version 2.4;
         i18n: {
             year: 'Year',
             prevYear: 'Previous Year',
@@ -667,7 +667,13 @@ along with this program.  If not, see
         },
 
         _i18n: function(str) {
-            return this.options.i18n[str] || $.MonthPicker.i18n[str];
+          var _trans = this.options.i18n[str];
+
+          if (typeof _trans === 'undefined') {
+            return $.MonthPicker.i18n[str];
+          } else {
+            return _trans;
+          }
         },
 
         _parseMonth: function (str, format) {
